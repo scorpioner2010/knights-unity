@@ -8,11 +8,11 @@ namespace Game.Scripts.API.Endpoints
 {
     public static class WarriorsManager
     {
-        public static async UniTask<(bool ok, string message, VehicleLite[] data)> GetAll(string faction = null, string branch = null)
+        public static async UniTask<(bool ok, string message, WarriorDto[] data)> GetAll(string culture = null, string branch = null)
         {
             string url = HttpLink.APIBase + "/warriors";
-            if (!string.IsNullOrEmpty(faction)) url += $"?faction={faction}";
-            if (!string.IsNullOrEmpty(branch)) url += string.IsNullOrEmpty(faction) ? $"?branch={branch}" : $"&branch={branch}";
+            if (!string.IsNullOrEmpty(culture)) url += $"?culture={culture}";
+            if (!string.IsNullOrEmpty(branch)) url += string.IsNullOrEmpty(culture) ? $"?branch={branch}" : $"&branch={branch}";
 
             UnityWebRequest request = UnityWebRequest.Get(url);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -24,14 +24,14 @@ namespace Game.Scripts.API.Endpoints
             string text = request.downloadHandler.text;
             if (request.result == UnityWebRequest.Result.Success)
             {
-                VehicleLite[] data = JsonHelper.FromJson<VehicleLite>(text);
+                WarriorDto[] data = JsonHelper.FromJson<WarriorDto>(text);
                 return (true, text, data);
             }
 
             return (false, text, null);
         }
 
-        public static async UniTask<(bool ok, string message, VehicleLite data)> GetById(int id)
+        public static async UniTask<(bool ok, string message, WarriorDto data)> GetById(int id)
         {
             UnityWebRequest request = UnityWebRequest.Get($"{HttpLink.APIBase}/warriors/{id}");
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -43,14 +43,14 @@ namespace Game.Scripts.API.Endpoints
             string text = request.downloadHandler.text;
             if (request.result == UnityWebRequest.Result.Success)
             {
-                VehicleLite data = JsonUtility.FromJson<VehicleLite>(text);
+                WarriorDto data = JsonUtility.FromJson<WarriorDto>(text);
                 return (true, text, data);
             }
 
             return (false, text, null);
         }
 
-        public static async UniTask<(bool ok, string message, VehicleLite data)> GetByCode(string code)
+        public static async UniTask<(bool ok, string message, WarriorDto data)> GetByCode(string code)
         {
             UnityWebRequest request = UnityWebRequest.Get($"{HttpLink.APIBase}/warriors/by-code/{code}");
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -62,18 +62,18 @@ namespace Game.Scripts.API.Endpoints
             string text = request.downloadHandler.text;
             if (request.result == UnityWebRequest.Result.Success)
             {
-                VehicleLite data = JsonUtility.FromJson<VehicleLite>(text);
+                WarriorDto data = JsonUtility.FromJson<WarriorDto>(text);
                 return (true, text, data);
             }
 
             return (false, text, null);
         }
 
-        public static async UniTask<(bool ok, string message, WarriorGraphResponse data)> GetGraph(string faction = null)
+        public static async UniTask<(bool ok, string message, WarriorGraphResponse data)> GetGraph(string culture = null)
         {
             string url = HttpLink.APIBase + "/warriors/graph";
-            if (!string.IsNullOrEmpty(faction))
-                url += "?faction=" + faction;
+            if (!string.IsNullOrEmpty(culture))
+                url += "?culture=" + culture;
 
             UnityWebRequest request = UnityWebRequest.Get(url);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -92,9 +92,9 @@ namespace Game.Scripts.API.Endpoints
             return (false, text, null);
         }
     }
-//WarriorDto
+    
     [Serializable]
-    public class VehicleLite
+    public class WarriorDto
     {
         public int id;
         public string code;

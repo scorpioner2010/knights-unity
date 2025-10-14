@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
-using Game.Scripts.API;
 using Game.Scripts.Core.Helpers;
 using Game.Scripts.Core.Services;
 using Game.Scripts.MenuController;
@@ -13,20 +12,11 @@ using Game.Scripts.UI.Screens;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 using FishNet.Connection;
-using FishNet.Object;
 using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.ServerManagers;
-using Game.Scripts.MenuController;
-using Game.Scripts.Server;
-using Game.Scripts.UI.Helpers;
 using Game.Scripts.UI.MainMenu;
 using NewDropDude.Script.API.ServerManagers;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UI;
 
 namespace Game.Scripts.UI.Tree
@@ -49,7 +39,7 @@ namespace Game.Scripts.UI.Tree
 
         // збережені дані з сервера
         private WarriorGraphResponse[] _graphs;
-        private VehicleLite[] _vehicleLites;
+        private WarriorDto[] _vehicleLites;
         private string[] _factionCodes;
 
         private readonly List<Transform> _fractionRoots = new();
@@ -67,9 +57,9 @@ namespace Game.Scripts.UI.Tree
 
         private readonly List<FactionView> _views = new();
 
-        public VehicleLite GetVehicleLite(int id)
+        public WarriorDto GetVehicleLite(int id)
         {
-            foreach (VehicleLite vehicleLite in _vehicleLites)
+            foreach (WarriorDto vehicleLite in _vehicleLites)
             {
                 if (vehicleLite.id == id)
                 {
@@ -112,8 +102,7 @@ namespace Game.Scripts.UI.Tree
             // очищаємо попередні дані
             _factionNameByCode.Clear();
 
-            (bool ok, _, VehicleLite[] items) = await WarriorsManager.GetAll();
-
+            (bool ok, _, WarriorDto[] items) = await WarriorsManager.GetAll();
             _vehicleLites = items;
         
             if (!ok || items == null || items.Length == 0)
@@ -124,8 +113,8 @@ namespace Game.Scripts.UI.Tree
                 return ok;
             }
 
-            // формуємо словник назв фракцій
-            foreach (VehicleLite v in items)
+            // формуємо словник назв фракцій (культур)
+            foreach (WarriorDto v in items)
             {
                 if (!string.IsNullOrWhiteSpace(v.cultureCode) && !_factionNameByCode.ContainsKey(v.cultureCode))
                 {
@@ -133,23 +122,27 @@ namespace Game.Scripts.UI.Tree
                 }
             }
 
-            // отримуємо список кодів фракцій
-            _factionCodes = items.Select(v => v.cultureCode).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            // отримуємо список кодів культур
+            _factionCodes = items
+                .Select(v => v.cultureCode)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
 
-            // отримуємо графи для кожної фракції
+            // отримуємо графи для кожної культури
             List<WarriorGraphResponse> graphs = new();
         
-            foreach (string faction in _factionCodes)
+            foreach (string culture in _factionCodes)
             {
-                (bool okGraph, _, WarriorGraphResponse graph) = await WarriorsManager.GetGraph(faction);
-            
+                (bool okGraph, _, WarriorGraphResponse graph) = await WarriorsManager.GetGraph(culture);
+                
                 if (okGraph && graph != null && graph.nodes != null && graph.nodes.Length > 0)
                 {
                     graphs.Add(graph);
                 }
                 else
                 {
-                    Popup.ShowText($"Failed to get graph for faction: {faction}", Color.red);
+                    Popup.ShowText($"Failed to get graph for culture: {culture}", Color.red);
                     graphs.Add(new WarriorGraphResponse { nodes = Array.Empty<WarriorGraphNode>(), edges = Array.Empty<WarriorGraphEdge>() });
                 }
             }
@@ -171,7 +164,7 @@ namespace Game.Scripts.UI.Tree
                 return;
             }
 
-            // створюємо кнопки фракцій
+            // створюємо кнопки культур
             for (int i = 0; i < _factionCodes.Length; i++)
             {
                 int idx = i;
@@ -190,13 +183,13 @@ namespace Game.Scripts.UI.Tree
                 });
             }
 
-            // створюємо UI для кожної фракції
+            // створюємо UI для кожної культури
             for (int i = 0; i < _graphs.Length; i++)
             {
                 await BuildFactionTreeUI(_factionCodes[i], _graphs[i]);
             }
 
-            // активуємо першу фракцію
+            // активуємо першу культуру
             if (_fractionRoots.Count > 0)
             {
                 SetActiveContainer(0);
@@ -207,7 +200,7 @@ namespace Game.Scripts.UI.Tree
             DrawArrowsAll();
         }
 
-        // показує активну фракцію
+        // показує активну культуру
         public void SetActiveContainer(int number)
         {
             for (int i = 0; i < _fractionRoots.Count; i++)
@@ -216,15 +209,15 @@ namespace Game.Scripts.UI.Tree
             }
         }
 
-        // будує дерево UI для однієї фракції
-        private async UniTask BuildFactionTreeUI(string factionCode, WarriorGraphResponse graphResponse)
+        // будує дерево UI для однієї культури
+        private async UniTask BuildFactionTreeUI(string cultureCode, WarriorGraphResponse graphResponse)
         {
             if (graphResponse == null || graphResponse.nodes == null || graphResponse.nodes.Length == 0)
                 return;
 
-            // кореневий контейнер фракції
+            // кореневий контейнер
             Transform rootT = Instantiate(fractionTreePrefab, animationPanel);
-            rootT.name = $"FactionRoot_{factionCode}";
+            rootT.name = $"FactionRoot_{cultureCode}";
             _fractionRoots.Add(rootT);
 
             // шар для стрілок (завжди під елементами)
@@ -250,13 +243,13 @@ namespace Game.Scripts.UI.Tree
 
             CreateTreeItemFromNode(starterContainer, starter, nodeMap);
 
-            // колонки для класів машин
+            // колонки за класами (ВАЖЛИВО: бек віддає "Light", "Ranged", "Heavy")
             FactionContainer columns = Instantiate(factionContainerPrefab, rootT);
             columns.name = "ColumnsContainer";
 
-            BuildColumn(columns.transform, graphResponse, "Scout", "Scout_Column", nodeMap);
-            BuildColumn(columns.transform, graphResponse, "Guardian", "Guardian_Column", nodeMap);
-            BuildColumn(columns.transform, graphResponse, "Colossus", "Colossus_Column", nodeMap);
+            BuildColumn(columns.transform, graphResponse, "Light",   "Light_Column",   nodeMap);
+            BuildColumn(columns.transform, graphResponse, "Ranged",  "Ranged_Column",  nodeMap);
+            BuildColumn(columns.transform, graphResponse, "Heavy",   "Heavy_Column",   nodeMap);
 
             _views.Add(new FactionView
             {
@@ -302,7 +295,7 @@ namespace Game.Scripts.UI.Tree
         
             Sprite sprite = ResourceManager.GetIcon(node.code);
             item.image.sprite = sprite;
-            VehicleLite result = GetVehicleLite(node.id);
+            WarriorDto result = GetVehicleLite(node.id);
 
             item.price.text = result.purchaseCost.ToString();
         
@@ -317,7 +310,7 @@ namespace Game.Scripts.UI.Tree
                 }
             
                 int bolts = info.Profile.coins;
-                VehicleLite lite = GetVehicleLite(node.id);
+                WarriorDto lite = GetVehicleLite(node.id);
 
                 if (bolts >= lite.purchaseCost)
                 {
@@ -367,12 +360,12 @@ namespace Game.Scripts.UI.Tree
         
         private Vehicle ParseVehicleClass(string cls)
         {
-            if (string.Equals(cls, "Guardian", StringComparison.OrdinalIgnoreCase)) return Vehicle.Guardian;
-            if (string.Equals(cls, "Colossus", StringComparison.OrdinalIgnoreCase)) return Vehicle.Colossus;
-            return Vehicle.Scout;
+            if (string.Equals(cls, "Ranged", StringComparison.OrdinalIgnoreCase)) return Vehicle.Ranged;
+            if (string.Equals(cls, "Heavy", StringComparison.OrdinalIgnoreCase)) return Vehicle.Heavy;
+            return Vehicle.Light; // Light за замовчуванням
         }
 
-        // перемальовує стрілки лише для активної фракції
+        // перемальовує стрілки лише для активної культури
         private async UniTask RedrawActive(int index)
         {
             await GameplayAssistant.RebuildAllLayouts(_fractionRoots);
@@ -388,7 +381,7 @@ namespace Game.Scripts.UI.Tree
             arrowDrawer.Draw(v.Edges, v.NodeMap, v.ArrowsLayer);
         }
 
-        // перемальовує всі стрілки (для всіх фракцій)
+        // перемальовує всі стрілки (для всіх культур)
         private void DrawArrowsAll()
         {
             if (arrowDrawer == null) return;

@@ -4,8 +4,8 @@ namespace Game.Scripts.UI
     public enum Vehicle
     {
         None = 0,
-        Scout = 1,
-        Guardian = 2,
-        Colossus = 3
+        Light = 1,
+        Ranged = 2,
+        Heavy = 3
     }
 }
