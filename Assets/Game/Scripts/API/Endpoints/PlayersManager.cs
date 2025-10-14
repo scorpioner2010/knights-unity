@@ -1,88 +1,69 @@
-using System.Text;
+using System;
 using Cysharp.Threading.Tasks;
-using Game.Scripts.API;
 using Game.Scripts.API.Helpers;
-using Game.Scripts.API.Models;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Game.Scripts
+namespace Game.Scripts.API.Endpoints
 {
-    public abstract class PlayersManager
+    public static class PlayersManager
     {
-        public static async UniTask<(bool isSuccess, string message, PlayerProfile profile)> GetMyProfile(string token)
+        public static async UniTask<(bool ok, string message, PlayerProfileDto data)> GetMyProfile(string token)
         {
-            string url = HttpLink.APIBase + "/players/me";
+            UnityWebRequest request = UnityWebRequest.Get($"{HttpLink.APIBase}/players/me");
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+            request.SetRequestHeader("Authorization", "Bearer " + token);
 
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET)
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
+
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                downloadHandler = new DownloadHandlerBuffer(),
-                certificateHandler = new AcceptAllCertificates()
-            };
-
-            req.SetRequestHeader("Authorization", "Bearer " + token);
-
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
-
-            string resp = req.downloadHandler?.text ?? string.Empty;
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                PlayerProfile profile = JsonUtility.FromJson<PlayerProfile>(resp);
-                return (true, resp, profile);
+                PlayerProfileDto data = JsonUtility.FromJson<PlayerProfileDto>(text);
+                return (true, text, data);
             }
 
-            return (false, resp, default);
+            return (false, text, null);
         }
 
-        public static async UniTask<(bool isSuccess, string message)> SetActiveVehicle(int vehicleId, string token)
+        public static async UniTask<(bool ok, string message)> SetActiveWarrior(int warriorId, string token)
         {
-            string url = HttpLink.APIBase + "/players/me/active/" + vehicleId;
+            UnityWebRequest request = UnityWebRequest.Put($"{HttpLink.APIBase}/players/me/active/{warriorId}", "");
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+            request.SetRequestHeader("Authorization", "Bearer " + token);
 
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPUT)
-            {
-                uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes("{}")),
-                downloadHandler = new DownloadHandlerBuffer(),
-                certificateHandler = new AcceptAllCertificates()
-            };
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed"); }
 
-            req.SetRequestHeader("Content-Type", "application/json");
-            req.SetRequestHeader("Authorization", "Bearer " + token);
-
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
-
-            string resp = req.downloadHandler?.text ?? string.Empty;
-            return (req.result == UnityWebRequest.Result.Success, resp);
+            return (request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
         }
     }
-}
 
-namespace Game.Scripts.API.Models
-{
-    [System.Serializable]
-    public class PlayerProfile
+    [Serializable]
+    public class PlayerProfileDto
     {
         public int id;
         public string username;
         public bool isAdmin;
         public int mmr;
-        public int bolts;
-        public int adamant;
-        public int freeXp;  // 🔹 нове поле
-
-        public int activeVehicleId;
-        public string activeVehicleCode;
-        public string activeVehicleName;
-
-        public OwnedVehicleDto[] ownedVehicles;
+        public int coins;
+        public int gold;
+        public int freeXp;
+        public int activeWarriorId;
+        public string activeWarriorCode;
+        public string activeWarriorName;
+        public OwnedWarriorDto[] ownedWarriors;
         
-        public OwnedVehicleDto GetSelected()
+        public OwnedWarriorDto GetSelected()
         {
-            OwnedVehicleDto active = null;
+            OwnedWarriorDto active = null;
 
-            foreach (OwnedVehicleDto dto in ownedVehicles)
+            foreach (OwnedWarriorDto dto in ownedWarriors)
             {
-                if (activeVehicleId == dto.vehicleId)
+                if (activeWarriorId == dto.warriorId)
                 {
                     return dto;
                 }
@@ -93,9 +74,9 @@ namespace Game.Scripts.API.Models
 
         public bool IsHave(int idVehicle)
         {
-            foreach (OwnedVehicleDto vehicleDto in ownedVehicles)
+            foreach (OwnedWarriorDto vehicleDto in ownedWarriors)
             {
-                if (vehicleDto.vehicleId == idVehicle)
+                if (vehicleDto.warriorId == idVehicle)
                 {
                     return true;
                 }
@@ -105,10 +86,10 @@ namespace Game.Scripts.API.Models
         }
     }
 
-    [System.Serializable]
-    public class OwnedVehicleDto
+    [Serializable]
+    public class OwnedWarriorDto
     {
-        public int vehicleId;
+        public int warriorId;
         public string code;
         public string name;
         public bool isActive;

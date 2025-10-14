@@ -48,7 +48,7 @@ namespace Game.Scripts.UI.Tree
         public RectTransform arrowsLayerPrefab;
 
         // збережені дані з сервера
-        private VehicleGraph[] _graphs;
+        private WarriorGraphResponse[] _graphs;
         private VehicleLite[] _vehicleLites;
         private string[] _factionCodes;
 
@@ -61,7 +61,7 @@ namespace Game.Scripts.UI.Tree
         {
             public RectTransform Root;
             public RectTransform ArrowsLayer;
-            public VehicleEdge[] Edges;
+            public WarriorGraphEdge[] Edges;
             public Dictionary<int, RectTransform> NodeMap;
         }
 
@@ -112,14 +112,14 @@ namespace Game.Scripts.UI.Tree
             // очищаємо попередні дані
             _factionNameByCode.Clear();
 
-            (bool ok, _, VehicleLite[] items) = await VehiclesManager.GetAll();
+            (bool ok, _, VehicleLite[] items) = await WarriorsManager.GetAll();
 
             _vehicleLites = items;
         
             if (!ok || items == null || items.Length == 0)
             {
                 Popup.ShowText("No vehicle data received from server!", Color.red);
-                _graphs = Array.Empty<VehicleGraph>();
+                _graphs = Array.Empty<WarriorGraphResponse>();
                 _factionCodes = Array.Empty<string>();
                 return ok;
             }
@@ -127,21 +127,21 @@ namespace Game.Scripts.UI.Tree
             // формуємо словник назв фракцій
             foreach (VehicleLite v in items)
             {
-                if (!string.IsNullOrWhiteSpace(v.factionCode) && !_factionNameByCode.ContainsKey(v.factionCode))
+                if (!string.IsNullOrWhiteSpace(v.cultureCode) && !_factionNameByCode.ContainsKey(v.cultureCode))
                 {
-                    _factionNameByCode[v.factionCode] = string.IsNullOrWhiteSpace(v.factionName) ? v.factionCode : v.factionName;
+                    _factionNameByCode[v.cultureCode] = string.IsNullOrWhiteSpace(v.cultureName) ? v.cultureCode : v.cultureName;
                 }
             }
 
             // отримуємо список кодів фракцій
-            _factionCodes = items.Select(v => v.factionCode).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            _factionCodes = items.Select(v => v.cultureCode).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
 
             // отримуємо графи для кожної фракції
-            List<VehicleGraph> graphs = new();
+            List<WarriorGraphResponse> graphs = new();
         
             foreach (string faction in _factionCodes)
             {
-                (bool okGraph, _, VehicleGraph graph) = await VehiclesManager.GetGraph(faction);
+                (bool okGraph, _, WarriorGraphResponse graph) = await WarriorsManager.GetGraph(faction);
             
                 if (okGraph && graph != null && graph.nodes != null && graph.nodes.Length > 0)
                 {
@@ -150,7 +150,7 @@ namespace Game.Scripts.UI.Tree
                 else
                 {
                     Popup.ShowText($"Failed to get graph for faction: {faction}", Color.red);
-                    graphs.Add(new VehicleGraph { nodes = Array.Empty<VehicleNode>(), edges = Array.Empty<VehicleEdge>() });
+                    graphs.Add(new WarriorGraphResponse { nodes = Array.Empty<WarriorGraphNode>(), edges = Array.Empty<WarriorGraphEdge>() });
                 }
             }
 
@@ -217,9 +217,9 @@ namespace Game.Scripts.UI.Tree
         }
 
         // будує дерево UI для однієї фракції
-        private async UniTask BuildFactionTreeUI(string factionCode, VehicleGraph graph)
+        private async UniTask BuildFactionTreeUI(string factionCode, WarriorGraphResponse graphResponse)
         {
-            if (graph == null || graph.nodes == null || graph.nodes.Length == 0)
+            if (graphResponse == null || graphResponse.nodes == null || graphResponse.nodes.Length == 0)
                 return;
 
             // кореневий контейнер фракції
@@ -243,10 +243,10 @@ namespace Game.Scripts.UI.Tree
             var nodeMap = new Dictionary<int, RectTransform>();
 
             // шукаємо стартовий вузол
-            VehicleNode starter = graph.nodes
+            WarriorGraphNode starter = graphResponse.nodes
                 .Where(n => n.level == 1)
                 .OrderBy(n => n.code)
-                .FirstOrDefault() ?? graph.nodes.OrderBy(n => n.level).ThenBy(n => n.code).First();
+                .FirstOrDefault() ?? graphResponse.nodes.OrderBy(n => n.level).ThenBy(n => n.code).First();
 
             CreateTreeItemFromNode(starterContainer, starter, nodeMap);
 
@@ -254,15 +254,15 @@ namespace Game.Scripts.UI.Tree
             FactionContainer columns = Instantiate(factionContainerPrefab, rootT);
             columns.name = "ColumnsContainer";
 
-            BuildColumn(columns.transform, graph, "Scout", "Scout_Column", nodeMap);
-            BuildColumn(columns.transform, graph, "Guardian", "Guardian_Column", nodeMap);
-            BuildColumn(columns.transform, graph, "Colossus", "Colossus_Column", nodeMap);
+            BuildColumn(columns.transform, graphResponse, "Scout", "Scout_Column", nodeMap);
+            BuildColumn(columns.transform, graphResponse, "Guardian", "Guardian_Column", nodeMap);
+            BuildColumn(columns.transform, graphResponse, "Colossus", "Colossus_Column", nodeMap);
 
             _views.Add(new FactionView
             {
                 Root = (RectTransform)rootT,
                 ArrowsLayer = arrowsLayer,
-                Edges = graph.edges ?? Array.Empty<VehicleEdge>(),
+                Edges = graphResponse.edges ?? Array.Empty<WarriorGraphEdge>(),
                 NodeMap = nodeMap
             });
 
@@ -270,13 +270,13 @@ namespace Game.Scripts.UI.Tree
         }
 
         // створює одну колонку
-        private void BuildColumn(Transform parent, VehicleGraph graph, string className, string columnName, Dictionary<int, RectTransform> nodeMap)
+        private void BuildColumn(Transform parent, WarriorGraphResponse graphResponse, string className, string columnName, Dictionary<int, RectTransform> nodeMap)
         {
             TreeGrid grid = Instantiate(treeGridPrefab, parent);
             grid.name = columnName;
             grid.Init(ParseVehicleClass(className));
 
-            IEnumerable<VehicleNode> nodes = graph.nodes
+            IEnumerable<WarriorGraphNode> nodes = graphResponse.nodes
                 .Where(n => string.Equals(n.@class, className, StringComparison.OrdinalIgnoreCase) && n.level >= 2)
                 .OrderBy(n => n.level)
                 .ThenBy(n => n.code);
@@ -288,7 +288,7 @@ namespace Game.Scripts.UI.Tree
         }
 
         // створює елемент дерева (машину)
-        private void CreateTreeItemFromNode(Transform parent, VehicleNode node, Dictionary<int, RectTransform> nodeMap)
+        private void CreateTreeItemFromNode(Transform parent, WarriorGraphNode node, Dictionary<int, RectTransform> nodeMap)
         {
             TreeItem item = Instantiate(treeItemPrefab, parent);
             item.vehicleName.text = node.name;
@@ -316,7 +316,7 @@ namespace Game.Scripts.UI.Tree
                     return;
                 }
             
-                int bolts = info.Profile.bolts;
+                int bolts = info.Profile.coins;
                 VehicleLite lite = GetVehicleLite(node.id);
 
                 if (bolts >= lite.purchaseCost)
@@ -343,9 +343,9 @@ namespace Game.Scripts.UI.Tree
         private async void Buy(int clientID, string code)
         {
             string token = RegisterServer.GetToken(clientID);
-            (bool ok, string msg, BuyVehicleResult data) result =  await UserVehiclesManager.Buy(code, token);
+            (bool ok, string message) result =  await UserWarriorsManager.BuyWarrior(code, token);
             NetworkConnection senderConn = ServerManager.Clients[clientID];
-            TargetRpcBuy(senderConn, result.ok, result.msg);
+            TargetRpcBuy(senderConn, result.ok, result.message);
         }
         
         [TargetRpc]

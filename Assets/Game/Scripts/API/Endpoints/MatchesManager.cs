@@ -7,106 +7,74 @@ using UnityEngine.Networking;
 
 namespace Game.Scripts.API.Endpoints
 {
-    /// <summary>
-    /// Робота з матчами:
-    ///   POST /matches/start
-    ///   POST /matches/{matchId}/end
-    ///   GET  /matches/{matchId}/participants
-    /// </summary>
-    public abstract class MatchesManager
+    public static class MatchesManager
     {
-        // POST /matches/start
-        public static async UniTask<(bool isSuccess, string message, int matchId)> StartMatch(string map, string token)
+        public static async UniTask<(bool ok, string message, MatchStartResponse data)> StartMatch(string map, string token)
         {
-            string url = HttpLink.APIBase + "/matches/start";
-            var payload = new StartMatchRequest { map = string.IsNullOrWhiteSpace(map) ? "default_map" : map };
-            string json = JsonUtility.ToJson(payload);
-
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST)
+            var payload = JsonUtility.ToJson(new StartMatchRequest { map = map });
+            UnityWebRequest request = new UnityWebRequest($"{HttpLink.APIBase}/matches/start", "POST")
             {
-                uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json)),
+                uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(payload)),
                 downloadHandler = new DownloadHandlerBuffer(),
                 certificateHandler = new AcceptAllCertificates()
             };
-            req.SetRequestHeader("Content-Type", "application/json");
-            req.SetRequestHeader("Authorization", "Bearer " + token);
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", "Bearer " + token);
 
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
 
-            string resp = req.downloadHandler != null ? req.downloadHandler.text : string.Empty;
-
-            if (req.result == UnityWebRequest.Result.Success)
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                var r = JsonUtility.FromJson<StartMatchResponse>(resp);
-                return (true, resp, r.matchId);
+                MatchStartResponse data = JsonUtility.FromJson<MatchStartResponse>(text);
+                return (true, text, data);
             }
 
-            return (false, resp, 0);
+            return (false, text, null);
         }
 
-        // POST /matches/{matchId}/end
-        // Клієнт відправляє тільки "сирі" дані. XP/MMR/Bolts рахує сервер.
-        public static async UniTask<(bool isSuccess, string message)> EndMatch(int matchId, ParticipantInput[] participants, string token)
+        public static async UniTask<(bool ok, string message)> EndMatch(int matchId, EndMatchRequest body, string token)
         {
-            string url = HttpLink.APIBase + "/matches/" + matchId + "/end";
-
-            var body = new EndMatchRequest { participants = participants ?? Array.Empty<ParticipantInput>() };
             string json = JsonUtility.ToJson(body);
-
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST)
+            UnityWebRequest request = new UnityWebRequest($"{HttpLink.APIBase}/matches/{matchId}/end", "POST")
             {
                 uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json)),
                 downloadHandler = new DownloadHandlerBuffer(),
                 certificateHandler = new AcceptAllCertificates()
             };
-            req.SetRequestHeader("Content-Type", "application/json");
-            req.SetRequestHeader("Authorization", "Bearer " + token);
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", "Bearer " + token);
 
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed"); }
 
-            string resp = req.downloadHandler != null ? req.downloadHandler.text : string.Empty;
-            return (req.result == UnityWebRequest.Result.Success, resp);
+            return (request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
         }
 
-        // GET /matches/{matchId}/participants
-        public static async UniTask<(bool isSuccess, string message, MatchParticipantView[] items)> GetParticipants(int matchId, string token)
+        public static async UniTask<(bool ok, string message, ParticipantEntry[] participants)> GetParticipants(int matchId, string token)
         {
-            string url = HttpLink.APIBase + "/matches/" + matchId + "/participants";
+            UnityWebRequest request = UnityWebRequest.Get($"{HttpLink.APIBase}/matches/{matchId}/participants");
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+            request.SetRequestHeader("Authorization", "Bearer " + token);
 
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET)
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
+
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                downloadHandler = new DownloadHandlerBuffer(),
-                certificateHandler = new AcceptAllCertificates()
-            };
-            req.SetRequestHeader("Authorization", "Bearer " + token);
-
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
-
-            string resp = req.downloadHandler != null ? req.downloadHandler.text : string.Empty;
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                var arr = JsonHelper.FromJson<MatchParticipantView>(resp);
-                return (true, resp, arr);
+                ParticipantEntry[] data = JsonHelper.FromJson<ParticipantEntry>(text);
+                return (true, text, data);
             }
 
-            return (false, resp, Array.Empty<MatchParticipantView>());
+            return (false, text, null);
         }
     }
 
-    // ===== Models (мають відповідати серверним контрактам) =====
-
-    [Serializable]
-    public class StartMatchRequest
-    {
-        public string map;
-    }
-
-    [Serializable]
-    public class StartMatchResponse
-    {
-        public int matchId;
-    }
+    [Serializable] public class StartMatchRequest { public string map; }
+    [Serializable] public class MatchStartResponse { public int matchId; }
 
     [Serializable]
     public class EndMatchRequest
@@ -114,28 +82,24 @@ namespace Game.Scripts.API.Endpoints
         public ParticipantInput[] participants;
     }
 
-    /// <summary>
-    /// "win" | "lose" | "draw"
-    /// Значення поза цими трьома сервер трактує як "lose".
-    /// </summary>
     [Serializable]
     public class ParticipantInput
     {
         public int userId;
-        public int vehicleId;
+        public int warriorId;
         public int team;
-        public string result; // "win"/"lose"/"draw"
+        public string result;
         public int kills;
         public int damage;
     }
 
     [Serializable]
-    public class MatchParticipantView
+    public class ParticipantEntry
     {
         public int userId;
         public string username;
-        public int vehicleId;
-        public string vehicleName;
+        public int warriorId;
+        public string warriorName;
         public int team;
         public string result;
         public int kills;

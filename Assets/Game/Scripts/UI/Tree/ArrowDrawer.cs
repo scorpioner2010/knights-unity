@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Scripts.API;
+using Game.Scripts.API.Endpoints;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace Game.Scripts.UI.Tree
         public Image arrowPrefab;
 
         // малює стрілки між вузлами
-        public void Draw(IEnumerable<VehicleEdge> edges, Dictionary<int, RectTransform> nodeById, RectTransform layer)
+        public void Draw(IEnumerable<WarriorGraphEdge> edges, Dictionary<int, RectTransform> nodeById, RectTransform layer)
         {
             if (arrowPrefab == null || layer == null)
                 return;
@@ -24,7 +25,7 @@ namespace Game.Scripts.UI.Tree
                     DestroyImmediate(c.gameObject);
             }
 
-            foreach (VehicleEdge e in edges)
+            foreach (WarriorGraphEdge e in edges)
             {
                 if (!nodeById.TryGetValue(e.fromId, out var from) || !nodeById.TryGetValue(e.toId, out var to))
                     continue;

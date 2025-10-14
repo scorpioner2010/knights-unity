@@ -5,35 +5,33 @@ using UnityEngine.Networking;
 
 namespace Game.Scripts.API.Endpoints
 {
-    public abstract class MapsManager
+    public static class MapsManager
     {
-        // GET /maps
-        public static async UniTask<(bool isSuccess, string message, MapView[] items)> GetAll()
+        public static async UniTask<(bool isSuccess, string message, MapDto[] maps)> GetAllMaps()
         {
             string url = HttpLink.APIBase + "/maps";
 
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET)
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
+
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                downloadHandler = new DownloadHandlerBuffer(),
-                certificateHandler = new AcceptAllCertificates()
-            };
-
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
-
-            string resp = req.downloadHandler != null ? req.downloadHandler.text : string.Empty;
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                var arr = JsonHelper.FromJson<MapView>(resp);
-                return (true, resp, arr);
+                MapDto[] data = JsonHelper.FromJson<MapDto>(text);
+                return (true, text, data);
             }
 
-            return (false, resp, Array.Empty<MapView>());
+            return (false, text, null);
         }
     }
 
     [Serializable]
-    public class MapView
+    public class MapDto
     {
         public int id;
         public string code;

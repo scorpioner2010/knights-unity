@@ -6,6 +6,7 @@ using FishNet.Connection;
 using FishNet.Managing.Scened;
 using FishNet.Object;
 using FishNet.Transporting;
+using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.Models;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.Gameplay.Robots;
@@ -284,8 +285,8 @@ namespace Game.Scripts.Networking.Lobby
             }
 
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene);
-            PlayerProfile profile = ProfileServer.GetProfileByClientId(connection.ClientId);
-            PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeVehicleCode);
+            PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
+            PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeWarriorCode);
             PlayerRoot tankRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
             ServerManager.Spawn(tankRoot.networkObject, connection, _additiveServerScene);
             

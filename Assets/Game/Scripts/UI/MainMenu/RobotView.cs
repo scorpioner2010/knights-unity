@@ -67,16 +67,15 @@ namespace Game.Scripts.UI.MainMenu
             Despawn();
             
             IPlayerClientInfo clientInfo = ServiceLocator.Get<IPlayerClientInfo>();
-            OwnedVehicleDto selected = clientInfo.Profile.GetSelected();
-
+            OwnedWarriorDto selected = clientInfo.Profile.GetSelected();
             List<RobotList> list = new();
             
-            foreach (OwnedVehicleDto vehicle in clientInfo.Profile.ownedVehicles)
+            foreach (OwnedWarriorDto vehicle in clientInfo.Profile.ownedWarriors)
             {
                 RobotList robotList = new RobotList();
                 robotList.icon = ResourceManager.GetIcon(vehicle.code);
-                robotList.id = vehicle.vehicleId;
-                robotList.isSelected = selected.vehicleId == vehicle.vehicleId;
+                robotList.id = vehicle.warriorId;
+                robotList.isSelected = selected.warriorId == vehicle.warriorId;
                 robotList.name = vehicle.name;
                 list.Add(robotList);
             }
@@ -103,9 +102,9 @@ namespace Game.Scripts.UI.MainMenu
             button.button.onClick.AddListener(() =>
             {
                 IPlayerClientInfo clientInfo = ServiceLocator.Get<IPlayerClientInfo>();
-                OwnedVehicleDto selected = clientInfo.Profile.GetSelected();
+                OwnedWarriorDto selected = clientInfo.Profile.GetSelected();
                 
-                if (id == selected.vehicleId)
+                if (id == selected.warriorId)
                 {
                     return;
                 }
@@ -126,7 +125,7 @@ namespace Game.Scripts.UI.MainMenu
         private async void Select(int clientID, int id)
         {
             string token = RegisterServer.GetToken(clientID);
-            (bool ok, string msg) result =  await UserVehiclesManager.SetActive(id, token);
+            (bool ok, string msg) result =  await UserWarriorsManager.SetActiveWarrior(id, token);
             NetworkConnection senderConn = ServerManager.Clients[clientID];
             TargetRpcSelect(senderConn, result.ok, result.msg);
         }
@@ -156,7 +155,7 @@ namespace Game.Scripts.UI.MainMenu
             GameplayAssistant.RebuildAllLayouts(l).Forget();
         }
         
-        public static async void Spawn(PlayerRoot  tankRoot)
+        public static async void Spawn(PlayerRoot tankRoot)
         {
             _in.rootSpawnPlace.SetActive(true);
             _in._tankRoot = Instantiate(tankRoot, _in.spawnPosition.transform, true);

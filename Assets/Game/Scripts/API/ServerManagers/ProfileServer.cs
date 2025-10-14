@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FishNet.Connection;
 using FishNet.Object;
+using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.Models;
 using Game.Scripts.Core.Helpers;
 using Game.Scripts.Core.Services;
@@ -22,7 +23,7 @@ namespace Game.Scripts.API.ServerManagers
 
         private void Awake() => _in = this;
         
-        public static PlayerProfile GetProfileByClientId(int clientId)
+        public static PlayerProfileDto GetProfileByClientId(int clientId)
         {
             foreach (PlayerDataAPIInfo dataAPIInfo in PlayersDataAPIInfos)
             {
@@ -49,12 +50,12 @@ namespace Game.Scripts.API.ServerManagers
 
         private async void RequestGetProfile(int clientId)
         {
-            (bool isSuccess, string message, PlayerProfile profile) data;
+            (bool isSuccess, string message, PlayerProfileDto profile) data;
             string token = RegisterServer.GetToken(clientId);
             
             if (ServerSettings.In.isTestMode)
             {
-                PlayerProfile profile = new PlayerProfile();
+                PlayerProfileDto profile = new PlayerProfileDto();
                 profile.username = GameplayAssistant.GenerateName(10);
                 data = (true, "111",profile);
             }
@@ -70,7 +71,7 @@ namespace Game.Scripts.API.ServerManagers
         }
 
         
-        private void AddPlayerDataAPI(PlayerProfile data, int clientId)
+        private void AddPlayerDataAPI(PlayerProfileDto data, int clientId)
         {
             PlayersDataAPIInfos.RemoveAll(x => x.ClientId == clientId);
             
@@ -82,7 +83,7 @@ namespace Game.Scripts.API.ServerManagers
         }
         
         [TargetRpc]
-        private void TargetRpcUpdateProfile(NetworkConnection target, bool success, string errorMessage, PlayerProfile profile)
+        private void TargetRpcUpdateProfile(NetworkConnection target, bool success, string errorMessage, PlayerProfileDto profile)
         {
             Loading.Hide();
             

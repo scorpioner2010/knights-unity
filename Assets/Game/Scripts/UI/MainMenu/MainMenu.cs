@@ -1,3 +1,4 @@
+using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.Models;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.Audio;
@@ -69,15 +70,15 @@ namespace Game.Scripts.UI.MainMenu
             };
         }
 
-        public void UpdatePlayerInfo(PlayerProfile profile)
+        public void UpdatePlayerInfo(PlayerProfileDto profile)
         {
             user.text = profile.username;
             mmr.text = profile.mmr.ToString();
-            bolts.text = profile.bolts.ToString();
-            adamant.text = profile.adamant.ToString();
+            bolts.text = profile.coins.ToString();
+            adamant.text = profile.gold.ToString();
             freeXp.text = profile.freeXp.ToString();
             
-            OwnedVehicleDto active = profile.GetSelected();
+            OwnedWarriorDto active = profile.GetSelected();
 
             if (active != null)
             {

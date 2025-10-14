@@ -1,36 +1,63 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.API.Helpers;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Game.Scripts.API.Endpoints
 {
-    public abstract class LeaderboardManager
+    public static class LeaderboardManager
     {
-        // GET /leaderboard/mmr?top=10
-        public static async UniTask<(bool ok, string msg, LeaderboardEntry[] items)> GetTopMmr(int top, string token)
+        private static async UniTask<(bool, string, LeaderboardEntry[])> GetLeaderboard(string url, string token = null)
         {
-            string url = HttpLink.APIBase + "/leaderboard/mmr?top=" + Mathf.Max(1, top);
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+            request.SetRequestHeader("Content-Type", "application/json");
+            if (!string.IsNullOrEmpty(token))
+                request.SetRequestHeader("Authorization", "Bearer " + token);
 
-            var req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET)
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
+
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                downloadHandler = new DownloadHandlerBuffer(),
-                certificateHandler = new AcceptAllCertificates()
-            };
-            req.SetRequestHeader("Authorization", "Bearer " + token);
-
-            try { await req.SendWebRequest(); } catch (UnityWebRequestException) { }
-
-            string resp = req.downloadHandler?.text ?? string.Empty;
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                var arr = JsonHelper.FromJson<LeaderboardEntry>(resp);
-                return (true, resp, arr);
+                LeaderboardEntry[] data = JsonHelper.FromJson<LeaderboardEntry>(text);
+                return (true, text, data);
             }
 
-            return (false, resp, Array.Empty<LeaderboardEntry>());
+            return (false, text, null);
+        }
+
+        public static UniTask<(bool, string, LeaderboardEntry[])> GetMmrLeaderboard(int top, string token)
+            => GetLeaderboard($"{HttpLink.APIBase}/leaderboard/mmr?top={top}", token);
+
+        public static UniTask<(bool, string, LeaderboardEntry[])> GetFreeXpLeaderboard(int top, string token)
+            => GetLeaderboard($"{HttpLink.APIBase}/leaderboard/free-xp?top={top}", token);
+
+        public static UniTask<(bool, string, WarriorXpEntry[])> GetWarriorXpLeaderboard(int top, string token)
+        {
+            return GetWarriorXpInternal($"{HttpLink.APIBase}/leaderboard/warrior-xp?top={top}", token);
+        }
+
+        private static async UniTask<(bool, string, WarriorXpEntry[])> GetWarriorXpInternal(string url, string token)
+        {
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+            request.SetRequestHeader("Authorization", "Bearer " + token);
+
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
+
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                WarriorXpEntry[] data = JsonHelper.FromJson<WarriorXpEntry>(text);
+                return (true, text, data);
+            }
+
+            return (false, text, null);
         }
     }
 
@@ -40,5 +67,14 @@ namespace Game.Scripts.API.Endpoints
         public int userId;
         public string username;
         public int value;
+    }
+
+    [Serializable]
+    public class WarriorXpEntry
+    {
+        public int userId;
+        public string username;
+        public string warriorName;
+        public int xp;
     }
 }
