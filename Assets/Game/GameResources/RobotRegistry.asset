@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - code: sam_l1_starter
-    prefab: {fileID: 7190061097650038209, guid: 70134a8f91ee0254bb51457d13cc427b,
+    prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
       type: 3}
     icon: {fileID: 21300000, guid: 51dde97bd028a324a885abc84151b692, type: 3}
   - code: vik_l1_starter
-    prefab: {fileID: 7190061097650038209, guid: 6169a681aa6dfbe4698e43e56e7da6f9,
+    prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
       type: 3}
     icon: {fileID: 21300000, guid: 6ebfe44f9956af54d8430024bb3fc86a, type: 3}
   - code: sam_l2_ronin
