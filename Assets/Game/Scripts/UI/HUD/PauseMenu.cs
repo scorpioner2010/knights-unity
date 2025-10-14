@@ -1,5 +1,7 @@
 using System;
+using Game.Script.Player;
 using Game.Scripts.Gameplay.Robots;
+using Game.Scripts.Player;
 using Game.Scripts.UI.Loading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,7 +47,7 @@ namespace Game.Scripts.UI.HUD
         
         private void Update()
         {
-            if (InputManager.Escape)
+            if (CharacterInput.Escape)
             {
                 if (!pauseMenu.activeInHierarchy)
                 {

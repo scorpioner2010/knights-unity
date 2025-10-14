@@ -8,11 +8,9 @@ using FishNet.Object;
 using FishNet.Transporting;
 using Game.Scripts.API.Models;
 using Game.Scripts.API.ServerManagers;
-using Game.Scripts.Core.Helpers;
-using Game.Scripts.Core.Services;
 using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.MenuController;
-using Game.Scripts.Player.Data;
+using Game.Scripts.Player;
 using Game.Scripts.UI.HUD;
 using Game.Scripts.UI.MainMenu;
 using Game.Scripts.World.Spawns;
@@ -160,7 +158,7 @@ namespace Game.Scripts.Networking.Lobby
             MainMenu.In.SetActive(true);
             MenuManager.CloseMenu(MenuType.GameplayHUD);
          
-            foreach (TankRoot root in FindObjectsByType<TankRoot>(FindObjectsSortMode.None))
+            foreach (PlayerRoot root in FindObjectsByType<PlayerRoot>(FindObjectsSortMode.None))
             {
                 if(root.OwnerId == ClientManager.Connection.ClientId)
                 {
@@ -287,8 +285,8 @@ namespace Game.Scripts.Networking.Lobby
 
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene);
             PlayerProfile profile = ProfileServer.GetProfileByClientId(connection.ClientId);
-            TankRoot vehicle = ResourceManager.GetPrefab(profile.activeVehicleCode);
-            TankRoot tankRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
+            PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeVehicleCode);
+            PlayerRoot tankRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
             ServerManager.Spawn(tankRoot.networkObject, connection, _additiveServerScene);
             
             Player player = serverRoom.GetPlayerBuyConnection(connection);

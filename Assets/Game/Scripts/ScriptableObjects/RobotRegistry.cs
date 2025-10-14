@@ -1,7 +1,9 @@
 // RobotRegistry.cs (лінійний пошук)
 using System;
 using System.Collections.Generic;
+using Game.Script.Player;
 using Game.Scripts.Gameplay.Robots;
+using Game.Scripts.Player;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -12,14 +14,14 @@ public class RobotRegistry : ScriptableObject
     public class Item
     {
         public string code;
-        public TankRoot prefab;
+        public PlayerRoot prefab;
         [ShowAssetPreview(64, 64)]
         public Sprite icon;
     }
 
     public List<Item> items = new ();
 
-    public TankRoot GetPrefab(string code)
+    public PlayerRoot GetPrefab(string code)
     {
         foreach (Item it in items)
         {

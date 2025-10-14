@@ -36,6 +36,7 @@ using FishNet.Object;
 using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.MenuController;
+using Game.Scripts.Player;
 using Game.Scripts.Server;
 using Game.Scripts.UI.Helpers;
 using Game.Scripts.UI.MainMenu;
@@ -54,7 +55,7 @@ namespace Game.Scripts.UI.MainMenu
         public Transform vehicleContainer;
         public VehicleButton vehicleButtonPrefab;
 
-        private TankRoot _tankRoot;
+        private PlayerRoot _tankRoot;
         private List<Button> _buttons = new();
         
         private static RobotView _in;
@@ -87,7 +88,7 @@ namespace Game.Scripts.UI.MainMenu
                 MakeIcons(robotList.icon, robotList.isSelected, robotList.id);
             }
             
-            TankRoot vehicleRoot = ResourceManager.GetPrefab(selected.code);
+            PlayerRoot vehicleRoot = ResourceManager.GetPrefab(selected.code);
             Spawn(vehicleRoot);
 
             UpdateUI();
@@ -155,7 +156,7 @@ namespace Game.Scripts.UI.MainMenu
             GameplayAssistant.RebuildAllLayouts(l).Forget();
         }
         
-        public static async void Spawn(TankRoot  tankRoot)
+        public static async void Spawn(PlayerRoot  tankRoot)
         {
             _in.rootSpawnPlace.SetActive(true);
             _in._tankRoot = Instantiate(tankRoot, _in.spawnPosition.transform, true);
@@ -189,13 +190,13 @@ namespace Game.Scripts.UI.MainMenu
             _in.rootSpawnPlace.SetActive(false);
         }
         
-        private async UniTask ActivateAndInitNextFrame(TankRoot go)
+        private async UniTask ActivateAndInitNextFrame(PlayerRoot go)
         {
             await UniTask.NextFrame();
             await UniTask.NextFrame();
             
             go.gameObject.SetActive(true);
-            go.Init(true);
+            //go.Init(true);
         }
 
         private void StripFishNetRuntime(GameObject root)
