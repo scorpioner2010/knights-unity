@@ -1,8 +1,7 @@
 using System;
 using FishNet.Connection;
-using Game.Script.Player;
-using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.Player;
+using Game.Scripts.World.Spawns;
 
 namespace Game.Scripts.Networking.Lobby
 {
@@ -14,5 +13,6 @@ namespace Game.Scripts.Networking.Lobby
         public PlayerRoot playerRoot;
         public bool isBot;
         public bool randomPlayerConnected; //for random game
+        public PointSide side;
     }
 }

@@ -254,7 +254,7 @@ namespace Game.Scripts.Networking.Lobby
         {
             return;
             
-            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene);
+            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.side);
             
             if (spawnPoint == null)
             {
@@ -265,6 +265,7 @@ namespace Game.Scripts.Networking.Lobby
             //TankRoot tankRoot = Instantiate(PlayerPrefab, spawnPoint.transform.position, Quaternion.identity);
             //ServerManager.Spawn(tankRoot.networkObject, LocalConnection, _additiveServerScene);
             //player.playerRoot = tankRoot;
+            //playerRoot.Side.Value = player.side;
             //player.playerRoot.characterInit.Init(0, InitValue.Bot, player.loginName, serverRoom.roomId, _additiveServerScene);
         }
         
@@ -283,15 +284,16 @@ namespace Game.Scripts.Networking.Lobby
                 Debug.LogError("Не вдалося валідувати адитивну сцену протягом відведеного часу.");
                 return;
             }
-
-            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene);
-            PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
-            PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeWarriorCode);
-            PlayerRoot tankRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
-            ServerManager.Spawn(tankRoot.networkObject, connection, _additiveServerScene);
             
             Player player = serverRoom.GetPlayerBuyConnection(connection);
-            player.playerRoot = tankRoot;
+            
+            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.side);
+            PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
+            PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeWarriorCode);
+            PlayerRoot playerRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
+            ServerManager.Spawn(playerRoot.networkObject, connection, _additiveServerScene);
+            playerRoot.Side.Value = player.side;
+            player.playerRoot = playerRoot;
             player.playerRoot.characterInit.ServerInit(serverRoom.maxPlayers, PlayerType.Player, player.loginName, _additiveServerScene);
         }
 

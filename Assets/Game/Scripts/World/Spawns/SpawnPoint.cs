@@ -11,12 +11,13 @@ namespace Game.Scripts.World.Spawns
 {
     public class SpawnPoint : NetworkBehaviour
     {
-        public readonly SyncVar<bool> IsNotFree = new (false);
+        public readonly SyncVar<bool> IsNotFree = new(false);
+        public PointSide pointSide;
 
         private async void MarkPoint()
         {
             IsNotFree.Value = true;
-            await UniTask.Delay(5000);
+            await UniTask.Delay(20000);
             IsNotFree.Value = false;
         }
 
@@ -24,33 +25,40 @@ namespace Game.Scripts.World.Spawns
         {
             MeshRenderer mesh = GetComponent<MeshRenderer>();
             
-            if(mesh != null)
+            if (mesh != null)
             {
                 mesh.enabled = false;
             }
         }
 
-        public static SpawnPoint GetFreePoint(Scene scene)
+        public static SpawnPoint GetFreePoint(Scene scene, PointSide side)
         {
             List<SpawnPoint> allPoints = GameplaySpawner.FindObjectsInScene<SpawnPoint>(scene);
-            List<SpawnPoint> freePoints = new();
+            List<SpawnPoint> freeBySide = new();
 
-            foreach (SpawnPoint point in allPoints)
+            for (int i = 0; i < allPoints.Count; i++)
             {
-                if (point.IsNotFree.Value == false)
+                SpawnPoint p = allPoints[i];
+                
+                if (p.pointSide == side)
                 {
-                    freePoints.Add(point);
+                    if (p.IsNotFree.Value == false)
+                    {
+                        freeBySide.Add(p);
+                    }
                 }
             }
-            
-            SpawnPoint random = freePoints.RandomElement();
 
-            if (random != null)
-            {
-                random.MarkPoint();
-            }
+            SpawnPoint pick = freeBySide.RandomElement();
+            pick.MarkPoint();
             
-            return random;
+            return pick;
         }
+    }
+
+    public enum PointSide
+    {
+        Red = 0,
+        Blue = 1,
     }
 }

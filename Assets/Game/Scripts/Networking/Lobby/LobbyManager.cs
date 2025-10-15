@@ -4,9 +4,11 @@ using System.Linq;
 using FishNet.Connection;
 using FishNet.Managing.Scened;
 using FishNet.Object;
+using Game.Scripts.Core.Helpers;
 using Game.Scripts.MenuController;
 using Game.Scripts.UI.Lobby;
 using Game.Scripts.UI.MainMenu;
+using Game.Scripts.World.Spawns;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -134,11 +136,13 @@ namespace Game.Scripts.Networking.Lobby
             }
             else
             {
-                serverRoom.AddPlayer(new Player
+                Player player = new Player
                 {
                     loginName = loginName,
                     Connection = ServerManager.Clients[senderId]
-                });
+                };
+                
+                serverRoom.AddPlayer(player);
             }
             
             if (serverRoom.IsFull())
@@ -149,6 +153,18 @@ namespace Game.Scripts.Networking.Lobby
 
         private void StartGame(ServerRoom room)
         {
+            int bots = room.maxPlayers - room.players.Count;
+
+            for (int i = 0; i < bots; i++)
+            {
+                continue;
+                Player bot = new Player();
+                int lengthName = GameplayAssistant.GetRandomInt(3, 5);
+                bot.loginName = GameplayAssistant.GenerateName(lengthName);
+                bot.isBot = true;
+                room.AddPlayer(bot);
+            }
+            
             foreach (Player player in room.GetPlayers())
             {
                 if (player.isBot == false)
@@ -157,6 +173,21 @@ namespace Game.Scripts.Networking.Lobby
                 }
             }
 
+            int amount = Mathf.Max(1, (room.players.Count + 1) / 2);
+
+            foreach (Player player in room.GetPlayers())
+            {
+                if (amount > 0)
+                {
+                    player.side = PointSide.Blue;
+                    amount--;
+                }
+                else
+                {
+                    player.side = PointSide.Red;
+                }
+            }
+            
             room.isInGame = true;
             LoadScene(room);
         }

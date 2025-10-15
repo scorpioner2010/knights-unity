@@ -4,6 +4,7 @@ using FishNet.Object.Synchronizing;
 using Game.Combat;
 using Game.Script.Player.UI;
 using Game.Scripts.Gameplay.Robots;
+using Game.Scripts.World.Spawns;
 using UnityEngine;
 
 namespace Game.Scripts.Player
@@ -12,7 +13,6 @@ namespace Game.Scripts.Player
     {
         public NetworkObject networkObject;
         public CharacterMovement characterMovement;
-        public NickDisplay nickDisplay;
         public CharacterAnimationController animationController;
         public Animator animator;
         public UnityEngine.Camera playerCamera;
@@ -26,9 +26,11 @@ namespace Game.Scripts.Player
         public MeleeWeapon meleeWeapon;
         public CharacterParticles characterParticles;
         public PlayerHUD playerHUD;
-        public readonly SyncVar<bool> Dead = new(false);
         public Collider playerCollider;
-
+        
+        public readonly SyncVar<bool> Dead = new(false);
+        public readonly SyncVar<PointSide> Side = new(PointSide.Red);
+        
         public override void OnStartClient()
         {
             Dead.OnChange += OnDeadChanged;

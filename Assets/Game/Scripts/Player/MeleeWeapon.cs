@@ -163,16 +163,31 @@ namespace Game.Combat
                     Vector3 curTip  = bladeTip  ? bladeTip.position  : prevTip;
 
                     // Саме це й «б'є»: капсула по траєкторії кінчика леза
-                    var cols = Physics.OverlapCapsule(prevTip, curTip, sweepRadius, hitMask, QueryTriggerInteraction.Ignore);
+                    Collider[] cols = Physics.OverlapCapsule(prevTip, curTip, sweepRadius, hitMask, QueryTriggerInteraction.Ignore);
+                    
                     for (int i = 0; i < cols.Length; i++)
                     {
                         Collider c = cols[i]; if (c == null) continue;
 
                         GameObject go  = c.attachedRigidbody ? c.attachedRigidbody.gameObject : c.gameObject;
                         NetworkObject nob = go.GetComponentInParent<NetworkObject>();
-                        if (nob == null || nob.ObjectId == ObjectId) continue;   // не себе
-                        if (!hitOnce.Add(nob.ObjectId)) continue;                // одну ціль — один раз
-
+                        PlayerRoot root = go.GetComponentInParent<PlayerRoot>();
+                        
+                        if (root.Side.Value == playerRoot.Side.Value)
+                        {
+                            continue;
+                        }
+                        
+                        if (nob == null || nob.ObjectId == ObjectId) // не себе
+                        {
+                            continue;
+                        }  
+                        
+                        if (!hitOnce.Add(nob.ObjectId)) // одну ціль — один раз
+                        {
+                            continue;
+                        }           
+                        
                         Health hp = nob.GetComponentInParent<Health>();
                         if (hp != null)
                         {

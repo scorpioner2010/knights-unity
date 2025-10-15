@@ -406,7 +406,6 @@ GameObject:
   - component: {fileID: 4238585791064594762}
   - component: {fileID: 1195596581958309019}
   - component: {fileID: 1398992688396928350}
-  - component: {fileID: 4006342621777794567}
   - component: {fileID: 1295222213664343209}
   - component: {fileID: 5933044338177343111}
   - component: {fileID: -1033110773516883015}
@@ -488,7 +487,7 @@ MonoBehaviour:
   - {fileID: 3340459714197439112}
   - {fileID: 1195596581958309019}
   - {fileID: 1398992688396928350}
-  - {fileID: 4006342621777794567}
+  - {fileID: 0}
   - {fileID: 1295222213664343209}
   - {fileID: 5933044338177343111}
   - {fileID: -1033110773516883015}
@@ -849,22 +848,6 @@ MonoBehaviour:
   turnSpeedAtZero: 720
   turnSpeedAtMax: 240
   playerRoot: {fileID: 1295222213664343209}
---- !u!114 &4006342621777794567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1421123571065159367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4fc7b59c1c546acb8bece5957fc4b64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 6
-  _addedNetworkObject: {fileID: 4678259557315704785}
-  _networkObjectCache: {fileID: 4678259557315704785}
-  nickText: {fileID: 0}
 --- !u!114 &1295222213664343209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,7 +865,6 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 4678259557315704785}
   networkObject: {fileID: 4678259557315704785}
   characterMovement: {fileID: 8365651957563856604}
-  nickDisplay: {fileID: 4006342621777794567}
   animationController: {fileID: 9074473342321312798}
   animator: {fileID: 1076657610233375419}
   playerCamera: {fileID: 0}

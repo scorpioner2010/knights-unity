@@ -9,9 +9,9 @@ namespace Game.Script.Player.UI
     {
         public PlayerRoot tankRoot;
         private Camera _mainCamera;
-        [SerializeField] private TMP_Text nickName;
-        [SerializeField] private Image hpView;
-        [SerializeField] private FloatingText floatingTextPrefab;
+        public TMP_Text nickName;
+        public Image hpView;
+        public FloatingText floatingTextPrefab;
 
         private void Start()
         {
