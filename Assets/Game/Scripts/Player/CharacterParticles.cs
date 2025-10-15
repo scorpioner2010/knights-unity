@@ -4,18 +4,10 @@ namespace Game.Scripts.Player
 {
     public class CharacterParticles : MonoBehaviour
     {
-        public static CharacterParticles In;
-        
-        public ParticleSystem bloodPrefab;
         public ParticleSystem hitPrefab;
-        public ParticleSystem revolverShoot;
-        
-
-        private void Awake() => In = this;
-
-        public void BloodEffectPlay(Vector3 spawnPosition) => Play(spawnPosition, bloodPrefab);
+        public ParticleSystem hitPrefabServer;
         public void HitEffectPlay(Vector3 spawnPosition) => Play(spawnPosition, hitPrefab);
-        public void RevolverShootEffectPlay(Vector3 spawnPosition) => Play(spawnPosition, revolverShoot);
+        public void HitEffectPlayServer(Vector3 spawnPosition) => Play(spawnPosition, hitPrefabServer);
         
         private ParticleSystem Play(Vector3 spawnPosition, ParticleSystem prefab)
         {

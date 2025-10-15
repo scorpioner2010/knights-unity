@@ -411,6 +411,7 @@ GameObject:
   - component: {fileID: 5933044338177343111}
   - component: {fileID: -1033110773516883015}
   - component: {fileID: 1655653836841836110}
+  - component: {fileID: 6551520111187205520}
   m_Layer: 8
   m_Name: Paladin
   m_TagString: Untagged
@@ -892,6 +893,7 @@ MonoBehaviour:
   characterInit: {fileID: 5933044338177343111}
   health: {fileID: -1033110773516883015}
   meleeWeapon: {fileID: 1655653836841836110}
+  characterParticles: {fileID: 6551520111187205520}
 --- !u!114 &5933044338177343111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -943,18 +945,36 @@ MonoBehaviour:
   _componentIndexCache: 10
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
+  playerRoot: {fileID: 1295222213664343209}
   bladeRoot: {fileID: 5305693244928749925}
   bladeTip: {fileID: 1743911484686829806}
   hitMask:
     serializedVersion: 2
     m_Bits: 256
   sweepRadius: 0.12
-  damage: 30
+  damage: 10
   hitWindow: 0.25
   drawGizmos: 1
   gizmoCurrentColor: {r: 0.1, g: 0.8, b: 1, a: 0.8}
   gizmoPrevColor: {r: 1, g: 0.7, b: 0.1, a: 0.8}
   gizmoSweepColor: {r: 1, g: 0.95, b: 0.1, a: 0.8}
+  localVfxWindow: 0.25
+--- !u!114 &6551520111187205520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421123571065159367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabb5af302188e149b242f9f2cb2c9c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitPrefab: {fileID: 5240128344545717902, guid: ab0605a6707db7a418489b8af7d8cb4f,
+    type: 3}
+  hitPrefabServer: {fileID: 1414258708746871229, guid: 58511696c15385e40abcdc87e5066593,
+    type: 3}
 --- !u!1 &1442515779182038148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,13 +1607,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2482398628194008578}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.178, y: -0.049, z: 0.716}
+  m_LocalRotation: {x: -0.00000005960463, y: 0.1331718, z: 0.000000029802315, w: 0.991093}
+  m_LocalPosition: {x: 0.096, y: -0.049, z: 0.433}
   m_LocalScale: {x: 0.080761, y: 0.080761, z: 0.080761}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 917684313470093599}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 15.306, z: 0}
 --- !u!33 &5526909017552431693
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1609,7 +1629,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2482398628194008578}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3290,13 +3310,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8320603307483483955}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.031, y: -0.015, z: 0.112}
+  m_LocalRotation: {x: -0, y: 0.080787845, z: -0.00000004470348, w: 0.9967314}
+  m_LocalPosition: {x: -0.031, y: 0.007, z: -0.103}
   m_LocalScale: {x: 0.080761, y: 0.080761, z: 0.080761}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 917684313470093599}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 9.268, z: 0}
 --- !u!33 &693565747112106895
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3312,7 +3332,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8320603307483483955}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

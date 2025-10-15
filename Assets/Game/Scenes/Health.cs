@@ -72,10 +72,8 @@ namespace Game.Combat
         {
             if (_healthBar == null || _healthBar.slider == null)
                 return;
-
-            float max = Mathf.Max(1f, maxHp);
-            float cur01 = Mathf.Clamp01(currentHp / max); // float-ділення, не інт
-            _healthBar.slider.value = cur01;
+            
+            _healthBar.SetHpView(currentHp, maxHp);
         }
     }
 }

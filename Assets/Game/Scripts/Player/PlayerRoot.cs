@@ -22,7 +22,8 @@ namespace Game.Scripts.Player
         public CharacterInit characterInit;
         public Health health;
         public MeleeWeapon meleeWeapon;
-
+        public CharacterParticles  characterParticles;
+        
         private void Update()
         {
         }
