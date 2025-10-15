@@ -51,15 +51,15 @@ namespace Game.Scripts.Gameplay.Robots
         private async void SetNickNameProcess()
         {
             bool isActiveProcess = true;
-return;
-            /*while (isActiveProcess)
+
+            while (isActiveProcess)
             {
                 await UniTask.Delay(500);
 
-                TankRoot[] players = FindObjectsByType<TankRoot>(FindObjectsSortMode.None);
+                PlayerRoot[] players = FindObjectsByType<PlayerRoot>(FindObjectsSortMode.None);
                 
                 bool allNicksSet = true;
-                foreach (TankRoot root in players)
+                foreach (PlayerRoot root in players)
                 {
                     if (string.IsNullOrEmpty(root.characterInit.LoginName.Value))
                     {
@@ -72,7 +72,7 @@ return;
                 {
                     Camera cam = CameraSync.In.gameplayCamera;
 
-                    foreach (TankRoot root in players)
+                    foreach (PlayerRoot root in players)
                     {
                         if (OwnerId != root.OwnerId)
                         {
@@ -83,7 +83,7 @@ return;
 
                     isActiveProcess = false;
                 }
-            }*/
+            }
         }
     }
 }

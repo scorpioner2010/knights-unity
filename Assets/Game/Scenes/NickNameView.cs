@@ -16,11 +16,11 @@ namespace Game.Script.Player.UI
 
         private void Start()
         {
-            /*tankRoot.health.OnDamaged += (f, f1, arg3) =>
+            tankRoot.health.OnDamaged += (f, f1, arg3) =>
             {
                 float cur01 = Mathf.Clamp01(f1 / Mathf.Max(1f, arg3));
                 hpView.fillAmount = cur01;
-            };*/
+            };
         }
 
         public void SetNick(string nick)

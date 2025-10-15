@@ -1,41 +1,46 @@
+using System;
 using FishNet.Object;
 using Game.Scripts.Core.Services;
 using Game.Scripts.Player;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game.Combat
 {
     public class Health : NetworkBehaviour
     {
-        [Header("HP")]
         public int maxHp = 100;
         public int hp;
 
-        private HealthBar _healthBar;     // локальний HUD (тільки для власника)
+        public Action<int, int, int> OnDamaged;
+        public UnityEvent onDeath;
+
+        private HealthBar _healthBar;
         public PlayerRoot playerRoot;
 
         public override void OnStartNetwork()
         {
-            base.OnStartNetwork();
             if (IsServer)
+            {
                 hp = maxHp;
+            }
         }
 
         public override void OnStartClient()
         {
-            base.OnStartClient();
-            // HUD показуємо лише власнику
             if (IsOwner)
             {
                 TryBindHealthBar();
-                UpdateOwnerHud(maxHp); // старт — повна смуга
+                UpdateOwnerHud(maxHp);
             }
         }
 
         private void TryBindHealthBar()
         {
             if (_healthBar == null)
-                _healthBar = Singleton<HealthBar>.Instance; // може бути null у перші кадри — не страшно
+            {
+                _healthBar = Singleton<HealthBar>.Instance;
+            }
         }
 
         [Server]
@@ -43,36 +48,50 @@ namespace Game.Combat
         {
             if (hp <= 0) return;
 
+            int oldHp = hp;
             hp = Mathf.Max(0, hp - amount);
-
-            // широкомовний фідбек (і відправляємо актуальний hp)
             DamageObserversRpc(amount, hitPoint, impulse, attackId, attacker.ObjectId, hp);
 
             if (hp == 0)
             {
-                // TODO: death logic (disable input, ragdoll, respawn, etc.)
+                DeathServer();
             }
+        }
+
+        [Server]
+        private void DeathServer()
+        {
+            DiedObserversRpc();
         }
 
         [ObserversRpc]
         private void DamageObserversRpc(int amount, Vector3 hitPoint, Vector3 impulse, int attackId, int attackerObjectId, int newHp)
         {
-            // синхронізуємо локальне значення hp для консистентності клієнтів
             hp = newHp;
+            OnDamaged?.Invoke(amount, newHp, maxHp);
 
-            // HUD оновлює лише власник; інші клієнти HUD не мають або мають свій
             if (!IsOwner)
+            {
                 return;
+            }
 
             TryBindHealthBar();
             UpdateOwnerHud(newHp);
         }
 
+        [ObserversRpc]
+        private void DiedObserversRpc()
+        {
+            onDeath?.Invoke();
+        }
+
         private void UpdateOwnerHud(int currentHp)
         {
             if (_healthBar == null || _healthBar.slider == null)
+            {
                 return;
-            
+            }
+
             _healthBar.SetHpView(currentHp, maxHp);
         }
     }
