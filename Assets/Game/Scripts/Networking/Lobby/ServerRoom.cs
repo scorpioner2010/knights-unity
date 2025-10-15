@@ -39,7 +39,7 @@ namespace Game.Scripts.Networking.Lobby
 
         public async void RunTimerAsync()
         {
-            float currentTime = ServerSettings.In.findRoomSeconds;
+            float currentTime = ServerSettings.FindRoomSeconds;
             
             while (currentTime > 0)
             {

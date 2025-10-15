@@ -53,10 +53,23 @@ namespace Game.Scripts.API.ServerManagers
             (bool isSuccess, string message, PlayerProfileDto profile) data;
             string token = RegisterServer.GetToken(clientId);
             
-            if (ServerSettings.In.isTestMode)
+            if (ServerSettings.IsTestMode)
             {
                 PlayerProfileDto profile = new PlayerProfileDto();
                 profile.username = GameplayAssistant.GenerateName(10);
+                profile.gold = 100;
+                profile.coins = 2566;
+                profile.activeWarriorCode = "sam_l1_starter";
+
+                List<OwnedWarriorDto> c = new List<OwnedWarriorDto>();
+                
+                OwnedWarriorDto dto = new();
+                dto.code = "sam_l1_starter";
+                dto.warriorId = 1;
+                c.Add(dto);
+                
+                profile.ownedWarriors = c.ToArray();
+                
                 data = (true, "111",profile);
             }
             else

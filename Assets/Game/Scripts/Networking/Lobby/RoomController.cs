@@ -48,7 +48,7 @@ namespace Game.Scripts.Networking.Lobby
         public void CreateRoomOrJoin()
         {
             IPlayerClientInfo info = ServiceLocator.Get<IPlayerClientInfo>();
-            lobbyManager.CreateRoomOrJoinServerRpc(ServerSettings.In.maxPlayersForFindRoom, currentMap.ToString(), info.Profile.username, info.ClientId);
+            lobbyManager.CreateRoomOrJoinServerRpc(ServerSettings.MaxPlayersForFindRoom, currentMap.ToString(), info.Profile.username, info.ClientId);
             MenuManager.OpenMenu(MenuType.FindGame);
         }
 

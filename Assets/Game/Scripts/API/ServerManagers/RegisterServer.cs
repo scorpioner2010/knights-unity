@@ -100,7 +100,7 @@ namespace NewDropDude.Script.API.ServerManagers
         {
             (bool isSuccess, string message, string token) result;
             
-            if (ServerSettings.In.isTestMode)
+            if (ServerSettings.IsTestMode)
             {
                 result = (true, "111", "222");
             }

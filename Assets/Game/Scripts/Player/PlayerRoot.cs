@@ -1,4 +1,5 @@
 using FishNet.Object;
+using Game.Combat;
 using Game.Script.Player;
 using Game.Scripts.Gameplay.Robots;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace Game.Scripts.Player
         public CharacterCameraController characterCameraController;
         public GroundChecker groundChecker;
         public CharacterInit characterInit;
+        public Health health;
+        public MeleeWeapon meleeWeapon;
 
         private void Update()
         {

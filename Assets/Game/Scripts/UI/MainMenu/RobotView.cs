@@ -69,6 +69,7 @@ namespace Game.Scripts.UI.MainMenu
             IPlayerClientInfo clientInfo = ServiceLocator.Get<IPlayerClientInfo>();
             OwnedWarriorDto selected = clientInfo.Profile.GetSelected();
             List<RobotList> list = new();
+
             
             foreach (OwnedWarriorDto vehicle in clientInfo.Profile.ownedWarriors)
             {

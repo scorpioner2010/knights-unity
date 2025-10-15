@@ -8,31 +8,29 @@ namespace Game.Scripts.Player
     {
         private bool _isJumping;
         public PlayerRoot playerRoot;
-        
-        private float _newSpeedLocomotion;
+
+        // throttle для відправки бігового параметра
+        [SerializeField] private float locomotionSendInterval = 0.05f; // 20 раз/с
+        [SerializeField] private float locomotionDeltaEpsilon = 0.01f;  // поріг зміни
+        private float _nextSendTime;
+        private float _lastSentLocomotion;
 
         private void OnEnable()
         {
             if (playerRoot.characterInput != null)
-            {
                 playerRoot.characterInput.OnUpdateInput += InputUpdated;
-            }
         }
 
         private void OnDisable()
         {
             if (playerRoot.characterInput != null)
-            {
                 playerRoot.characterInput.OnUpdateInput -= InputUpdated;
-            }
         }
 
         private void InputUpdated()
         {
             if (!IsOwner)
-            {
                 return;
-            }
 
             // Стрибок
             if (playerRoot.characterInput.jumpPressed &&
@@ -40,16 +38,14 @@ namespace Game.Scripts.Player
                 !_isJumping)
             {
                 _isJumping = true;
-                PlayJumpSound();
                 JumpServerRpc();
             }
 
-            // Атака
-            
-            //if (playerRoot.characterInput.attackPressed && !BlockAttack(currentWeapon))
-            //{
-            //    AttackServerRpc(currentWeapon);
-            //}
+            // 🔥 Атака — тригер "Attack"
+            if (playerRoot.characterInput.attackPressed)
+            {
+                AttackServerRpc();
+            }
         }
 
         private void Update()
@@ -57,9 +53,7 @@ namespace Game.Scripts.Player
             if (IsOwner)
             {
                 if (playerRoot.groundChecker.isGrounded && _isJumping)
-                {
                     _isJumping = false;
-                }
             }
             else if (IsServer)
             {
@@ -71,15 +65,49 @@ namespace Game.Scripts.Player
         {
             return playerRoot.animator.GetFloat("Locomotion");
         }
-        
-        public void SetLocomotion(float speed, float lerpParameter)
+
+        /// <summary>
+        /// Власник викликає це щофікс-кадр (див. CharacterMovement.FixedUpdate).
+        /// Локально робимо плавний лерп і, якщо змінились суттєво — шлемо на сервер для ретрансляції.
+        /// </summary>
+        public void SetLocomotion(float normalizedSpeed01, float lerpParameter)
         {
-            float  lerpSpeed = Mathf.Lerp(GetLocomotion(), speed, Time.fixedDeltaTime * lerpParameter);
-            playerRoot.animator.SetFloat("Locomotion", lerpSpeed);
+            float target = Mathf.Clamp01(normalizedSpeed01);
+            float value = Mathf.Lerp(GetLocomotion(), target, Time.fixedDeltaTime * lerpParameter);
+            playerRoot.animator.SetFloat("Locomotion", value);
+
+            if (IsOwner)
+                MaybeSendLocomotion(value);
         }
 
-        private void PlayJumpSound()
+        private void MaybeSendLocomotion(float value)
         {
+            if (Time.time < _nextSendTime)
+                return;
+
+            if (Mathf.Abs(value - _lastSentLocomotion) < locomotionDeltaEpsilon)
+                return;
+
+            _nextSendTime = Time.time + locomotionSendInterval;
+            _lastSentLocomotion = value;
+            LocomotionServerRpc(value);
+        }
+
+        // Сервер приймає значення від власника і розсилає спостерігачам
+        [ServerRpc(RequireOwnership = true)]
+        private void LocomotionServerRpc(float value)
+        {
+            LocomotionObserversRpc(value);
+        }
+
+        // На віддалених клієнтах ставимо значення напряму (без додаткового лерпу)
+        [ObserversRpc]
+        private void LocomotionObserversRpc(float value)
+        {
+            if (IsOwner)
+                return; // власник уже оновив локально
+
+            playerRoot.animator.SetFloat("Locomotion", Mathf.Clamp01(value));
         }
 
         [ServerRpc(RequireOwnership = true)]
@@ -87,6 +115,14 @@ namespace Game.Scripts.Player
         {
             TriggerAnimation("Jump");
             TriggerAnimationObserversRpc("Jump");
+        }
+
+        // ✅ Атака по мережі
+        [ServerRpc(RequireOwnership = true)]
+        private void AttackServerRpc()
+        {
+            TriggerAnimation("Attack");
+            TriggerAnimationObserversRpc("Attack");
         }
 
         [ObserversRpc]

@@ -7,106 +7,105 @@ namespace Game.Scripts.Player
     [DefaultExecutionOrder(-50)]
     public class CharacterInput : NetworkBehaviour
     {
-        // — SyncVar з правом запису лише на клієнті-власнику
+        // Плавний рух: напрям (x,z) * амплітуда (0..1)
         public Vector3 inputDirection;
         public bool jumpPressed;
         public bool attackPressed;
-        
+
         public bool slot1;
         public bool slot2;
         public bool slot3;
 
         public event Action OnUpdateInput;
 
-        // — попередній стан, щоб не спамити RPC
-        private Vector3 _lastDirection = Vector3.zero;
-        
-        private bool 
-            _lastJump, 
-            _lastAttack, 
-            _lastSlot1, 
-            _lastSlot2, 
+        // Кеш для економії апдейтів
+        private Vector3 _lastRawDirection = Vector3.zero;
+        private float _lastMoveAmount = 0f;
+
+        private bool
+            _lastJump,
+            _lastAttack,
+            _lastSlot1,
+            _lastSlot2,
             _lastSlot3;
-        
+
         [SerializeField] private Transform skeleton;
-        [SerializeField] private float accelerationTime = 0.02f;
+
+        [Header("Acceleration / Deceleration")]
+        [SerializeField] private float accelerationTime = 0.5f;
         [SerializeField] private float decelerationMultiplier = 3.0f;
-        
+
+        [Header("Inertia / Turning")]
+        [SerializeField] private float maxReverseSpeedCap = 0.2f;
+        [SerializeField] private float directionChangeDecelMultiplier = 2.0f;
+        [SerializeField] private float turnSpeedAtZero = 720f;
+        [SerializeField] private float turnSpeedAtMax = 240f;
+
         public PlayerRoot playerRoot;
 
-        public static float GetAxisVertical => Input.GetAxis("Vertical");
-        public static float GetAxisHorizontal => Input.GetAxis("Horizontal");
         public static float GetAxisX => Input.GetAxis("Mouse X");
         public static float GetAxisY => Input.GetAxis("Mouse Y");
         public static bool Escape => Input.GetKeyDown(KeyCode.Escape);
         public static bool Tab => Input.GetKeyDown(KeyCode.Tab);
-        public static bool E => Input.GetKey(KeyCode.E);
-        public static bool Q => Input.GetKey(KeyCode.Q);
-        
-        private float GetAlignmentScore()
-        {
-            Vector3 characterForward = new Vector3(skeleton.forward.x, 0, skeleton.forward.z).normalized;
-            Vector3 cameraForward = new Vector3(playerRoot.playerCamera.transform.forward.x, 0, playerRoot.playerCamera.transform.forward.z).normalized;
-            float dot = Vector3.Dot(characterForward, cameraForward);
-            return (dot + 1) / 2;
-        }
+
+        // Внутрішній стан
+        private float _moveAmount; // 0..1
+        private Vector3 _currentDir = Vector3.forward; // поточний згладжений напрям (нормований)
+        public float MoveAmount => _moveAmount;
 
         private void Update()
         {
-            if (IsOwner == false)
-            {
+            if (!IsOwner)
                 return;
-            }
-            
-            bool canShoot = false;
 
-            /*if (playerRoot.weaponController.currentWeapon != WeaponType.Fist && playerRoot.weaponController.currentWeapon != WeaponType.Sword)
-            {
-                if (playerRoot.playerCamera != null)
-                {
-                    float angle = GetAlignmentScore();
-                    canShoot = angle > 0.95f;
-                    CrosshairScreen.SetActiveScreen(canShoot);
-                }
-            }
-            else
-            {
-                CrosshairScreen.SetActiveScreen(false);
-            }*/
-
-            // 1) Зчитуємо ввід
-            Vector3 targetDirection = Vector3.zero;
-            if (Input.GetKey("w")) targetDirection += playerRoot.transform.forward;
-            if (Input.GetKey("s")) targetDirection -= playerRoot.transform.forward;
-            if (Input.GetKey("a")) targetDirection -= playerRoot.transform.right;
-            if (Input.GetKey("d")) targetDirection += playerRoot.transform.right;
-            if (targetDirection.magnitude > 1) targetDirection.Normalize();
+            // 1) Сирий таргет-напрямок з WASD
+            Vector3 rawTarget = Vector3.zero;
+            if (Input.GetKey("w")) rawTarget += playerRoot.transform.forward;
+            if (Input.GetKey("s")) rawTarget -= playerRoot.transform.forward;
+            if (Input.GetKey("a")) rawTarget -= playerRoot.transform.right;
+            if (Input.GetKey("d")) rawTarget += playerRoot.transform.right;
+            if (rawTarget.sqrMagnitude > 1f) rawTarget.Normalize();
 
             bool jump = Input.GetKeyDown(KeyCode.Space);
-            bool attack = false;
+            bool attack = Input.GetMouseButtonDown(0);
             bool slotNumber1 = Input.GetKey("1");
             bool slotNumber2 = Input.GetKey("2");
             bool slotNumber3 = Input.GetKey("3");
-            
-            // 2) Перевіряємо, чи треба відправити RPC
-            bool movementHeld = targetDirection != Vector3.zero;
 
-            /*if (playerRoot.weaponController.currentWeapon == WeaponType.Fist || playerRoot.weaponController.currentWeapon == WeaponType.Sword)
+            bool hasInput = rawTarget != Vector3.zero;
+
+            // 2) Плавний поворот напрямку (інерція повороту)
+            float turnSpeed = Mathf.Lerp(turnSpeedAtZero, turnSpeedAtMax, Mathf.Clamp01(_moveAmount));
+            if (hasInput)
             {
-                attack = MobileHUD.IsMobile() ? MobileHUD.AttackPressed : Input.GetMouseButtonDown(0);
+                Vector3 targetDir = rawTarget.normalized;
+                float maxStep = turnSpeed * Time.deltaTime;
+                _currentDir = Vector3.RotateTowards(_currentDir, targetDir, Mathf.Deg2Rad * maxStep, float.MaxValue);
+                _currentDir.Normalize();
             }
-            else
-            {
-                if (canShoot)
-                {
-                    attack = MobileHUD.IsMobile() ? MobileHUD.AttackPressed : Input.GetMouseButtonDown(0);
-                    playerRoot.sightLookController.SetSightPosition();
-                }
-            }*/
-            
+
+            // 3) Кутовий штраф швидкості
+            float alignment = hasInput ? Mathf.Clamp(Vector3.Dot(_currentDir, rawTarget.normalized), -1f, 1f) : 1f;
+            float dirFactor = Mathf.InverseLerp(-1f, 1f, alignment); // 0..1
+            float directionSpeedCap = Mathf.Lerp(maxReverseSpeedCap, 1f, dirFactor);
+
+            // 4) Розгін/гальмування з урахуванням капа
+            float targetAmount = hasInput ? directionSpeedCap : 0f;
+            float accel = Mathf.Max(0.0001f, accelerationTime);
+            float baseDecel = Mathf.Max(0.0001f, accelerationTime / Mathf.Max(0.0001f, decelerationMultiplier));
+            bool decelPhase = targetAmount < _moveAmount;
+            float decel = decelPhase ? baseDecel / Mathf.Max(0.0001f, directionChangeDecelMultiplier) : baseDecel;
+            float step = decelPhase ? Time.deltaTime / decel : Time.deltaTime / accel;
+            _moveAmount = Mathf.MoveTowards(_moveAmount, targetAmount, step);
+
+            // 5) Остаточний вектор руху
+            Vector3 smoothedDirection = (_moveAmount > 0.0001f) ? _currentDir * _moveAmount : Vector3.zero;
+
+            // 6) Нотифікація слухачів
             bool changed =
-                movementHeld ||
-                targetDirection != _lastDirection ||
+                hasInput ||
+                rawTarget != _lastRawDirection ||
+                Mathf.Abs(_moveAmount - _lastMoveAmount) > 0.0001f ||
                 jump != _lastJump ||
                 attack != _lastAttack ||
                 slotNumber1 != _lastSlot1 ||
@@ -115,21 +114,23 @@ namespace Game.Scripts.Player
 
             if (changed)
             {
-                _lastDirection = targetDirection;
+                _lastRawDirection = rawTarget;
+                _lastMoveAmount = _moveAmount;
+
                 _lastJump = jump;
                 _lastAttack = attack;
                 _lastSlot1 = slotNumber1;
                 _lastSlot2 = slotNumber2;
                 _lastSlot3 = slotNumber3;
 
-                inputDirection = targetDirection;
+                inputDirection = smoothedDirection;
                 jumpPressed = jump;
                 attackPressed = attack;
-                
+
                 slot1 = slotNumber1;
                 slot2 = slotNumber2;
                 slot3 = slotNumber3;
-                
+
                 OnUpdateInput?.Invoke();
             }
         }

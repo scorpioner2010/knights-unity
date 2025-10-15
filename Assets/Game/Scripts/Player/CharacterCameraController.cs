@@ -1,5 +1,4 @@
 using FishNet.Object;
-using Game.Script.Player;
 using UnityEngine;
 
 namespace Game.Scripts.Player
@@ -32,8 +31,6 @@ namespace Game.Scripts.Player
 
         private void Start()
         {
-            IniVisibleProcess();
-
             if (playerRoot.playerCamera != null)
             {
                 Vector3 angles = playerRoot.playerCamera.transform.eulerAngles;
@@ -45,11 +42,6 @@ namespace Game.Scripts.Player
 
             if (cameraFocusPoint != null)
                 _smoothedFocusPosition = cameraFocusPoint.position;
-        }
-
-        private void IniVisibleProcess()
-        {
-           
         }
 
         private void CameraVisibleProcess()

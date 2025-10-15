@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.API.Helpers;
+using Game.Scripts.Server;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -59,8 +60,14 @@ namespace Game.Scripts.API.Endpoints
         
         public OwnedWarriorDto GetSelected()
         {
-            OwnedWarriorDto active = null;
-
+            if (ServerSettings.IsTestMode)
+            {
+                OwnedWarriorDto dto = new();
+                dto.code = "sam_l1_starter";
+                dto.warriorId = 1;
+                return dto;
+            }
+            
             foreach (OwnedWarriorDto dto in ownedWarriors)
             {
                 if (activeWarriorId == dto.warriorId)
