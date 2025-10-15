@@ -895,7 +895,8 @@ MonoBehaviour:
   health: {fileID: -1033110773516883015}
   meleeWeapon: {fileID: 1655653836841836110}
   characterParticles: {fileID: 6551520111187205520}
-  nickNameView: {fileID: 943925330065302218}
+  playerHUD: {fileID: 943925330065302218}
+  playerCollider: {fileID: 1133995800236080708}
 --- !u!114 &5933044338177343111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3909,6 +3910,12 @@ PrefabInstance:
       propertyPath: tankRoot
       value: 
       objectReference: {fileID: 1295222213664343209}
+    - target: {fileID: 8419437673525612707, guid: 9043c1ae5d088df4690974177aa623d2,
+        type: 3}
+      propertyPath: floatingTextPrefab
+      value: 
+      objectReference: {fileID: 2152639842866602628, guid: 947e933197b42444abd55769254f6d3f,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

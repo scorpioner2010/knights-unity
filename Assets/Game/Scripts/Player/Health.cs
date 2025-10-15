@@ -44,13 +44,16 @@ namespace Game.Combat
         }
 
         [Server]
-        public void ApplyDamage(int amount, Vector3 hitPoint, Vector3 impulse, int attackId, NetworkObject attacker)
+        public void ApplyDamage(int dmg, Vector3 hitPoint, Vector3 impulse, int attackId, NetworkObject attacker)
         {
-            if (hp <= 0) return;
+            if (hp <= 0)
+            {
+                return;
+            }
 
             int oldHp = hp;
-            hp = Mathf.Max(0, hp - amount);
-            DamageObserversRpc(amount, hitPoint, impulse, attackId, attacker.ObjectId, hp);
+            hp = Mathf.Max(0, hp - dmg);
+            DamageObserversRpc(dmg, hitPoint, impulse, attackId, attacker.ObjectId, hp);
 
             if (hp == 0)
             {
@@ -61,20 +64,23 @@ namespace Game.Combat
         [Server]
         private void DeathServer()
         {
+            if (!playerRoot.Dead.Value)
+            {
+                playerRoot.SetDeadServer(true);
+            }
+            playerRoot.animationController.TriggerAnimationObserversRpc("Die");
             DiedObserversRpc();
         }
 
         [ObserversRpc]
-        private void DamageObserversRpc(int amount, Vector3 hitPoint, Vector3 impulse, int attackId, int attackerObjectId, int newHp)
+        private void DamageObserversRpc(int dmg, Vector3 hitPoint, Vector3 impulse, int attackId, int attackerObjectId, int newHp)
         {
             hp = newHp;
-            OnDamaged?.Invoke(amount, newHp, maxHp);
-
+            OnDamaged?.Invoke(dmg, newHp, maxHp);
             if (!IsOwner)
             {
                 return;
             }
-
             TryBindHealthBar();
             UpdateOwnerHud(newHp);
         }
@@ -91,7 +97,6 @@ namespace Game.Combat
             {
                 return;
             }
-
             _healthBar.SetHpView(currentHp, maxHp);
         }
     }

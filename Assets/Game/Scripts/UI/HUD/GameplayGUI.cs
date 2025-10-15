@@ -16,11 +16,6 @@ namespace Game.Scripts.UI.HUD
             In = this;
             buttonPause.onClick.AddListener(pauseMenu.OpenPause);
         }
-        
-        public void UpdateHealth(float healthPercentage)
-        {
-           
-        }
 
         public void OnDestroy()
         {

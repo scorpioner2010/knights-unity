@@ -100,6 +100,8 @@ namespace Game.Scripts.UI.MainMenu
             else
             {
                 MenuManager.OpenMenu(MenuType.GameplayHUD);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
 

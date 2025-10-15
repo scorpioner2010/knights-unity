@@ -1,5 +1,3 @@
-using System;
-using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.Player;
 using TMPro;
 using UnityEngine;
@@ -7,20 +5,28 @@ using UnityEngine.UI;
 
 namespace Game.Script.Player.UI
 {
-    public class NickNameView : MonoBehaviour
+    public class PlayerHUD : MonoBehaviour
     {
         public PlayerRoot tankRoot;
         private Camera _mainCamera;
         [SerializeField] private TMP_Text nickName;
         [SerializeField] private Image hpView;
+        [SerializeField] private FloatingText floatingTextPrefab;
 
         private void Start()
         {
-            tankRoot.health.OnDamaged += (f, f1, arg3) =>
+            tankRoot.health.OnDamaged += (dmg, current, max) =>
             {
-                float cur01 = Mathf.Clamp01(f1 / Mathf.Max(1f, arg3));
-                hpView.fillAmount = cur01;
+                hpView.fillAmount = Mathf.Clamp01(current / Mathf.Max(1f, max));
+                ShowFloatingText(dmg);
             };
+        }
+
+        private void ShowFloatingText(float dmg)
+        {
+            FloatingText t = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
+            string damage = Mathf.RoundToInt(dmg).ToString();
+            t.SetText(damage);
         }
 
         public void SetNick(string nick)
@@ -33,18 +39,10 @@ namespace Game.Script.Player.UI
         {
             _mainCamera = cam;
         }
-
-        public void SetActiveView(bool active)
-        {
-            nickName.gameObject.SetActive(active);
-        }
         
         private void LateUpdate()
         {
-            if (_mainCamera != null)
-            {
-                transform.forward = _mainCamera.transform.forward;
-            }
+            if (_mainCamera != null) transform.forward = _mainCamera.transform.forward;
         }
     }
 }

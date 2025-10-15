@@ -66,6 +66,11 @@ namespace Game.Scripts.Player
             {
                 return;
             }
+            
+            if (playerRoot.Dead.Value)
+            {
+                return;
+            }
 
             if (playerRoot.playerCamera == null)
             {

@@ -270,6 +270,7 @@ MonoBehaviour:
   tankRoot: {fileID: 0}
   nickName: {fileID: 1708463725538953413}
   hpView: {fileID: 6888389142017244291}
+  floatingTextPrefab: {fileID: 0}
 --- !u!1 &8062004295221571761
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,17 +29,14 @@ namespace Game.Scripts.Player
             _lastSlot2,
             _lastSlot3;
 
-        [SerializeField] private Transform skeleton;
-
-        [Header("Acceleration / Deceleration")]
-        [SerializeField] private float accelerationTime = 0.5f;
-        [SerializeField] private float decelerationMultiplier = 3.0f;
-
-        [Header("Inertia / Turning")]
-        [SerializeField] private float maxReverseSpeedCap = 0.2f;
-        [SerializeField] private float directionChangeDecelMultiplier = 2.0f;
-        [SerializeField] private float turnSpeedAtZero = 720f;
-        [SerializeField] private float turnSpeedAtMax = 240f;
+        public Transform skeleton;
+        public float accelerationTime = 0.5f;
+        public float decelerationMultiplier = 3.0f;
+        
+        public float maxReverseSpeedCap = 0.2f;
+        public float directionChangeDecelMultiplier = 2.0f;
+        public float turnSpeedAtZero = 720f;
+        public float turnSpeedAtMax = 240f;
 
         public PlayerRoot playerRoot;
 
@@ -58,6 +55,11 @@ namespace Game.Scripts.Player
             if (!IsOwner)
                 return;
 
+            if (playerRoot.Dead.Value)
+            {
+                return;
+            }
+            
             // 1) Сирий таргет-напрямок з WASD
             Vector3 rawTarget = Vector3.zero;
             if (Input.GetKey("w")) rawTarget += playerRoot.transform.forward;

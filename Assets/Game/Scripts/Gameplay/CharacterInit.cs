@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using Game.Script.Player;
 using Game.Scripts.Player;
 using UnityEngine;
 using UEScene = UnityEngine.SceneManagement.Scene;
@@ -76,8 +75,8 @@ namespace Game.Scripts.Gameplay.Robots
                     {
                         if (OwnerId != root.OwnerId)
                         {
-                            root.nickNameView.SetCamera(cam);
-                            root.nickNameView.SetNick(root.characterInit.LoginName.Value);
+                            root.playerHUD.SetCamera(cam);
+                            root.playerHUD.SetNick(root.characterInit.LoginName.Value);
                         }
                     }
 
