@@ -412,7 +412,7 @@ GameObject:
   - component: {fileID: 1655653836841836110}
   - component: {fileID: 6551520111187205520}
   m_Layer: 8
-  m_Name: Paladin
+  m_Name: Unit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
