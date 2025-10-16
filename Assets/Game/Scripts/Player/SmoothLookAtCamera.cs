@@ -50,7 +50,11 @@ namespace Game.Scripts.Player
             // Напрямок до камери, ігноруючи Y
             Vector3 direction = targetCamera.transform.position - transform.position;
             direction.y = 0;
-            if (direction.sqrMagnitude < 0.001f) return;
+            if (direction.sqrMagnitude < 0.001f)
+            {
+                return;
+            }
+            
             Quaternion targetRotation = Quaternion.LookRotation(direction); transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
         }
     }

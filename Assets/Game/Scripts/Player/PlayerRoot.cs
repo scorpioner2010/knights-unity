@@ -27,6 +27,7 @@ namespace Game.Scripts.Player
         public CharacterParticles characterParticles;
         public PlayerHUD playerHUD;
         public Collider playerCollider;
+        public FaceCenterFromGround  faceCenterFromGround;
         
         public readonly SyncVar<bool> Dead = new(false);
         public readonly SyncVar<PointSide> Side = new(PointSide.Red);
@@ -48,6 +49,7 @@ namespace Game.Scripts.Player
         public void Init()
         {
             playerCamera = CameraSync.In.gameplayCamera;
+            faceCenterFromGround.FaceCenterFromGroundLayer(this);
         }
 
         [Server]

@@ -10,7 +10,7 @@ namespace Game.Scripts.Player
         public PlayerRoot playerRoot;
 
         public bool blockCameraRotation;
-        
+
         public float cameraDistance = 5.0f;
         public float xSpeed = 120.0f;
         public float ySpeed = 120.0f;
@@ -31,13 +31,13 @@ namespace Game.Scripts.Player
 
         private void Start()
         {
-            if (playerRoot.playerCamera != null)
+            if (playerRoot != null && playerRoot.playerCamera != null)
             {
                 Vector3 angles = playerRoot.playerCamera.transform.eulerAngles;
                 _x = angles.y;
                 _y = angles.x;
             }
-            
+
             _lastSentX = _x;
 
             if (cameraFocusPoint != null)
@@ -46,48 +46,30 @@ namespace Game.Scripts.Player
 
         private void CameraVisibleProcess()
         {
-            if (IsOwner  == false)
+            if (IsOwner == false)
             {
                 return;
             }
-            
-            if (_boundingCube == null)
-            {
-                return;
-            }
-
-            Vector3 camPos = playerRoot.playerCamera.transform.position;
-            bool isInside = Mathf.Abs(camPos.x - _center.x) <= _halfExtents.x && Mathf.Abs(camPos.y - _center.y) <= _halfExtents.y && Mathf.Abs(camPos.z - _center.z) <= _halfExtents.z;
         }
 
         private void LateUpdate()
         {
             if (IsOwner == false)
-            {
                 return;
-            }
-            
-            if (playerRoot.Dead.Value)
-            {
-                return;
-            }
 
-            if (playerRoot.playerCamera == null)
-            {
+            if (playerRoot == null || playerRoot.playerCamera == null)
                 return;
-            }
+
+            if (playerRoot.Dead.Value)
+                return;
 
             CameraVisibleProcess();
 
             if (blockCameraRotation)
-            {
                 return;
-            }
-            
+
             if (cameraFocusPoint == null)
-            {
                 return;
-            }
 
             if (isActiveLerp)
             {
@@ -98,18 +80,42 @@ namespace Game.Scripts.Player
             _y -= CharacterInput.GetAxisY * ySpeed * mouseSpeed;
 
             _y = Mathf.Clamp(_y, -10f, 60f);
-            
+
             Quaternion camRotation = Quaternion.Euler(_y, _x, 0f);
             Vector3 camPosition = camRotation * new Vector3(0f, 0f, -cameraDistance) + _smoothedFocusPosition;
-            
+
             playerRoot.playerCamera.transform.rotation = camRotation;
             playerRoot.playerCamera.transform.position = camPosition;
-            
+
             if (!Mathf.Approximately(_lastSentX, _x))
             {
                 _lastSentX = _x;
                 transform.rotation = Quaternion.Euler(0f, _lastSentX, 0f);
             }
+        }
+        
+        public void OverrideYawOnce(float worldYawDegrees)
+        {
+            _x = worldYawDegrees;
+            _lastSentX = _x;
+
+            if (cameraFocusPoint != null)
+            {
+                _smoothedFocusPosition = cameraFocusPoint.position;
+            }
+
+            if (playerRoot == null || playerRoot.playerCamera == null)
+            {
+                return;
+            }
+            
+            Quaternion camRotation = Quaternion.Euler(_y, _x, 0f);
+            Vector3 camPosition = camRotation * new Vector3(0f, 0f, -cameraDistance) + _smoothedFocusPosition;
+
+            playerRoot.playerCamera.transform.rotation = camRotation;
+            playerRoot.playerCamera.transform.position = camPosition;
+            
+            transform.rotation = Quaternion.Euler(0f, _x, 0f);
         }
     }
 }

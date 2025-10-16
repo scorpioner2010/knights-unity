@@ -26,13 +26,13 @@ namespace Game.Scripts.Networking.Lobby
     {
         Test = 0,
     }
-    
+
     public class GameplaySpawner : NetworkBehaviour
     {
         public static GameplaySpawner In;
         public GameMaps[] scenes;
         public GameplayTimer gameplayTimerPrefab;
-        
+
         [SerializeField] private LobbyManager lobbyManager;
 
         private UEScene _additiveServerScene;
@@ -61,14 +61,14 @@ namespace Game.Scripts.Networking.Lobby
                 {
                     return;
                 }
-                
+
                 Player player = serverRoom.GetPlayers().Find(x => x.Connection == conn);
-                
+
                 if (player == null)
                 {
                     return;
                 }
-                
+
                 LobbyRooms.RemovePlayerFromRoom(serverRoom.roomId, player.loginName);
             }
         }
@@ -81,7 +81,7 @@ namespace Game.Scripts.Networking.Lobby
             }
 
             int usedOffset = sceneOffsetX;
-            
+
             foreach (GameObject go in scene.GetRootGameObjects())
             {
                 go.transform.position += Vector3.right * usedOffset;
@@ -101,7 +101,7 @@ namespace Game.Scripts.Networking.Lobby
                 if (param is ServerRoom info)
                 {
                     ServerRoom serverRoom = LobbyRooms.GetRoomById(info.roomId);
-                    
+
                     foreach (Scene sc in args.LoadedScenes)
                     {
                         if (sc.name == serverRoom.loadedSceneName)
@@ -128,10 +128,10 @@ namespace Game.Scripts.Networking.Lobby
             {
                 return;
             }
-            
+
             NotifyServerSceneLoaded(ClientManager.Connection.ClientId);
         }
-        
+
         private void HandleClientLoadEnd(SceneLoadEndEventArgs args)
         {
             byte[] cp = args.QueueData.SceneLoadData.Params.ClientParams;
@@ -143,7 +143,7 @@ namespace Game.Scripts.Networking.Lobby
                 {
                     continue;
                 }
-                
+
                 foreach (GameObject go in scene.GetRootGameObjects())
                 {
                     go.transform.position += Vector3.right * offset;
@@ -151,22 +151,24 @@ namespace Game.Scripts.Networking.Lobby
             }
         }
 
-        private void SceneManagerOnUnloadEnd(SceneUnloadEndEventArgs obj) { }
-        
+        private void SceneManagerOnUnloadEnd(SceneUnloadEndEventArgs obj)
+        {
+        }
+
         public void ReturnToMainMenu()
         {
             RobotView.GenerateIcons();
             MainMenu.In.SetActive(true);
             MenuManager.CloseMenu(MenuType.GameplayHUD);
-         
+
             foreach (PlayerRoot root in FindObjectsByType<PlayerRoot>(FindObjectsSortMode.None))
             {
-                if(root.OwnerId == ClientManager.Connection.ClientId)
+                if (root.OwnerId == ClientManager.Connection.ClientId)
                 {
                     //Destroy from gameplay
                 }
             }
-            
+
             RequestPlayerDisconnectServerRpc(ClientManager.Connection.ClientId);
             lobbyManager.RequestGetRoomList();
         }
@@ -178,13 +180,13 @@ namespace Game.Scripts.Networking.Lobby
             {
                 return;
             }
-            
+
             ServerRoom serverRoom = LobbyRooms.GetRoomByConnection(conn);
 
             if (serverRoom != null)
             {
                 Player player = serverRoom.GetPlayerBuyConnection(conn);
-            
+
                 if (player != null)
                 {
                     SceneManager.UnloadConnectionScenes(conn, new SceneUnloadData(serverRoom.loadedSceneName));
@@ -194,7 +196,8 @@ namespace Game.Scripts.Networking.Lobby
             }
         }
 
-        private bool IsValidScene(UEScene scene) => scene.IsValid() && scenes.Any(k => scene.name.Contains(k.ToString()));
+        private bool IsValidScene(UEScene scene) =>
+            scene.IsValid() && scenes.Any(k => scene.name.Contains(k.ToString()));
 
         [ServerRpc(RequireOwnership = false)]
         private void NotifyServerSceneLoaded(int clientId)
@@ -203,11 +206,11 @@ namespace Game.Scripts.Networking.Lobby
             {
                 return;
             }
-            
+
             ServerRoom serverRoom = LobbyRooms.GetRoomByConnection(conn);
             Player playerByConnection = serverRoom.GetPlayerBuyConnection(conn);
             playerByConnection.randomPlayerConnected = true;
-            
+
             List<Player> realPlayers = new();
 
             foreach (Player player in serverRoom.GetPlayers())
@@ -217,9 +220,9 @@ namespace Game.Scripts.Networking.Lobby
                     realPlayers.Add(player);
                 }
             }
-            
+
             bool allLoaded = realPlayers.All(p => p.randomPlayerConnected);
-            
+
             if (allLoaded) //виконується тільки тоді коли всі гравці загрузилися
             {
                 foreach (Player player in serverRoom.GetPlayers())
@@ -233,7 +236,7 @@ namespace Game.Scripts.Networking.Lobby
                         SpawnPlayer(serverRoom, player.Connection);
                     }
                 }
-                
+
                 LobbyRooms.UpdateRoomStatusInGame(serverRoom.roomId);
                 SpawnTimer(serverRoom);
                 //ScoreBoard timer = Instantiate(scoreBoard, Vector3.zero, Quaternion.identity);
@@ -247,32 +250,32 @@ namespace Game.Scripts.Networking.Lobby
         {
             GameplayTimer timer = Instantiate(gameplayTimerPrefab, Vector3.zero, Quaternion.identity);
             ServerManager.Spawn(timer.networkObject, LocalConnection, _additiveServerScene);
-            serverRoom.gameplayTimer =  timer;
+            serverRoom.gameplayTimer = timer;
         }
-        
+
         private void SpawnBot(ServerRoom serverRoom, Player player)
         {
             return;
-            
+
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.side);
-            
+
             if (spawnPoint == null)
             {
                 Debug.LogError("Не знайдено вільної точки спавну.");
                 return;
             }
-            
+
             //TankRoot tankRoot = Instantiate(PlayerPrefab, spawnPoint.transform.position, Quaternion.identity);
             //ServerManager.Spawn(tankRoot.networkObject, LocalConnection, _additiveServerScene);
             //player.playerRoot = tankRoot;
             //playerRoot.Side.Value = player.side;
             //player.playerRoot.characterInit.Init(0, InitValue.Bot, player.loginName, serverRoom.roomId, _additiveServerScene);
         }
-        
+
         private async void SpawnPlayer(ServerRoom serverRoom, NetworkConnection connection)
         {
             float elapsedTime = 0f;
-            
+
             while (!_additiveServerScene.IsValid() && elapsedTime < SceneValidationTimeout)
             {
                 elapsedTime += Time.deltaTime;
@@ -284,24 +287,26 @@ namespace Game.Scripts.Networking.Lobby
                 Debug.LogError("Не вдалося валідувати адитивну сцену протягом відведеного часу.");
                 return;
             }
-            
+
             Player player = serverRoom.GetPlayerBuyConnection(connection);
-            
+
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.side);
             PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
             PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeWarriorCode);
+
             PlayerRoot playerRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
+            //playerRoot.faceCenterFromGround.FaceCenterFromGroundLayer(playerRoot);
             ServerManager.Spawn(playerRoot.networkObject, connection, _additiveServerScene);
             playerRoot.Side.Value = player.side;
             player.playerRoot = playerRoot;
             player.playerRoot.characterInit.ServerInit(serverRoom.maxPlayers, PlayerType.Player, player.loginName, _additiveServerScene);
         }
-
+        
         [ObserversRpc]
         private void ApplySceneOffsetClientRpc(int sceneHandle, int offset)
         {
             UEScene scene = GetSceneByHandleLocal(sceneHandle);
-            
+
             if (!scene.IsValid())
             {
                 return;
@@ -323,13 +328,14 @@ namespace Game.Scripts.Networking.Lobby
                     return s;
                 }
             }
+
             return default;
         }
 
         public static List<T> FindObjectsInScene<T>(UEScene scene, bool includeInactive = true) where T : Component
         {
             List<T> results = new List<T>();
-            
+
             if (!scene.IsValid())
             {
                 return results;
@@ -339,17 +345,18 @@ namespace Game.Scripts.Networking.Lobby
             {
                 results.AddRange(root.GetComponentsInChildren<T>(includeInactive));
             }
-            
+
             return results;
         }
 
-        public static List<Component> FindObjectsInScene(GameObject root, Type componentType, bool includeInactive = true)
+        public static List<Component> FindObjectsInScene(GameObject root, Type componentType,
+            bool includeInactive = true)
         {
             if (root == null)
             {
                 return new List<Component>();
             }
-            
+
             return root.GetComponentsInChildren(componentType, includeInactive).Cast<Component>().ToList();
         }
 
@@ -359,7 +366,7 @@ namespace Game.Scripts.Networking.Lobby
             {
                 return new List<T>();
             }
-            
+
             return root.GetComponentsInChildren<T>(includeInactive).ToList();
         }
     }

@@ -21829,7 +21829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7d804b5d3773e47b81d159d7e65980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTestMode: 0
+  isTestMode: 1
   maxPlayersForFindRoom: 5
   findRoomSeconds: 3
 --- !u!4 &2068572094

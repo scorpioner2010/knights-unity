@@ -21,8 +21,6 @@ namespace Game.Scripts.Gameplay.Robots
         private readonly SyncVar<int> _amountPlayersInRoom = new ();
         public readonly SyncVar<string> LoginName = new ("");
         public readonly SyncVar<PlayerType> PlayerType = new(Robots.PlayerType.None);
-        
-
         public UEScene currentScene;
 
         [Server]

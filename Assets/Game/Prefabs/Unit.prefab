@@ -411,6 +411,7 @@ GameObject:
   - component: {fileID: -1033110773516883015}
   - component: {fileID: 1655653836841836110}
   - component: {fileID: 6551520111187205520}
+  - component: {fileID: 5044299463202849338}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -487,7 +488,6 @@ MonoBehaviour:
   - {fileID: 3340459714197439112}
   - {fileID: 1195596581958309019}
   - {fileID: 1398992688396928350}
-  - {fileID: 0}
   - {fileID: 1295222213664343209}
   - {fileID: 5933044338177343111}
   - {fileID: -1033110773516883015}
@@ -517,9 +517,9 @@ MonoBehaviour:
   _spectatorInterpolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  <PrefabId>k__BackingField: 1
+  <PrefabId>k__BackingField: 0
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 13268444209975181518
+  <AssetPathHash>k__BackingField: 8648165907711213806
   <SceneId>k__BackingField: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
@@ -860,7 +860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e13be27e1966e4b981a1451cd07a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 7
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   networkObject: {fileID: 4678259557315704785}
@@ -879,6 +879,7 @@ MonoBehaviour:
   characterParticles: {fileID: 6551520111187205520}
   playerHUD: {fileID: 943925330065302218}
   playerCollider: {fileID: 1133995800236080708}
+  faceCenterFromGround: {fileID: 5044299463202849338}
 --- !u!114 &5933044338177343111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,7 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87497f6416ac94c832de5c280cac7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 8
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   playerRoot: {fileID: 1295222213664343209}
@@ -909,7 +910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8f30354a2418b4d927d1015331d425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 9
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   maxHp: 100
@@ -930,7 +931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4be7afb9eb409c4dbc8ebac6512cc2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 10
+  _componentIndexCache: 9
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   playerRoot: {fileID: 1295222213664343209}
@@ -963,6 +964,21 @@ MonoBehaviour:
     type: 3}
   hitPrefabServer: {fileID: 1414258708746871229, guid: 58511696c15385e40abcdc87e5066593,
     type: 3}
+--- !u!114 &5044299463202849338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421123571065159367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 298f3691d4229eb44859e948816ce00f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &1442515779182038148
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,7 +2839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 11
+  _componentIndexCache: 10
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   _componentConfiguration: 0
