@@ -1,11 +1,15 @@
 using Game.Scripts.Player;
+using Game.Scripts.ScriptableObjects;
 using UnityEngine;
 
-public class ResourceManager : MonoBehaviour
+namespace Game.GameResources
 {
-    private static ResourceManager _in;
-    public RobotRegistry registry;
-    private void Awake() => _in = this;
-    public static PlayerRoot GetPrefab(string code) => _in.registry.GetPrefab(code);
-    public static Sprite GetIcon(string code) => _in.registry.GetIcon(code);
+    public class ResourceManager : MonoBehaviour
+    {
+        private static ResourceManager _in;
+        public UnitRegistry registry;
+        private void Awake() => _in = this;
+        public static PlayerRoot GetPrefab(string code) => _in.registry.GetPrefab(code);
+        public static Sprite GetIcon(string code) => _in.registry.GetIcon(code);
+    }
 }

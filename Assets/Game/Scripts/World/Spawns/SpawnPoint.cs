@@ -12,7 +12,7 @@ namespace Game.Scripts.World.Spawns
     public class SpawnPoint : NetworkBehaviour
     {
         public readonly SyncVar<bool> IsNotFree = new(false);
-        public PointSide pointSide;
+        public Team team;
 
         private async void MarkPoint()
         {
@@ -31,7 +31,7 @@ namespace Game.Scripts.World.Spawns
             }
         }
 
-        public static SpawnPoint GetFreePoint(Scene scene, PointSide side)
+        public static SpawnPoint GetFreePoint(Scene scene, Team team)
         {
             List<SpawnPoint> allPoints = GameplaySpawner.FindObjectsInScene<SpawnPoint>(scene);
             List<SpawnPoint> freeBySide = new();
@@ -40,7 +40,7 @@ namespace Game.Scripts.World.Spawns
             {
                 SpawnPoint p = allPoints[i];
                 
-                if (p.pointSide == side)
+                if (p.team == team)
                 {
                     if (p.IsNotFree.Value == false)
                     {
@@ -56,9 +56,10 @@ namespace Game.Scripts.World.Spawns
         }
     }
 
-    public enum PointSide
+    public enum Team
     {
-        Red = 0,
-        Blue = 1,
+        Draw = 0,
+        Red = 1,
+        Blue = 2,
     }
 }

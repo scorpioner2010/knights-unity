@@ -1,9 +1,8 @@
-using System;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using Game.Combat;
 using Game.Script.Player.UI;
 using Game.Scripts.Gameplay.Robots;
+using Game.Scripts.Networking.Lobby;
 using Game.Scripts.World.Spawns;
 using UnityEngine;
 
@@ -28,22 +27,21 @@ namespace Game.Scripts.Player
         public PlayerHUD playerHUD;
         public Collider playerCollider;
         public FaceCenterFromGround  faceCenterFromGround;
+        public StatisticCounter  statisticCounter;
         
-        public readonly SyncVar<bool> Dead = new(false);
-        public readonly SyncVar<PointSide> Side = new(PointSide.Red);
+        public readonly SyncVar<bool> IsDead = new();
+        public readonly SyncVar<Team> Team = new();
+        public ServerRoom serverRoom; //only server
+        public string warriorCode;
         
         public override void OnStartClient()
         {
-            Dead.OnChange += OnDeadChanged;
+            IsDead.OnChange += OnIsDeadChanged;
         }
 
         public override void OnStopClient()
         {
-            Dead.OnChange -= OnDeadChanged;
-        }
-
-        private void Update()
-        {
+            IsDead.OnChange -= OnIsDeadChanged;
         }
 
         public void Init()
@@ -53,16 +51,12 @@ namespace Game.Scripts.Player
         }
 
         [Server]
-        public void SetDeadServer(bool value)
+        public void SetDeadServer()
         {
-            if (Dead.Value == value)
-            {
-                return;
-            }
-            Dead.Value = value;
+            IsDead.Value = true;
         }
 
-        private void OnDeadChanged(bool prev, bool next, bool asServer)
+        private void OnIsDeadChanged(bool prev, bool next, bool asServer)
         {
             ApplyDeadState(next);
         }
@@ -75,9 +69,6 @@ namespace Game.Scripts.Player
                 animator.ResetTrigger("Jump");
                 animator.SetFloat("Locomotion", 0f);
                 animator.SetTrigger("Die");
-                
-                playerCollider.enabled = false;
-                characterController.enabled = false;
             }
         }
     }

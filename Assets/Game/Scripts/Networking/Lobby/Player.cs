@@ -13,6 +13,7 @@ namespace Game.Scripts.Networking.Lobby
         public PlayerRoot playerRoot;
         public bool isBot;
         public bool randomPlayerConnected; //for random game
-        public PointSide side;
+        public Team team;
+        public int matchId;
     }
 }

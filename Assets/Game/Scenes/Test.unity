@@ -219,7 +219,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &147969886
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +319,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &228623538
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +484,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &338111422
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +644,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!4 &359703905
 Transform:
   m_ObjectHideFlags: 0
@@ -809,7 +809,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &388903399
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +909,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &419150677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,7 +1436,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &700896456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,7 +1536,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &728947997
 GameObject:
   m_ObjectHideFlags: 0
@@ -1761,7 +1761,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &776278875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1986,7 +1986,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &958140196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2085,7 +2085,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!33 &1070062901
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2235,7 +2235,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &1124262196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2538,7 +2538,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &1334172115
 GameObject:
   m_ObjectHideFlags: 0
@@ -2638,7 +2638,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &1337344640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2688,7 +2688,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!33 &1337344643
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2838,7 +2838,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &1352073718
 GameObject:
   m_ObjectHideFlags: 0
@@ -3013,7 +3013,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!33 &1369620899
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3163,7 +3163,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &1563464896
 GameObject:
   m_ObjectHideFlags: 0
@@ -3263,7 +3263,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &1579309171
 GameObject:
   m_ObjectHideFlags: 0
@@ -3313,7 +3313,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!33 &1579309174
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3500,7 +3500,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &1686699316
 GameObject:
   m_ObjectHideFlags: 0
@@ -3600,7 +3600,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &1722329768
 GameObject:
   m_ObjectHideFlags: 0
@@ -3700,7 +3700,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &1761058057
 GameObject:
   m_ObjectHideFlags: 0
@@ -4106,7 +4106,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &1947045061
 GameObject:
   m_ObjectHideFlags: 0
@@ -4206,7 +4206,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &1973335628
 GameObject:
   m_ObjectHideFlags: 0
@@ -4306,7 +4306,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &2073790754
 GameObject:
   m_ObjectHideFlags: 0
@@ -4524,7 +4524,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &2088447684
 GameObject:
   m_ObjectHideFlags: 0
@@ -4624,7 +4624,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
-  pointSide: 1
+  team: 2
 --- !u!1 &2092599173
 GameObject:
   m_ObjectHideFlags: 0
@@ -4724,7 +4724,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1 &2118709754
 GameObject:
   m_ObjectHideFlags: 0
@@ -4824,7 +4824,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1786657438}
   _networkObjectCache: {fileID: 0}
-  pointSide: 0
+  team: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

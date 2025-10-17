@@ -179,12 +179,12 @@ namespace Game.Scripts.Networking.Lobby
             {
                 if (amount > 0)
                 {
-                    player.side = PointSide.Blue;
+                    player.team = Team.Blue;
                     amount--;
                 }
                 else
                 {
-                    player.side = PointSide.Red;
+                    player.team = Team.Red;
                 }
             }
             

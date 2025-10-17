@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 7954560391765168706}
   - component: {fileID: 6585528503223272842}
   - component: {fileID: 8667579807356841120}
-  - component: {fileID: 1133995800236080708}
+  - component: {fileID: 3286393339316045850}
   - component: {fileID: 2471983283610974262}
   - component: {fileID: 8041738382331135194}
   - component: {fileID: 8365651957563856604}
@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 1655653836841836110}
   - component: {fileID: 6551520111187205520}
   - component: {fileID: 5044299463202849338}
+  - component: {fileID: -6113481503883571012}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -492,6 +493,7 @@ MonoBehaviour:
   - {fileID: 5933044338177343111}
   - {fileID: -1033110773516883015}
   - {fileID: 1655653836841836110}
+  - {fileID: -6113481503883571012}
   - {fileID: 2526728416897311191}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
@@ -557,7 +559,7 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
-  _componentConfiguration: 0
+  _componentConfiguration: 1
   _synchronizeParent: 0
   _packing:
     Position: 1
@@ -604,14 +606,14 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.8
-  m_Radius: 0.27
+  m_Height: 1.7
+  m_Radius: 0.47
   m_SlopeLimit: 35
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!136 &1133995800236080708
+--- !u!136 &3286393339316045850
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -631,7 +633,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.47
-  m_Height: 1.8
+  m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!195 &2471983283610974262
@@ -878,8 +880,9 @@ MonoBehaviour:
   meleeWeapon: {fileID: 1655653836841836110}
   characterParticles: {fileID: 6551520111187205520}
   playerHUD: {fileID: 943925330065302218}
-  playerCollider: {fileID: 1133995800236080708}
+  playerCollider: {fileID: 3286393339316045850}
   faceCenterFromGround: {fileID: 5044299463202849338}
+  statisticCounter: {fileID: -6113481503883571012}
 --- !u!114 &5933044338177343111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -940,13 +943,9 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 256
-  sweepRadius: 0.12
+  sweepRadius: 0.2
   damage: 10
   hitWindow: 0.25
-  drawGizmos: 1
-  gizmoCurrentColor: {r: 0.1, g: 0.8, b: 1, a: 0.8}
-  gizmoPrevColor: {r: 1, g: 0.7, b: 0.1, a: 0.8}
-  gizmoSweepColor: {r: 1, g: 0.95, b: 0.1, a: 0.8}
   localVfxWindow: 0.25
 --- !u!114 &6551520111187205520
 MonoBehaviour:
@@ -979,6 +978,22 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 8
+--- !u!114 &-6113481503883571012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421123571065159367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8515a442031fe9a4c93eedcc2d0c9446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 10
+  _addedNetworkObject: {fileID: 4678259557315704785}
+  _networkObjectCache: {fileID: 4678259557315704785}
+  playerRoot: {fileID: 1295222213664343209}
 --- !u!1 &1442515779182038148
 GameObject:
   m_ObjectHideFlags: 0
@@ -2839,7 +2854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 10
+  _componentIndexCache: 11
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   _componentConfiguration: 0

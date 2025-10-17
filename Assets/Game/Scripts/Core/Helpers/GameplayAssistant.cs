@@ -187,7 +187,25 @@ namespace Game.Scripts.Core.Helpers
         
         public static int RemoveAllNull<T>(this List<T> list)
         {
-            return list.RemoveAll(item => item.Equals(default(T)));
+            if (list == null)
+            {
+                return 0;
+            }
+
+            // Спеціальний кейс для UnityEngine.Object (фейковий null через оператор ==)
+            if (typeof(Object).IsAssignableFrom(typeof(T)))
+            {
+                return list.RemoveAll(item => (item as Object) == null);
+            }
+
+            // Для звичайних посилальних типів і Nullable<T> (boxing дає null, якщо немає значення)
+            if (!typeof(T).IsValueType)
+            {
+                return list.RemoveAll(item => ReferenceEquals(item, null));
+            }
+
+            // Value-type (struct, int, float...) — нічого не видаляємо
+            return 0;
         }
         
         public static int RandomIndex<T>(this T[] array)

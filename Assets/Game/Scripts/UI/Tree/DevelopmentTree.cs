@@ -13,6 +13,7 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using FishNet.Connection;
+using Game.GameResources;
 using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.UI.MainMenu;

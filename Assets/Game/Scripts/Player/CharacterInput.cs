@@ -55,7 +55,7 @@ namespace Game.Scripts.Player
             if (!IsOwner)
                 return;
 
-            if (playerRoot.Dead.Value)
+            if (playerRoot.IsDead.Value)
             {
                 return;
             }

@@ -34,10 +34,12 @@ namespace Game.Scripts.API.Endpoints
             return (false, text, null);
         }
 
-        public static async UniTask<(bool ok, string message)> EndMatch(int matchId, EndMatchRequest body, string token)
+        // Клієнт завершує СВІЙ результат: /matches/{matchId}/end/me
+        // Використовує WarriorCode, UserId береться із токена на сервері.
+        public static async UniTask<(bool ok, string message)> EndMatchMe(int matchId, EndMatchMeRequest body, string token)
         {
             string json = JsonUtility.ToJson(body);
-            UnityWebRequest request = new UnityWebRequest($"{HttpLink.APIBase}/matches/{matchId}/end", "POST")
+            UnityWebRequest request = new UnityWebRequest($"{HttpLink.APIBase}/matches/{matchId}/end/me", "POST")
             {
                 uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json)),
                 downloadHandler = new DownloadHandlerBuffer(),
@@ -73,22 +75,25 @@ namespace Game.Scripts.API.Endpoints
         }
     }
 
-    [Serializable] public class StartMatchRequest { public string map; }
-    [Serializable] public class MatchStartResponse { public int matchId; }
-
     [Serializable]
-    public class EndMatchRequest
+    public class StartMatchRequest
     {
-        public ParticipantInput[] participants;
+        public string map;
     }
 
     [Serializable]
-    public class ParticipantInput
+    public class MatchStartResponse
     {
-        public int userId;
-        public int warriorId;
+        public int matchId;
+    }
+
+    // Новий DTO: лише для клієнта, замість WarriorId — WarriorCode
+    [Serializable]
+    public class EndMatchMeRequest
+    {
+        public string warriorCode; // обов'язково
         public int team;
-        public string result;
+        public string result; // "win" | "draw" | "lose"
         public int kills;
         public int damage;
     }
@@ -98,7 +103,8 @@ namespace Game.Scripts.API.Endpoints
     {
         public int userId;
         public string username;
-        public int warriorId;
+        public int warriorId;      // лишено для сумісності з бекенд-відповіддю
+        public string warriorCode; // повертається сервером
         public string warriorName;
         public int team;
         public string result;

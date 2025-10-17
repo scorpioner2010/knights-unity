@@ -60,7 +60,7 @@ namespace Game.Scripts.Player
             if (playerRoot == null || playerRoot.playerCamera == null)
                 return;
 
-            if (playerRoot.Dead.Value)
+            if (playerRoot.IsDead.Value)
                 return;
 
             CameraVisibleProcess();

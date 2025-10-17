@@ -6,15 +6,18 @@ using FishNet.Connection;
 using FishNet.Managing.Scened;
 using FishNet.Object;
 using FishNet.Transporting;
+using Game.GameResources;
 using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.Models;
 using Game.Scripts.API.ServerManagers;
+using Game.Scripts.Core.Helpers;
 using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.MenuController;
 using Game.Scripts.Player;
 using Game.Scripts.UI.HUD;
 using Game.Scripts.UI.MainMenu;
 using Game.Scripts.World.Spawns;
+using NewDropDude.Script.API.ServerManagers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UEScene = UnityEngine.SceneManagement.Scene;
@@ -239,25 +242,67 @@ namespace Game.Scripts.Networking.Lobby
 
                 LobbyRooms.UpdateRoomStatusInGame(serverRoom.roomId);
                 SpawnTimer(serverRoom);
-                //ScoreBoard timer = Instantiate(scoreBoard, Vector3.zero, Quaternion.identity);
-                //timer.serverRoom = serverRoom;
-                //timer.GetComponent<RoomConditionRebuilder>().SetupRoomID(serverRoom.roomId);
-                //ServerManager.Spawn(timer.gameObject, scene: _additiveServerScene);
+                StartMatch(serverRoom);
             }
         }
 
+        private async void StartMatch(ServerRoom serverRoom)
+        {
+            await UniTask.Delay(500);
+            
+            List<PlayerRoot> playerRoots = serverRoom.players.Select(p => p.playerRoot).ToList();
+            playerRoots.RemoveAllNull();
+            
+            List<(string token, PlayerRoot root)> tokens = new();
+                
+            foreach (PlayerRoot playerRoot in playerRoots)
+            {
+                string token = RegisterServer.GetToken(playerRoot.OwnerId);
+
+                if (token != string.Empty)
+                {
+                    tokens.Add((token, playerRoot));
+                }
+            }
+                
+            foreach ((string token, PlayerRoot root) token in tokens)
+            {
+                StartMatchAsync(token, serverRoom);
+            }
+        }
+
+        private async void StartMatchAsync((string token, PlayerRoot root) info, ServerRoom serverRoom)
+        {
+           (bool ok, string message, MatchStartResponse data) result = await MatchesManager.StartMatch("default_map", info.token);
+           
+           if (result.ok == false)
+           {
+               Debug.LogError("Failed to start match: "+info.root.OwnerId);
+           }
+           else
+           {
+               Player owner = serverRoom.players.Where(p => p.Connection.ClientId == info.root.OwnerId).ToList().FirstOrDefault();
+               
+               if (owner != null)
+               {
+                   owner.matchId = result.data.matchId;
+               }
+           }
+        }
+        
         private void SpawnTimer(ServerRoom serverRoom)
         {
             GameplayTimer timer = Instantiate(gameplayTimerPrefab, Vector3.zero, Quaternion.identity);
             ServerManager.Spawn(timer.networkObject, LocalConnection, _additiveServerScene);
             serverRoom.gameplayTimer = timer;
+            timer.serverRoom = serverRoom;
         }
 
         private void SpawnBot(ServerRoom serverRoom, Player player)
         {
             return;
 
-            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.side);
+            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
 
             if (spawnPoint == null)
             {
@@ -290,14 +335,16 @@ namespace Game.Scripts.Networking.Lobby
 
             Player player = serverRoom.GetPlayerBuyConnection(connection);
 
-            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.side);
+            SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
             PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
             PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeWarriorCode);
 
             PlayerRoot playerRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
-            //playerRoot.faceCenterFromGround.FaceCenterFromGroundLayer(playerRoot);
             ServerManager.Spawn(playerRoot.networkObject, connection, _additiveServerScene);
-            playerRoot.Side.Value = player.side;
+            playerRoot.Team.Value = player.team;
+            playerRoot.warriorCode = profile.activeWarriorCode;
+            playerRoot.serverRoom =  serverRoom;
+            
             player.playerRoot = playerRoot;
             player.playerRoot.characterInit.ServerInit(serverRoom.maxPlayers, PlayerType.Player, player.loginName, _additiveServerScene);
         }

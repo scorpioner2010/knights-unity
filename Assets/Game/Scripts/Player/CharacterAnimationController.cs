@@ -37,7 +37,7 @@ namespace Game.Scripts.Player
                 return;
             }
 
-            if (playerRoot.Dead.Value)
+            if (playerRoot.IsDead.Value)
             {
                 return;
             }
@@ -72,7 +72,7 @@ namespace Game.Scripts.Player
 
         public void SetLocomotion(float normalizedSpeed01, float lerpParameter)
         {
-            float target = Mathf.Clamp01(playerRoot.Dead.Value ? 0f : normalizedSpeed01);
+            float target = Mathf.Clamp01(playerRoot.IsDead.Value ? 0f : normalizedSpeed01);
             float value = Mathf.Lerp(GetLocomotion(), target, Time.fixedDeltaTime * lerpParameter);
             playerRoot.animator.SetFloat("Locomotion", value);
             if (IsOwner)
@@ -122,7 +122,7 @@ namespace Game.Scripts.Player
         [ServerRpc(RequireOwnership = true)]
         private void AttackServerRpc()
         {
-            if (playerRoot.Dead.Value)
+            if (playerRoot.IsDead.Value)
             {
                 return;
             }
