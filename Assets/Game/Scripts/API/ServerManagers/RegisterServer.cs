@@ -3,7 +3,6 @@ using System.Linq;
 using FishNet.Connection;
 using FishNet.Object;
 using Game.Scripts.API.Endpoints;
-using Game.Scripts.API.ServerManagers;
 using Game.Scripts.MenuController;
 using Game.Scripts.Server;
 using Game.Scripts.UI.Helpers;
@@ -24,7 +23,8 @@ namespace NewDropDude.Script.API.ServerManagers
         private const string LastLoginName = "LastLogin";
         private static readonly string LastPasswordName = "LastPassword";
         public static readonly List<PlayerTokenInfo> PlayerTokenInfo = new();
-
+        private static string _clientToken;
+        
         public static string LastLogin
         {
             get => PlayerPrefs.GetString(LastLoginName, string.Empty);
@@ -48,6 +48,11 @@ namespace NewDropDude.Script.API.ServerManagers
             }
 
             return string.Empty;
+        }
+        
+        public static string GetMyToken()
+        {
+            return _clientToken;
         }
         
         public override void OnStartClient()
@@ -121,7 +126,7 @@ namespace NewDropDude.Script.API.ServerManagers
             }
             
             NetworkConnection senderConn = ServerManager.Clients[clientID];
-            TargetLoginResponseRpc(senderConn, result.isSuccess, result.message);
+            TargetLoginResponseRpc(senderConn, result.isSuccess, result.message, result.token);
         }
         
         [ServerRpc(RequireOwnership = false)]
@@ -139,7 +144,7 @@ namespace NewDropDude.Script.API.ServerManagers
         }
 
         [TargetRpc]
-        private void TargetLoginResponseRpc(NetworkConnection target, bool success, string errorMessage)
+        private void TargetLoginResponseRpc(NetworkConnection target, bool success, string errorMessage,  string token)
         {
             Loading.Hide();
             
@@ -147,6 +152,7 @@ namespace NewDropDude.Script.API.ServerManagers
             {
                 MenuManager.CloseMenu(MenuType.Auth);
                 MenuManager.OpenMenu(MenuType.MainMenu);
+                _clientToken = token;
             }
             else
             {

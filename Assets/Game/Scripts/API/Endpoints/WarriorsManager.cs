@@ -91,8 +91,31 @@ namespace Game.Scripts.API.Endpoints
 
             return (false, text, null);
         }
+
+        // 🔹 НОВЕ: отримати вимоги на дослідження для конкретного юніта (список предків і потрібний XP)
+        // GET /warriors/{id}/research-from  -> [{ predecessorId, requiredXp }]
+        public static async UniTask<(bool ok, string message, ResearchFromEntry[] data)> GetResearchFrom(int successorWarriorId)
+        {
+            string url = $"{HttpLink.APIBase}/warriors/{successorWarriorId}/research-from";
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.certificateHandler = new AcceptAllCertificates();
+
+            try { await request.SendWebRequest(); }
+            catch (UnityWebRequestException) { return (false, "Request failed", null); }
+
+            string text = request.downloadHandler.text;
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                ResearchFromEntry[] data = JsonHelper.FromJson<ResearchFromEntry>(text);
+                return (true, text, data);
+            }
+
+            return (false, text, null);
+        }
     }
-    
+
     [Serializable]
     public class WarriorDto
     {
@@ -114,14 +137,14 @@ namespace Game.Scripts.API.Endpoints
         public float traverseSpeed;
         public string armor;
     }
-    
+
     [Serializable]
     public class WarriorGraphResponse
     {
         public WarriorGraphNode[] nodes;
         public WarriorGraphEdge[] edges;
     }
-    
+
     [Serializable]
     public class WarriorGraphNode
     {
@@ -134,12 +157,20 @@ namespace Game.Scripts.API.Endpoints
         public string cultureCode;
         public bool isVisible;
     }
-    
+
     [Serializable]
     public class WarriorGraphEdge
     {
         public int fromId;
         public int toId;
+        public int requiredXp;
+    }
+
+    // 🔹 НОВЕ: DTO для /warriors/{id}/research-from
+    [Serializable]
+    public class ResearchFromEntry
+    {
+        public int predecessorId;
         public int requiredXp;
     }
 }
