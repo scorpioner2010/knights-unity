@@ -47,10 +47,13 @@ namespace Game.Scripts.UI.Tree
         private readonly Dictionary<string, string> _factionNameByCode = new(StringComparer.OrdinalIgnoreCase);
         private readonly List<FactionView> _views = new();
 
-        // кеш: володіння/XP/анлоки
         private readonly HashSet<int> _ownedIds = new();
         private readonly Dictionary<int, int> _xpByOwnedWarriorId = new(); // WarriorId -> Xp
         private readonly HashSet<int> _unlockedSuccessors = new(); // Successor WarriorId
+        private int _freeXpCache = 0;
+
+        private readonly Color _xpDefaultColor = Color.white;
+        private readonly Color _xpReadyColor = new Color(1f, 0.88f, 0.2f);
 
         public bool isInitialized;
 
@@ -90,7 +93,6 @@ namespace Game.Scripts.UI.Tree
                 bool ok = await LoadDataFromServer();
                 isInitialized = ok;
             }
-
             await UpdateUI();
         }
 
@@ -100,8 +102,8 @@ namespace Game.Scripts.UI.Tree
             _ownedIds.Clear();
             _xpByOwnedWarriorId.Clear();
             _unlockedSuccessors.Clear();
+            _freeXpCache = 0;
 
-            // юніти каталогу
             (bool okAll, _, WarriorDto[] items) = await WarriorsManager.GetAll();
             _vehicleLites = items ?? Array.Empty<WarriorDto>();
 
@@ -114,10 +116,8 @@ namespace Game.Scripts.UI.Tree
             }
 
             foreach (WarriorDto v in _vehicleLites)
-            {
                 if (!string.IsNullOrWhiteSpace(v.cultureCode) && !_factionNameByCode.ContainsKey(v.cultureCode))
                     _factionNameByCode[v.cultureCode] = string.IsNullOrWhiteSpace(v.cultureName) ? v.cultureCode : v.cultureName;
-            }
 
             _factionCodes = _vehicleLites
                 .Select(v => v.cultureCode)
@@ -125,36 +125,38 @@ namespace Game.Scripts.UI.Tree
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToArray();
 
-            // графи
             List<WarriorGraphResponse> graphs = new(_factionCodes.Length);
             foreach (string culture in _factionCodes)
             {
                 (bool okGraph, _, WarriorGraphResponse graph) = await WarriorsManager.GetGraph(culture);
-                if (okGraph && graph != null && graph.nodes != null && graph.nodes.Length > 0)
-                    graphs.Add(graph);
-                else
-                {
-                    Popup.ShowText($"Failed to get graph for culture: {culture}", Color.red);
-                    graphs.Add(new WarriorGraphResponse { nodes = Array.Empty<WarriorGraphNode>(), edges = Array.Empty<WarriorGraphEdge>() });
-                }
+                graphs.Add(okGraph && graph != null && graph.nodes != null && graph.nodes.Length > 0
+                    ? graph
+                    : new WarriorGraphResponse { nodes = Array.Empty<WarriorGraphNode>(), edges = Array.Empty<WarriorGraphEdge>() });
+                if (!okGraph) Popup.ShowText($"Failed to get graph for culture: {culture}", Color.red);
             }
             _graphs = graphs.ToArray();
 
-            // профіль гравця (володіння, coins, xp)
-            IPlayerClientInfo info = ServiceLocator.Get<IPlayerClientInfo>();
-            if (info != null && info.Profile != null && info.Profile.ownedWarriors != null)
-            {
-                foreach (var ow in info.Profile.ownedWarriors)
-                {
-                    _ownedIds.Add(ow.warriorId);
-                    _xpByOwnedWarriorId[ow.warriorId] = ow.xp;
-                }
-            }
-
-            // завантажити анлоки з сервера (якщо бекенд готовий), інакше підтягнути локальний кеш
+            RefreshPlayerCachesFromServiceLocator();
             await LoadUnlocksSafe();
 
             return true;
+        }
+
+        private void RefreshPlayerCachesFromServiceLocator()
+        {
+            IPlayerClientInfo info = ServiceLocator.Get<IPlayerClientInfo>();
+            if (info != null && info.Profile != null)
+            {
+                _freeXpCache = info.Profile.freeXp;
+                if (info.Profile.ownedWarriors != null)
+                {
+                    foreach (var ow in info.Profile.ownedWarriors)
+                    {
+                        _ownedIds.Add(ow.warriorId);
+                        _xpByOwnedWarriorId[ow.warriorId] = ow.xp;
+                    }
+                }
+            }
         }
 
         private async UniTask LoadUnlocksSafe()
@@ -162,37 +164,30 @@ namespace Game.Scripts.UI.Tree
             string token = RegisterServer.GetMyToken();
             if (!string.IsNullOrEmpty(token))
             {
-                // пробуємо сервер
                 var (ok, _, ids) = await ResearchManager.GetMyUnlocked(token);
                 if (ok && ids != null)
                 {
                     _unlockedSuccessors.Clear();
                     foreach (int id in ids) _unlockedSuccessors.Add(id);
-                    SaveLocalUnlocks(); // синхронізуємо локальний кеш
+                    SaveLocalUnlocks();
                     return;
                 }
             }
-
-            // локальний кеш
             LoadLocalUnlocks();
         }
 
         private void SaveLocalUnlocks()
         {
-            string key = "Tree_Unlocks";
-            string payload = string.Join(",", _unlockedSuccessors);
-            PlayerPrefs.SetString(key, payload);
+            PlayerPrefs.SetString("Tree_Unlocks", string.Join(",", _unlockedSuccessors));
             PlayerPrefs.Save();
         }
 
         private void LoadLocalUnlocks()
         {
-            string key = "Tree_Unlocks";
             _unlockedSuccessors.Clear();
-            string s = PlayerPrefs.GetString(key, "");
+            string s = PlayerPrefs.GetString("Tree_Unlocks", "");
             if (string.IsNullOrWhiteSpace(s)) return;
-            string[] parts = s.Split(',');
-            foreach (var p in parts)
+            foreach (var p in s.Split(','))
                 if (int.TryParse(p, out int id)) _unlockedSuccessors.Add(id);
         }
 
@@ -210,25 +205,20 @@ namespace Game.Scripts.UI.Tree
             BuildFactionButtons();
 
             for (int i = 0; i < _graphs.Length; i++)
-            {
                 await BuildFactionTreeUI(_factionCodes[i], _graphs[i]);
-            }
 
             if (_fractionRoots.Count > 0) SetActiveContainer(0);
 
             await GameplayAssistant.RebuildAllLayouts(_fractionRoots);
             await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
-
             DrawArrowsAll();
         }
 
         public void SetActiveContainer(int number)
         {
             for (int i = 0; i < _fractionRoots.Count; i++)
-            {
-                Transform t = _fractionRoots[i];
-                if (t != null) t.gameObject.SetActive(i == number);
-            }
+                if (_fractionRoots[i] != null)
+                    _fractionRoots[i].gameObject.SetActive(i == number);
         }
 
         private async UniTask BuildFactionTreeUI(string cultureCode, WarriorGraphResponse graphResponse)
@@ -290,9 +280,7 @@ namespace Game.Scripts.UI.Tree
                 .ThenBy(n => n.code);
 
             foreach (WarriorGraphNode n in nodes)
-            {
                 CreateTreeItemFromNode(grid.transform, n, nodeMap);
-            }
         }
 
         private void CreateTreeItemFromNode(Transform parent, WarriorGraphNode node, Dictionary<int, RectTransform> nodeMap)
@@ -306,12 +294,10 @@ namespace Game.Scripts.UI.Tree
             item.level.text = node.level.ToString();
             item.isClose.SetActive(!node.isVisible);
 
-            IPlayerClientInfo clientInfo = ServiceLocator.Get<IPlayerClientInfo>();
             bool isHave = _ownedIds.Contains(node.id);
             item.isHave.gameObject.SetActive(isHave);
 
-            Sprite sprite = ResourceManager.GetIcon(node.code);
-            item.image.sprite = sprite;
+            item.image.sprite = ResourceManager.GetIcon(node.code);
 
             WarriorDto liteInfo = GetVehicleLite(node.id);
             item.price.text = liteInfo != null ? liteInfo.purchaseCost.ToString() : "0";
@@ -321,116 +307,148 @@ namespace Game.Scripts.UI.Tree
 
             if (!isHave && !isUnlocked)
             {
-                // показати XP на дослідження з найближчого предка
                 item.SetActiveCoinsView(false);
                 item.SetActiveXpView(true);
                 SetupXpResearchView(item, node);
             }
             else
             {
-                // купівля за монети (або вже володіє)
                 item.SetActiveCoinsView(true);
                 item.SetActiveXpView(false);
+                item.xp.color = _xpDefaultColor;
                 SetupCoinsBuyView(item, node, liteInfo);
             }
 
-            RectTransform rt = item.rectTransform;
-            nodeMap[node.id] = rt;
+            nodeMap[node.id] = item.rectTransform;
         }
 
         private void SetupXpResearchView(TreeItem item, WarriorGraphNode node)
         {
-            // завантажуємо вимоги
             item.xp.text = "…";
+            item.xp.color = _xpDefaultColor;
             item.button.onClick.RemoveAllListeners();
 
             _ = SetupXpAsync();
 
             async UniTaskVoid SetupXpAsync()
             {
-                // читаємо лінки (предки) з бекенду
+                RefreshPlayerCachesFromServiceLocator();
+
                 var (okLinks, _, links) = await WarriorsManager.GetResearchFrom(node.id);
                 if (!okLinks || links == null || links.Length == 0)
                 {
                     item.xp.text = "-";
+                    item.xp.color = _xpDefaultColor;
                     item.button.onClick.AddListener(() => Popup.ShowText("No research path.", Color.red));
                     return;
                 }
 
-                // вибір предка: спершу той, яким володіємо; якщо декілька — з найменшою вимогою XP
-                var candidates = links
+                // На плитці — загальна вартість дослідження (мінімальна з ребер)
+                int minRequired = links.Min(l => l.requiredXp);
+                item.xp.text = minRequired.ToString();
+
+                // Кандидати-предки, якими володіємо
+                var ownedCandidates = links
                     .Where(l => _ownedIds.Contains(l.predecessorId))
-                    .OrderBy(l => l.requiredXp)
+                    .Select(l =>
+                    {
+                        int predXp = _xpByOwnedWarriorId.TryGetValue(l.predecessorId, out var x) ? x : 0;
+                        int needFromFree = Mathf.Max(0, l.requiredXp - predXp);
+                        bool enoughTotal = (predXp + _freeXpCache) >= l.requiredXp;
+                        return new
+                        {
+                            link = l,
+                            predXp,
+                            needFromFree,
+                            enoughTotal
+                        };
+                    })
+                    .OrderBy(x => x.needFromFree)
+                    .ThenBy(x => x.link.requiredXp)
                     .ToList();
 
-                if (candidates.Count == 0)
-                {
-                    item.xp.text = "Need predecessor";
-                    item.button.onClick.AddListener(() => Popup.ShowText("Own a predecessor first.", Color.yellow));
-                    return;
-                }
+                var bestOwned = ownedCandidates.FirstOrDefault();
 
-                var link = candidates[0];
-                int myXp = _xpByOwnedWarriorId.TryGetValue(link.predecessorId, out var x) ? x : 0;
-                int need = Mathf.Max(0, link.requiredXp - myXp);
+                // Жовтий колір, якщо сумарно вистачає (XP предка + Free XP)
+                if (bestOwned != null && bestOwned.enoughTotal)
+                    item.xp.color = _xpReadyColor;
+                else
+                    item.xp.color = _xpDefaultColor;
 
-                if (need > 0)
-                {
-                    item.xp.text = need.ToString();
-                    item.button.onClick.AddListener(() =>
-                    {
-                        Popup.ShowText($"Need {need} XP on predecessor to research.", Color.yellow);
-                    });
-                    return;
-                }
-
-                // достатньо XP — даємо кнопку "Research"
-                item.xp.text = "Ready";
+                // Клік — Confirm із повною ціною та розкладом джерел
                 item.button.onClick.AddListener(() =>
                 {
-                    TryResearch(node.id, link.predecessorId, item);
+                    if (bestOwned != null)
+                    {
+                        int req = bestOwned.link.requiredXp;
+                        int spendFromPred = Mathf.Min(req, bestOwned.predXp);
+                        int spendFree = Mathf.Max(0, req - spendFromPred);
+
+                        string title =
+                            $"Research '{node.name}'?\n" +
+                            $"Cost: {req} (from predecessor: {spendFromPred}, Free XP: {spendFree})";
+
+                        Popup.ShowText(title, Color.green, () =>
+                        {
+                            TryResearchWithFreeXp(node.id, bestOwned.link.predecessorId, req, bestOwned.predXp);
+                        }, TypePopup.Confirm);
+                    }
+                    else
+                    {
+                        // немає у власності жодного предка — просто показуємо повну ціну
+                        var bestAny = links.OrderBy(l => l.requiredXp).First();
+                        string msg =
+                            $"Research '{node.name}'?\n" +
+                            $"Cost: {bestAny.requiredXp}\n" +
+                            $"You need to own a predecessor.";
+                        Popup.ShowText(msg, Color.yellow);
+                    }
                 });
             }
         }
 
-        private async void TryResearch(int successorId, int predecessorId, TreeItem item)
+        private async void TryResearchWithFreeXp(int successorId, int predecessorId, int requiredOnPred, int currentPredXp)
         {
             Helpers.Loading.Show();
 
-            string token = RegisterServer.GetMyToken();
-            bool serverOk = false;
+            RefreshPlayerCachesFromServiceLocator();
 
-            if (!string.IsNullOrEmpty(token))
+            int needFromFree = Mathf.Max(0, requiredOnPred - currentPredXp);
+
+            string token = RegisterServer.GetMyToken();
+            bool converted = true;
+
+            if (needFromFree > 0)
             {
-                var (ok, msg) = await ResearchManager.Unlock(successorId, predecessorId, token);
-                serverOk = ok;
-                if (!ok && !string.IsNullOrWhiteSpace(msg))
+                if (_freeXpCache < needFromFree)
                 {
-                    // якщо сервер відмовився — покажемо повідомлення і НЕ робимо лок-анлок
-                    Popup.ShowText(msg, Color.red);
+                    Helpers.Loading.Hide();
+                    int lack = needFromFree - _freeXpCache;
+                    Popup.ShowText($"Not enough Free XP. Need {lack} more.", Color.red);
+                    return;
+                }
+
+                var (okConv, msgConv) = await UserWarriorsManager.ConvertFreeXp(predecessorId, needFromFree, token);
+                if (!okConv)
+                {
+                    converted = false;
+                    Popup.ShowText(string.IsNullOrWhiteSpace(msgConv) ? "Free XP conversion failed." : msgConv, Color.red);
                 }
             }
 
-            if (!serverOk)
+            bool unlocked = false;
+            if (converted)
             {
-                // fallback: локальний unlock без списання XP (тимчасово)
-                _unlockedSuccessors.Add(successorId);
-                SaveLocalUnlocks();
+                var (ok, msg) = await ResearchManager.Unlock(successorId, predecessorId, token);
+                unlocked = ok;
+                if (!ok && !string.IsNullOrWhiteSpace(msg))
+                    Popup.ShowText(msg, Color.red);
             }
 
-            // оновлюємо відображення айтема (переходимо у Coins-режим)
-            item.SetActiveCoinsView(true);
-            item.SetActiveXpView(false);
-
-            // кнопка покупки
-            WarriorDto lite = GetVehicleLite(successorId);
-            
-            SetupCoinsBuyView(item, new WarriorGraphNode
-            {
-                id = successorId, code = lite != null ? lite.code : "", name = item.vehicleName.text
-            }, lite);
+            await ReloadAndRebuildAsync();
 
             Helpers.Loading.Hide();
+            if (unlocked) Popup.ShowText("Researched!", Color.green);
         }
 
         private void SetupCoinsBuyView(TreeItem item, WarriorGraphNode node, WarriorDto liteInfo)
@@ -443,8 +461,7 @@ namespace Game.Scripts.UI.Tree
             bool have = _ownedIds.Contains(node.id);
             if (have)
             {
-                // вже володіє — нічого не робимо
-                item.button.onClick.AddListener(() => { /* вже куплено */ });
+                item.button.onClick.AddListener(() => { /* already owned */ });
                 return;
             }
 
@@ -496,6 +513,7 @@ namespace Game.Scripts.UI.Tree
             if (success)
             {
                 ProfileServer.UpdateProfile();
+                _ = ReloadAndRebuildAsync();
             }
             else
             {
@@ -571,6 +589,14 @@ namespace Game.Scripts.UI.Tree
                     _ = RedrawActive(idx);
                 });
             }
+        }
+
+        private async UniTask ReloadAndRebuildAsync()
+        {
+            ProfileServer.UpdateProfile();
+            await UniTask.Delay(50);
+            await LoadDataFromServer();
+            await UpdateUI();
         }
     }
 }
