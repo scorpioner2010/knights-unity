@@ -7,7 +7,6 @@ namespace Game.Scripts.Player
     public class CharacterMovement : NetworkBehaviour
     {
         [SerializeField] private float speed = 7.0f;
-        [SerializeField] private float jumpPower = 7.0f;
         [SerializeField] private float gravity = 10.0f;
 
         public PlayerRoot playerRoot;
@@ -26,14 +25,12 @@ namespace Game.Scripts.Player
 
         private void FixedUpdate()
         {
-            // Фізична швидкість (як була)
             Vector3 delta = transform.position - _lastPosition;
             float distance = delta.magnitude;
             IsMoving = distance > _movementThreshold;
             CurrentSpeed = distance / Time.fixedDeltaTime;
             _lastPosition = transform.position;
 
-            // ✅ Анімацію бігу підживлює ТІЛЬКИ власник; інші отримають RPC
             if (IsOwner)
             {
                 float animLocomotion01 = playerRoot.characterInput != null ? playerRoot.characterInput.MoveAmount : 0f;
@@ -59,23 +56,13 @@ namespace Game.Scripts.Player
 
         private void InputUpdated()
         {
-            if (!IsOwner)
-            {
-                return;
-            }
-
-            if (playerRoot.characterController.isGrounded && playerRoot.characterInput.jumpPressed)
-            {
-                _verticalVelocity.y = jumpPower;
-            }
+            if (!IsOwner) return;
+            if (playerRoot.IsDead.Value) return;
         }
 
         private void Update()
         {
-            if (!IsOwner || !playerRoot.characterController.enabled)
-            {
-                return;
-            }
+            if (!IsOwner || !playerRoot.characterController.enabled) return;
 
             if (_verticalVelocity.y > -gravity)
             {

@@ -34,6 +34,19 @@ namespace Game.Scripts.Player
         
         private void PlayFootstep()
         {
+            if (foots.Length > 0)
+            {
+                return;
+            }
+
+            foreach (Transform variable in foots)
+            {
+                if (variable == null)
+                {
+                    return;
+                }
+            }
+            
             if (playerRoot.characterController.isGrounded == false)
             {
                 return;

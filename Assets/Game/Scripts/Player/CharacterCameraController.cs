@@ -76,8 +76,17 @@ namespace Game.Scripts.Player
                 _smoothedFocusPosition = Vector3.Lerp(_smoothedFocusPosition, cameraFocusPoint.position, focusSmoothSpeed * Time.deltaTime);
             }
 
+            if (MobileManager.IsNativeMobile() == false)
+            {
+                _y -= CharacterInput.GetAxisY * ySpeed * mouseSpeed;
+            }
+            else
+            {
+                _y = MobileManager.In.yCameraAngle;
+            }
+
             _x += CharacterInput.GetAxisX * xSpeed * mouseSpeed;
-            _y -= CharacterInput.GetAxisY * ySpeed * mouseSpeed;
+            
 
             _y = Mathf.Clamp(_y, -10f, 60f);
 

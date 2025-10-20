@@ -18,7 +18,7 @@ namespace Game.Scripts.UI.HUD
         
         public void Awake()
         {
-            resumeButton.onClick.AddListener(ResumeButtonPressed);
+            resumeButton.onClick.AddListener(ClosePause);
             disconnectButton.onClick.AddListener(DisconnectButtonPressed);
         }
         
@@ -31,11 +31,15 @@ namespace Game.Scripts.UI.HUD
             LoadingScreenManager.HideLoading(); //hide with delay 1 second
         }
         
-        private void ResumeButtonPressed()
+        private void ClosePause()
         {
             pauseMenu.SetActive(false);
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            
+            if (MobileManager.IsNativeMobile() == false)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
         
         public void OpenPause()
@@ -51,15 +55,11 @@ namespace Game.Scripts.UI.HUD
             {
                 if (!pauseMenu.activeInHierarchy)
                 {
-                    pauseMenu.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
+                    OpenPause();
                 }
                 else
                 {
-                    pauseMenu.SetActive(false);
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
+                    ClosePause();
                 }
             }
         }

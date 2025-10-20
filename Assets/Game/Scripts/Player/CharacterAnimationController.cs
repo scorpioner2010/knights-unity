@@ -6,7 +6,6 @@ namespace Game.Scripts.Player
     [DefaultExecutionOrder(-40)]
     public class CharacterAnimationController : NetworkBehaviour
     {
-        private bool _isJumping;
         public PlayerRoot playerRoot;
 
         [SerializeField] private float locomotionSendInterval = 0.05f;
@@ -14,55 +13,35 @@ namespace Game.Scripts.Player
         private float _nextSendTime;
         private float _lastSentLocomotion;
 
+        private bool _shieldLocal;
+
         private void OnEnable()
         {
             if (playerRoot.characterInput != null)
-            {
                 playerRoot.characterInput.OnUpdateInput += InputUpdated;
-            }
         }
 
         private void OnDisable()
         {
             if (playerRoot.characterInput != null)
-            {
                 playerRoot.characterInput.OnUpdateInput -= InputUpdated;
-            }
         }
 
         private void InputUpdated()
         {
-            if (!IsOwner)
-            {
-                return;
-            }
+            if (!IsOwner) return;
+            if (playerRoot.IsDead.Value) return;
 
-            if (playerRoot.IsDead.Value)
+            bool shield = playerRoot.characterInput.shieldHeld;
+            if (shield != _shieldLocal)
             {
-                return;
-            }
-
-            if (playerRoot.characterInput.jumpPressed && playerRoot.groundChecker.isGrounded && !_isJumping)
-            {
-                _isJumping = true;
-                JumpServerRpc();
+                _shieldLocal = shield;
+                SetShieldLocal(_shieldLocal);
+                ShieldServerRpc(_shieldLocal);
             }
 
             if (playerRoot.characterInput.attackPressed)
-            {
                 AttackServerRpc();
-            }
-        }
-
-        private void Update()
-        {
-            if (IsOwner)
-            {
-                if (playerRoot.groundChecker.isGrounded && _isJumping)
-                {
-                    _isJumping = false;
-                }
-            }
         }
 
         public float GetLocomotion()
@@ -75,22 +54,13 @@ namespace Game.Scripts.Player
             float target = Mathf.Clamp01(playerRoot.IsDead.Value ? 0f : normalizedSpeed01);
             float value = Mathf.Lerp(GetLocomotion(), target, Time.fixedDeltaTime * lerpParameter);
             playerRoot.animator.SetFloat("Locomotion", value);
-            if (IsOwner)
-            {
-                MaybeSendLocomotion(value);
-            }
+            if (IsOwner) MaybeSendLocomotion(value);
         }
 
         private void MaybeSendLocomotion(float value)
         {
-            if (Time.time < _nextSendTime)
-            {
-                return;
-            }
-            if (Mathf.Abs(value - _lastSentLocomotion) < locomotionDeltaEpsilon)
-            {
-                return;
-            }
+            if (Time.time < _nextSendTime) return;
+            if (Mathf.Abs(value - _lastSentLocomotion) < locomotionDeltaEpsilon) return;
             _nextSendTime = Time.time + locomotionSendInterval;
             _lastSentLocomotion = value;
             LocomotionServerRpc(value);
@@ -105,27 +75,32 @@ namespace Game.Scripts.Player
         [ObserversRpc]
         private void LocomotionObserversRpc(float value)
         {
-            if (IsOwner)
-            {
-                return;
-            }
+            if (IsOwner) return;
             playerRoot.animator.SetFloat("Locomotion", Mathf.Clamp01(value));
         }
 
         [ServerRpc(RequireOwnership = true)]
-        private void JumpServerRpc()
+        private void ShieldServerRpc(bool state)
         {
-            TriggerAnimation("Jump");
-            TriggerAnimationObserversRpc("Jump");
+            ShieldObserversRpc(state);
+        }
+
+        [ObserversRpc]
+        private void ShieldObserversRpc(bool state)
+        {
+            if (IsOwner) return;
+            SetShieldLocal(state);
+        }
+
+        private void SetShieldLocal(bool state)
+        {
+            playerRoot.animator.SetBool("Shield", state);
         }
 
         [ServerRpc(RequireOwnership = true)]
         private void AttackServerRpc()
         {
-            if (playerRoot.IsDead.Value)
-            {
-                return;
-            }
+            if (playerRoot.IsDead.Value) return;
             TriggerAnimation("Attack");
             TriggerAnimationObserversRpc("Attack");
         }

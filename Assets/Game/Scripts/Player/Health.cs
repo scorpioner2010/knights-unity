@@ -165,7 +165,7 @@ namespace Game.Scripts.Player
 
         private void UpdateOwnerHud(int currentHp)
         {
-            if (_healthBar == null || _healthBar.slider == null)
+            if (_healthBar == null || _healthBar.healthImage == null)
             {
                 return;
             }
