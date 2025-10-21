@@ -945,8 +945,6 @@ GameObject:
   - component: {fileID: 745430854890527931}
   - component: {fileID: 1784266621457294621}
   - component: {fileID: 2663684432721716865}
-  - component: {fileID: 8734775451141214537}
-  - component: {fileID: 7533907710446623515}
   - component: {fileID: 5440494884047244325}
   - component: {fileID: 2591158885689284001}
   - component: {fileID: 7349407344431180276}
@@ -997,7 +995,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 595a9dbf17010654d98449b634214a65, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -1240,8 +1238,11 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 7467045247968414096}
   _networkObjectCache: {fileID: 7467045247968414096}
+  useRootMotion: 1
   speed: 7
   gravity: 20
+  groundedStick: 2
+  maxFallSpeed: 50
   playerRoot: {fileID: 7349407344431180276}
   moveLerpSpeed: 20
   skeleton: {fileID: 7036624427481757841}
@@ -1310,39 +1311,6 @@ MonoBehaviour:
   - {fileID: 0}
   fxSpawnOffset: {x: 0, y: 0, z: 0}
   playerRoot: {fileID: 7349407344431180276}
---- !u!114 &8734775451141214537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5147354574049463367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83754fdbfe264be4fb799c97eff2fc2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 0}
-  rotateSpeed: 2
---- !u!114 &7533907710446623515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5147354574049463367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38efa9086d9dd714fa8bf93c9911f179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerRoot: {fileID: 7349407344431180276}
-  groundCheck: {fileID: 1961629099950413777}
-  groundCheckDistance: 0.1
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 16392
-  isGrounded: 0
 --- !u!114 &5440494884047244325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1407,9 +1375,9 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   characterInput: {fileID: 2591158885689284001}
   characterController: {fileID: 7552952064449497227}
-  smoothLookAtCamera: {fileID: 8734775451141214537}
+  smoothLookAtCamera: {fileID: 0}
   characterCameraController: {fileID: 1784266621457294621}
-  groundChecker: {fileID: 7533907710446623515}
+  groundChecker: {fileID: 0}
   characterInit: {fileID: 8405656857730875656}
   health: {fileID: 1382975182209966850}
   meleeWeapon: {fileID: 1659602984434443191}

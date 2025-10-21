@@ -17,9 +17,7 @@ namespace Game.Scripts.Player
         public UnityEngine.Camera playerCamera;
         public CharacterInput characterInput;
         public CharacterController characterController;
-        public SmoothLookAtCamera smoothLookAtCamera;
         public CharacterCameraController characterCameraController;
-        public GroundChecker groundChecker;
         public CharacterInit characterInit;
         public Health health;
         public MeleeWeapon meleeWeapon;

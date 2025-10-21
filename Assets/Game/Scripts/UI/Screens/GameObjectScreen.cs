@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Scripts.UI.Helpers
+namespace Game.Scripts.UI.Screens
 {
     public class GameObjectScreen<T> : MonoBehaviour where T : GameObjectScreen<T>
     {

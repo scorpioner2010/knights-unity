@@ -14,16 +14,16 @@ namespace Game.Scripts.Player
         public Transform bladeTip;
 
         public LayerMask hitMask;
-        [Range(0.01f, 0.5f)] public float sweepRadius = 0.12f;
+        private float _sweepRadius = 0.12f;
 
         public int damage = 30;
-        public float hitWindow = 0.25f;
-
         private CancellationTokenSource _cts;
 
         private static readonly Collider[] VFXBuf = new Collider[8];
         private CancellationTokenSource _vfxCts;
-        [SerializeField] private float localVfxWindow = 0.18f;
+        
+        private float _localVfxWindow = 0.18f;
+        private float _hitWindow = 0.18f;
 
         public void AE_TryLocalHitVfx()
         {
@@ -39,7 +39,7 @@ namespace Game.Scripts.Player
 
         private async UniTaskVoid LocalVfxWindowAsync(CancellationToken token)
         {
-            float duration = Mathf.Min(hitWindow, localVfxWindow);
+            float duration = Mathf.Min(_hitWindow, _localVfxWindow);
             float tEnd = Time.time + duration;
 
             HashSet<int> hitOnce = new HashSet<int>();
@@ -56,7 +56,7 @@ namespace Game.Scripts.Player
                     Vector3 curTip = bladeTip ? bladeTip.position : prevTip;
                     Vector3 curRoot = bladeRoot ? bladeRoot.position : prevRoot;
 
-                    int count = Physics.OverlapCapsuleNonAlloc(prevTip, curTip, sweepRadius, VFXBuf, hitMask, QueryTriggerInteraction.Ignore);
+                    int count = Physics.OverlapCapsuleNonAlloc(prevTip, curTip, _sweepRadius, VFXBuf, hitMask, QueryTriggerInteraction.Ignore);
                     for (int i = 0; i < count; i++)
                     {
                         Collider col = VFXBuf[i];
@@ -136,7 +136,7 @@ namespace Game.Scripts.Player
                 _cts = new CancellationTokenSource();
             }
             
-            _ = ServerMeleeWindowAsync(damage, hitWindow, _cts.Token);
+            _ = ServerMeleeWindowAsync(damage, _hitWindow, _cts.Token);
         }
 
         private async UniTaskVoid ServerMeleeWindowAsync(int dmg, float window, CancellationToken token)
@@ -161,7 +161,7 @@ namespace Game.Scripts.Player
                     Vector3 curRoot = bladeRoot ? bladeRoot.position : prevRoot;
                     Vector3 curTip = bladeTip ? bladeTip.position : prevTip;
 
-                    Collider[] cols = Physics.OverlapCapsule(prevTip, curTip, sweepRadius, hitMask, QueryTriggerInteraction.Ignore);
+                    Collider[] cols = Physics.OverlapCapsule(prevTip, curTip, _sweepRadius, hitMask, QueryTriggerInteraction.Ignore);
 
                     for (int i = 0; i < cols.Length; i++)
                     {
@@ -193,7 +193,7 @@ namespace Game.Scripts.Player
                         Vector3 impulse = transform.forward * 6f;
                         Vector3 hitPointWorld = c.ClosestPoint(curTip);
                         BroadcastHitVfx(target.networkObject, hitPointWorld);
-                        target.health.ApplyDamage(dmg, hitPoint, impulse, NetworkObject);
+                        target.health.ApplyDamageServer(dmg, hitPoint, impulse, NetworkObject);
                     }
 
                     prevRoot = curRoot;

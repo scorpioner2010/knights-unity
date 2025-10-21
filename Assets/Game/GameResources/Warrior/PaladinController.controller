@@ -1,5 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1102 &-9220641502978722217
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: attack test
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: e7548180af7133246a59f7e08497ae7f, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-8787492310889014648
 AnimatorState:
   serializedVersion: 6
@@ -372,7 +398,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: iddle
+  m_Name: test idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -411,10 +437,13 @@ AnimatorStateMachine:
     m_Position: {x: -720, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4295441808199907200}
-    m_Position: {x: -760, y: 560, z: 0}
+    m_Position: {x: -740, y: 600, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4785343475423161556}
     m_Position: {x: -320, y: 390, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -9220641502978722217}
+    m_Position: {x: -740, y: 650, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: -3229298524690032580}
@@ -454,7 +483,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6a2037f0f88649544b7ba72f6743820d, type: 2}
+  m_Motion: {fileID: 7400000, guid: e7548180af7133246a59f7e08497ae7f, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

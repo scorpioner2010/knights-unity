@@ -8,7 +8,6 @@ using FishNet.Object;
 using FishNet.Transporting;
 using Game.GameResources;
 using Game.Scripts.API.Endpoints;
-using Game.Scripts.API.Models;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.Core.Helpers;
 using Game.Scripts.Gameplay.Robots;
@@ -48,7 +47,7 @@ namespace Game.Scripts.Networking.Lobby
             SceneManager.OnLoadEnd += HandleServerLoadEnd;
             ServerManager.OnRemoteConnectionState += OnRemoteConnectionState;
         }
-
+        
         private void OnRemoteConnectionState(NetworkConnection conn, RemoteConnectionStateArgs args)
         {
             if (args.ConnectionState == RemoteConnectionState.Stopped)
@@ -330,12 +329,16 @@ namespace Game.Scripts.Networking.Lobby
 
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
             PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
-            PlayerRoot vehicle = ResourceManager.GetPrefab(profile.activeWarriorCode);
-
-            PlayerRoot playerRoot = Instantiate(vehicle, spawnPoint.transform.position, Quaternion.identity);
+            PlayerRoot unit = ResourceManager.GetPrefab(profile.activeWarriorCode);
+            PlayerRoot playerRoot = Instantiate(unit, spawnPoint.transform.position, Quaternion.identity);
             ServerManager.Spawn(playerRoot.networkObject, connection, _additiveServerScene);
-            playerRoot.Team.Value = player.team;
+            
+            WarriorDto info = WarriorsServer.GetWarrior(profile.activeWarriorCode);
+            
             playerRoot.warriorCode = profile.activeWarriorCode;
+            playerRoot.health.SetHpServer(info.hp);
+            playerRoot.meleeWeapon.damage = info.damage;
+            playerRoot.Team.Value = player.team;
             playerRoot.serverRoom =  serverRoom;
             
             player.playerRoot = playerRoot;

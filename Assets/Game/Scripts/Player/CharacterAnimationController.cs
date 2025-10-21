@@ -17,6 +17,12 @@ namespace Game.Scripts.Player
 
         private void OnEnable()
         {
+            if (playerRoot != null && playerRoot.animator != null)
+            {
+                // Ми застосовуємо RootMotion вручну у OnAnimatorMove, тому вимикаємо авто.
+                playerRoot.animator.applyRootMotion = false;
+            }
+
             if (playerRoot.characterInput != null)
                 playerRoot.characterInput.OnUpdateInput += InputUpdated;
         }
@@ -49,6 +55,7 @@ namespace Game.Scripts.Player
             return playerRoot.animator.GetFloat("Locomotion");
         }
 
+        // Цей параметр як і раніше керує блендами ходьби/бігу (RM бере швидкість із кліпу).
         public void SetLocomotion(float normalizedSpeed01, float lerpParameter)
         {
             float target = Mathf.Clamp01(playerRoot.IsDead.Value ? 0f : normalizedSpeed01);

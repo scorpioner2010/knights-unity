@@ -5,18 +5,14 @@ namespace Game.Scripts.Player
     public class GroundChecker : MonoBehaviour
     {
         public PlayerRoot playerRoot;
-
-        [Header("Ground Check")]
         public Transform groundCheck;
         public float groundCheckDistance = 0.1f;
         public LayerMask groundMask;
-
-        [Header("Debug")]
         public bool isGrounded;
 
         private void FixedUpdate()
         {
-            CheckGround();
+            //CheckGround();
         }
 
         private void CheckGround()

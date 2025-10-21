@@ -196,8 +196,11 @@ namespace Game.Scripts.UI.MainMenu
             await UniTask.NextFrame();
             await UniTask.NextFrame();
             
-            go.gameObject.SetActive(true);
-            //go.Init(true);
+            if (go != null && go.gameObject != null)
+            {
+                go.gameObject.SetActive(true);
+                //go.Init(true);
+            }
         }
 
         private void StripFishNetRuntime(GameObject root)

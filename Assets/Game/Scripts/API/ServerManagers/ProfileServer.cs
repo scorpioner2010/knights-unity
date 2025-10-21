@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using FishNet.Connection;
 using FishNet.Object;
 using Game.Scripts.API.Endpoints;
@@ -81,8 +82,8 @@ namespace Game.Scripts.API.ServerManagers
             
             AddPlayerDataAPI(data.profile, clientId);
             TargetRpcUpdateProfile(senderConn, data.isSuccess, data.message, data.profile);
+            WarriorsServer.InitWarriors();
         }
-
         
         private void AddPlayerDataAPI(PlayerProfileDto data, int clientId)
         {

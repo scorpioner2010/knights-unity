@@ -16,10 +16,6 @@ MonoBehaviour:
   - code: sam_l1_starter
     prefab: {fileID: 341785797077207336, guid: 0072b8e281164644ca5d089b959d702e, type: 3}
     icon: {fileID: 21300000, guid: a7ca02c81061d284e890a594b4d6b2f6, type: 3}
-  - code: vik_l1_starter
-    prefab: {fileID: 5658955610904274255, guid: d0abe7f604a6e4b469db608cafbbf92a,
-      type: 3}
-    icon: {fileID: 21300000, guid: 93a13a17ffcb5b24faa344b444b10fb1, type: 3}
   - code: sam_l2_ronin
     prefab: {fileID: 4114653662106249588, guid: b183355776d03f14cb932f5d5f1d150d,
       type: 3}
@@ -32,6 +28,10 @@ MonoBehaviour:
     prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
       type: 3}
     icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+  - code: vik_l1_starter
+    prefab: {fileID: 5658955610904274255, guid: d0abe7f604a6e4b469db608cafbbf92a,
+      type: 3}
+    icon: {fileID: 21300000, guid: 93a13a17ffcb5b24faa344b444b10fb1, type: 3}
   - code: vik_l2_raider
     prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
       type: 3}
