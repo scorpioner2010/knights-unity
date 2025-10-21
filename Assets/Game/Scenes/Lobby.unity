@@ -3095,7 +3095,7 @@ MonoBehaviour:
   play: {fileID: 1904502719}
   cancel: {fileID: 1709096796}
   lobbyManager: {fileID: 970225864}
-  scenes: 0000000001000000
+  scenes: 0100000000000000
   currentMap: 1
 --- !u!114 &337547483
 MonoBehaviour:
@@ -3631,10 +3631,10 @@ RectTransform:
   - {fileID: 1315332397}
   m_Father: {fileID: 610108200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 217, y: -60.069824}
-  m_SizeDelta: {x: 180, y: 60}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 192, y: -73.651}
+  m_SizeDelta: {x: 329.62, y: 109.87}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &425987814
 MonoBehaviour:
@@ -8747,8 +8747,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1366.1763, y: -81.2959}
-  m_SizeDelta: {x: 629.062, y: 125.16}
+  m_AnchoredPosition: {x: -1307.4, y: -81.2959}
+  m_SizeDelta: {x: 511.54, y: 125.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1005922427
 MonoBehaviour:
@@ -13204,8 +13204,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010070801, y: -0.000015258789}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1.0700073, y: 1.0709991}
+  m_SizeDelta: {x: -49.255, y: -36.406}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1315332398
 MonoBehaviour:
@@ -13221,7 +13221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -13254,7 +13254,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
+  m_fontSize: 37.35
   m_fontSizeBase: 65.2
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -20453,7 +20453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTestMode: 0
   maxPlayersForFindRoom: 30
-  findRoomSeconds: 2
+  findRoomSeconds: 20
 --- !u!4 &2068572094
 Transform:
   m_ObjectHideFlags: 0
@@ -24733,8 +24733,10 @@ MonoBehaviour:
   createRoomButton: {fileID: 527947730457450460}
   lobbyManager: {fileID: 970225864}
   mapList:
-  - icon: {fileID: 21300000, guid: 2c03e8b5946584f6c9e65a94e14b5076, type: 3}
+  - icon: {fileID: 21300000, guid: a1e8ff278270b49f4837fb5c36b01fa0, type: 3}
     mapName: 0
+  - icon: {fileID: 21300000, guid: 087e302fdf6f1494d8038a71cdab300e, type: 3}
+    mapName: 1
   currentMap: 0
 --- !u!224 &5546767720162340685
 RectTransform:

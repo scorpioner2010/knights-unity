@@ -23,7 +23,7 @@ namespace Game.Scripts.Core.Utils
         private void Start()
         {
             _textStyle.fontStyle = FontStyle.Bold;
-            _textStyle.fontSize = 12;
+            _textStyle.fontSize = 20;
             _textStyle.normal.textColor = Color.white;
             _timeleft = _updateInterval;
         }
