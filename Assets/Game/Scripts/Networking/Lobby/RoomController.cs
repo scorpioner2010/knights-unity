@@ -19,7 +19,10 @@ namespace Game.Scripts.Networking.Lobby
         [SerializeField] private LobbyManager lobbyManager;
 
         private static RoomController _in;
+        public GameMaps[] scenes;
         public GameMaps currentMap;
+        
+        public static GameMaps[] Maps => _in.scenes;
         
         private void Awake()
         {

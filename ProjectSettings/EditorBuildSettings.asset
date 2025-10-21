@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Lobby.unity
     guid: b813628accd629c458ee2dc6cbfb55d9
   - enabled: 1
-    path: Assets/Art/Map/Test.unity
+    path: Assets/Art/Map/Map1.unity
     guid: 4adf57e13222d284a817c6459dc70dd2
   - enabled: 0
     path: Assets/Game/Scenes/Test1111.unity

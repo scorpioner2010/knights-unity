@@ -3095,7 +3095,8 @@ MonoBehaviour:
   play: {fileID: 1904502719}
   cancel: {fileID: 1709096796}
   lobbyManager: {fileID: 970225864}
-  currentMap: 0
+  scenes: 0000000001000000
+  currentMap: 1
 --- !u!114 &337547483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5005,7 +5006,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.45882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -14175,7 +14176,6 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 1510332974}
   _networkObjectCache: {fileID: 0}
-  scenes: 00000000
   gameplayTimerPrefab: {fileID: 5805746888609840445, guid: 91566732414fc37489fd74a6230dc973,
     type: 3}
   lobbyManager: {fileID: 970225864}
@@ -16864,7 +16864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.9607843}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -20470,7 +20470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.45882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -24155,7 +24155,7 @@ PrefabInstance:
     - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}
       propertyPath: ConnectionData.Address
-      value: 3.120.130.195
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}

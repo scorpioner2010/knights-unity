@@ -25,15 +25,9 @@ using UESceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Game.Scripts.Networking.Lobby
 {
-    public enum GameMaps
-    {
-        Test = 0,
-    }
-
     public class GameplaySpawner : NetworkBehaviour
     {
         public static GameplaySpawner In;
-        public GameMaps[] scenes;
         public GameplayTimer gameplayTimerPrefab;
 
         [SerializeField] private LobbyManager lobbyManager;
@@ -199,8 +193,7 @@ namespace Game.Scripts.Networking.Lobby
             }
         }
 
-        private bool IsValidScene(UEScene scene) =>
-            scene.IsValid() && scenes.Any(k => scene.name.Contains(k.ToString()));
+        private bool IsValidScene(UEScene scene) => scene.IsValid() && RoomController.Maps.Any(k => scene.name.Contains(k.ToString()));
 
         [ServerRpc(RequireOwnership = false)]
         private void NotifyServerSceneLoaded(int clientId)
