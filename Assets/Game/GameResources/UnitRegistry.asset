@@ -21,13 +21,13 @@ MonoBehaviour:
       type: 3}
     icon: {fileID: 21300000, guid: 93a13a17ffcb5b24faa344b444b10fb1, type: 3}
   - code: sam_l2_ronin
-    prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
+    prefab: {fileID: 4114653662106249588, guid: b183355776d03f14cb932f5d5f1d150d,
       type: 3}
-    icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+    icon: {fileID: 21300000, guid: 39cef4d2959010441aa1788faa25889d, type: 3}
   - code: sam_l2_spearman
-    prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
+    prefab: {fileID: 7349407344431180276, guid: 2aa8c167e26786c4ab13f9501c304440,
       type: 3}
-    icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+    icon: {fileID: 21300000, guid: 4c064b71c54ca8440846aa099b79595f, type: 3}
   - code: sam_l2_kensei
     prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208,
       type: 3}

@@ -1,4 +1,10 @@
 ﻿using UnityEngine;
+
+#if UnityEditor
+
+
+
+
 using UnityEditor;
 using System;
 
@@ -24,3 +30,5 @@ namespace TobyFredson.Drawers
 		}
 	}
 }
+
+#endif

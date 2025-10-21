@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Art/Map/Test.unity
     guid: 4adf57e13222d284a817c6459dc70dd2
   - enabled: 0
-    path: Assets/Game/Scenes/Test.unity
+    path: Assets/Game/Scenes/Test1111.unity
     guid: ba87aff19da38454ebe9cac99a971e44
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
