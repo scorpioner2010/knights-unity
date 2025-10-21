@@ -1113,7 +1113,7 @@ MonoBehaviour:
   xSpeed: 120
   ySpeed: 120
   mouseSpeed: 0.01
-  mouseSpeedMobile: 0.01
+  mouseSpeedMobile: 1
   isActiveLerp: 1
 --- !u!114 &1327664875790166468
 MonoBehaviour:
@@ -1245,7 +1245,6 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5582807725330484609}
   _networkObjectCache: {fileID: 5582807725330484609}
   maxHp: 100
-  hp: 0
   onDeath:
     m_PersistentCalls:
       m_Calls: []

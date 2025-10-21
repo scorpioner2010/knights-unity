@@ -25,10 +25,6 @@ namespace Game.Scripts.Player
         private float _lastSentX;
         private Vector3 _smoothedFocusPosition;
 
-        private Transform _boundingCube;
-        private Vector3 _center;
-        private Vector3 _halfExtents;
-
         private void Start()
         {
             if (playerRoot != null && playerRoot.playerCamera != null)
@@ -44,17 +40,9 @@ namespace Game.Scripts.Player
                 _smoothedFocusPosition = cameraFocusPoint.position;
         }
 
-        private void CameraVisibleProcess()
-        {
-            if (IsOwner == false)
-            {
-                return;
-            }
-        }
-
         private void LateUpdate()
         {
-            if (IsOwner == false)
+            if (!IsOwner)
                 return;
 
             if (playerRoot == null || playerRoot.playerCamera == null)
@@ -63,8 +51,6 @@ namespace Game.Scripts.Player
             if (playerRoot.IsDead.Value)
                 return;
 
-            CameraVisibleProcess();
-
             if (blockCameraRotation)
                 return;
 
@@ -72,21 +58,23 @@ namespace Game.Scripts.Player
                 return;
 
             if (isActiveLerp)
-            {
                 _smoothedFocusPosition = Vector3.Lerp(_smoothedFocusPosition, cameraFocusPoint.position, focusSmoothSpeed * Time.deltaTime);
-            }
 
-            if (MobileManager.IsNativeMobile() == false)
+            bool isMobile = MobileManager.IsNativeMobile();
+
+            if (!isMobile)
             {
+                // ПК: як було
                 _y -= CharacterInput.GetAxisY * ySpeed * mouseSpeed;
+                _x += CharacterInput.GetAxisX * xSpeed * mouseSpeed;
             }
             else
             {
+                // Мобільні: Y задається твоїм MobileManager (як було),
+                // а X нормалізуємо по часу, щоб не залежав від FPS.
                 _y = MobileManager.In.yCameraAngle;
+                _x += CharacterInput.GetAxisX * xSpeed * mouseSpeedMobile * Time.deltaTime;
             }
-
-            _x += CharacterInput.GetAxisX * xSpeed * mouseSpeed;
-            
 
             _y = Mathf.Clamp(_y, -10f, 60f);
 
@@ -109,21 +97,17 @@ namespace Game.Scripts.Player
             _lastSentX = _x;
 
             if (cameraFocusPoint != null)
-            {
                 _smoothedFocusPosition = cameraFocusPoint.position;
-            }
 
             if (playerRoot == null || playerRoot.playerCamera == null)
-            {
                 return;
-            }
-            
+
             Quaternion camRotation = Quaternion.Euler(_y, _x, 0f);
             Vector3 camPosition = camRotation * new Vector3(0f, 0f, -cameraDistance) + _smoothedFocusPosition;
 
             playerRoot.playerCamera.transform.rotation = camRotation;
             playerRoot.playerCamera.transform.position = camPosition;
-            
+
             transform.rotation = Quaternion.Euler(0f, _x, 0f);
         }
     }

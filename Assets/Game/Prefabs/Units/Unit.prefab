@@ -748,7 +748,7 @@ MonoBehaviour:
   xSpeed: 120
   ySpeed: 120
   mouseSpeed: 0.01
-  mouseSpeedMobile: 0.01
+  mouseSpeedMobile: 1
   isActiveLerp: 1
 --- !u!114 &6835414113782467482
 MonoBehaviour:
@@ -835,9 +835,7 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   characterInput: {fileID: 1398992688396928350}
   characterController: {fileID: 8667579807356841120}
-  smoothLookAtCamera: {fileID: 0}
   characterCameraController: {fileID: 3340459714197439112}
-  groundChecker: {fileID: 0}
   characterInit: {fileID: 5933044338177343111}
   health: {fileID: -1033110773516883015}
   meleeWeapon: {fileID: 1655653836841836110}
@@ -882,7 +880,6 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   maxHp: 100
-  hp: 0
   onDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -908,10 +905,7 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 256
-  sweepRadius: 0.2
   damage: 10
-  hitWindow: 0.25
-  localVfxWindow: 0.25
 --- !u!114 &6551520111187205520
 MonoBehaviour:
   m_ObjectHideFlags: 0

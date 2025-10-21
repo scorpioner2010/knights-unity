@@ -34,14 +34,15 @@ namespace Game.Scripts.Player
         private float _moveAmount;
         private Vector3 _currentDir = Vector3.forward;
         public float MoveAmount => _moveAmount;
-        private TimerBlocker _attackDelay = new (0.6f);
+
+        private TimerBlocker _attackDelay = new(0.6f);
 
         private void Update()
         {
-            if (!IsOwner) 
+            if (!IsOwner)
                 return;
-            
-            if (playerRoot.IsDead.Value) 
+
+            if (playerRoot.IsDead.Value)
                 return;
 
             bool isMobile = MobileManager.IsNativeMobile();
@@ -65,12 +66,12 @@ namespace Game.Scripts.Player
                     GetAxisY = 0f;
                 }
             }
-            
+
             bool shield = !isMobile ? Input.GetMouseButton(1) : MobileManager.In.IsShieldHeld();
-            
+
             bool isUnblock = _attackDelay.IsBlock() == false;
             bool attack = !isMobile ? Input.GetMouseButtonDown(0) && isUnblock : MobileManager.In.ConsumeAttackDown() && isUnblock;
-            
+
             if (attack)
             {
                 _attackDelay.Block();
@@ -87,7 +88,7 @@ namespace Game.Scripts.Player
                     rawTarget += playerRoot.transform.right * mv.x;
                 }
             }
-            else if(attack == false && shield == false)
+            else if (attack == false && shield == false)
             {
                 if (Input.GetKey("w")) rawTarget += playerRoot.transform.forward;
                 if (Input.GetKey("s")) rawTarget -= playerRoot.transform.forward;
@@ -96,7 +97,7 @@ namespace Game.Scripts.Player
             }
 
             if (rawTarget.sqrMagnitude > 1f) rawTarget.Normalize();
-            
+
             bool hasInput = rawTarget != Vector3.zero;
 
             float turnSpeed = Mathf.Lerp(turnSpeedAtZero, turnSpeedAtMax, Mathf.Clamp01(_moveAmount));
