@@ -20,31 +20,36 @@ namespace Game.Scripts.Player
 
         public int damageTest;
         private readonly SyncVar<int> _damage = new();
-        
+
         private CancellationTokenSource _cts;
 
         private static readonly Collider[] VFXBuf = new Collider[8];
         private CancellationTokenSource _vfxCts;
-        
+
         private float _localVfxWindow = 0.18f;
         private float _hitWindow = 0.18f;
 
-        public void InitWeapon(Transform bladeRoot,  Transform bladeTip)
+        public void InitWeapon(Transform bladeRoot, Transform bladeTip)
         {
-            _bladeRoot =  bladeRoot;
+            _bladeRoot = bladeRoot;
             _bladeTip = bladeTip;
+        }
+
+        public override void OnStartServer()
+        {
+            playerRoot.animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         }
 
         private void Awake()
         {
             _cts = new CancellationTokenSource();
         }
-        
+
         private void OnDestroy()
         {
             CancelTasks();
         }
-        
+
         private void Update()
         {
             damageTest = _damage.Value;
@@ -54,7 +59,7 @@ namespace Game.Scripts.Player
         {
             GameplayAssistant.SetNetworkParameter(_damage, damage);
         }
-        
+
         public void AE_TryLocalHitVfx()
         {
             if (!IsOwner)
@@ -73,7 +78,7 @@ namespace Game.Scripts.Player
             {
                 return;
             }
-            
+
             float duration = Mathf.Min(_hitWindow, _localVfxWindow);
             float tEnd = Time.time + duration;
 
@@ -99,9 +104,9 @@ namespace Game.Scripts.Player
                         {
                             continue;
                         }
-                        
+
                         PlayerRoot target = col.gameObject.GetComponentInParent<PlayerRoot>();
-                        
+
                         if (target.networkObject == null || (NetworkObject != null && target.networkObject.ObjectId == NetworkObject.ObjectId))
                         {
                             continue;
@@ -160,7 +165,7 @@ namespace Game.Scripts.Player
             {
                 _cts = new CancellationTokenSource();
             }
-            
+
             _ = ServerMeleeWindowAsync(_damage.Value, _hitWindow, _cts.Token);
         }
 
@@ -170,7 +175,7 @@ namespace Game.Scripts.Player
             {
                 return;
             }
-            
+
             if (!IsServer)
             {
                 return;
@@ -196,12 +201,12 @@ namespace Game.Scripts.Player
                     for (int i = 0; i < cols.Length; i++)
                     {
                         Collider c = cols[i];
-                        
+
                         if (c == null)
                         {
                             continue;
                         }
-                        
+
                         PlayerRoot target = c.gameObject.GetComponentInParent<PlayerRoot>();
 
                         if (target != null && playerRoot != null && target.Team.Value == playerRoot.Team.Value)

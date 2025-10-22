@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.48460647, g: 0.3777432, b: 0.6533965, a: 1}
+  m_IndirectSpecularColor: {r: 0.4859022, g: 0.37764966, b: 0.6526153, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1066,7 +1066,7 @@ Transform:
   m_GameObject: {fileID: 493242974}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.38405403, z: -0, w: 0.92331064}
-  m_LocalPosition: {x: 55.4, y: 3.01, z: -60.8}
+  m_LocalPosition: {x: -3.5, y: 2.24, z: -14.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1925,6 +1925,7 @@ GameObject:
   - component: {fileID: 1332977280}
   - component: {fileID: 1332977279}
   - component: {fileID: 1332977278}
+  - component: {fileID: 1332977281}
   m_Layer: 3
   m_Name: Terrain
   m_TagString: Untagged
@@ -2007,6 +2008,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1332977281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332977277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05725f147002851409c50235e935cd2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  center: {fileID: 1928426827}
 --- !u!1 &1334172115
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,37 +2721,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1636237250
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1636237251}
-  m_Layer: 0
-  m_Name: World
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1636237251
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1636237250}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1675828296
 GameObject:
   m_ObjectHideFlags: 0
@@ -3243,7 +3226,7 @@ Transform:
   m_GameObject: {fileID: 1786657434}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.37128952, z: -0, w: 0.92851716}
-  m_LocalPosition: {x: -62.86, y: 7.76, z: 47.1}
+  m_LocalPosition: {x: -19.5, y: 2.45, z: 1.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3444,6 +3427,37 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 493242976}
   _networkObjectCache: {fileID: 0}
   team: 2
+--- !u!1 &1928426826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1928426827}
+  m_Layer: 0
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1928426827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928426826}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1947045061
 GameObject:
   m_ObjectHideFlags: 0
@@ -4169,8 +4183,8 @@ SceneRoots:
   - {fileID: 1761058058}
   - {fileID: 1771415521}
   - {fileID: 1166004887}
-  - {fileID: 1636237251}
   - {fileID: 419150682}
   - {fileID: 1786657436}
   - {fileID: 493242978}
   - {fileID: 1332977280}
+  - {fileID: 1928426827}

@@ -5,7 +5,7 @@ namespace Game.Scripts
 {
     public class FaceCenterFromGround : MonoBehaviour
     {
-        [SerializeField] private LayerMask groundLayerMask = ~0; // за замовчуванням — всі шари
+        [SerializeField] private LayerMask groundLayerMask = ~0;
         
         public void FaceCenterFromGroundLayer(PlayerRoot playerRoot)
         {
@@ -15,17 +15,21 @@ namespace Game.Scripts
             
             if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, maxDist, groundLayerMask, QueryTriggerInteraction.Ignore))
             {
-                Vector3 center = hit.collider.bounds.center;
-                FaceTowardsXZ(playerRoot, t, center);
+                Map map = hit.collider.GetComponent<Map>();
+                if (map != null)
+                {
+                    FaceTowardsXZ(playerRoot, map.center.position);
+                }
             }
             else
             {
-                FaceTowardsXZ(playerRoot, t, Vector3.zero);
+                FaceTowardsXZ(playerRoot, Vector3.zero);
             }
         }
 
-        private void FaceTowardsXZ(PlayerRoot playerRoot, Transform t, Vector3 target)
+        private void FaceTowardsXZ(PlayerRoot playerRoot, Vector3 target)
         {
+            Transform t = playerRoot.transform;
             Vector3 look = new Vector3(target.x - t.position.x, 0f, target.z - t.position.z);
 
             if (look.sqrMagnitude <= 1e-6f)
