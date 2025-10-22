@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using Game.Scripts.Core.Helpers;
 using UnityEngine;
 
 namespace Game.Scripts.Player
@@ -10,13 +12,15 @@ namespace Game.Scripts.Player
     {
         public PlayerRoot playerRoot;
 
-        public Transform bladeRoot;
-        public Transform bladeTip;
+        private Transform _bladeRoot;
+        private Transform _bladeTip;
 
         public LayerMask hitMask;
         private float _sweepRadius = 0.12f;
 
-        public int damage = 30;
+        public int damageTest;
+        private readonly SyncVar<int> _damage = new();
+        
         private CancellationTokenSource _cts;
 
         private static readonly Collider[] VFXBuf = new Collider[8];
@@ -25,6 +29,32 @@ namespace Game.Scripts.Player
         private float _localVfxWindow = 0.18f;
         private float _hitWindow = 0.18f;
 
+        public void InitWeapon(Transform bladeRoot,  Transform bladeTip)
+        {
+            _bladeRoot =  bladeRoot;
+            _bladeTip = bladeTip;
+        }
+
+        private void Awake()
+        {
+            _cts = new CancellationTokenSource();
+        }
+        
+        private void OnDestroy()
+        {
+            CancelTasks();
+        }
+        
+        private void Update()
+        {
+            damageTest = _damage.Value;
+        }
+
+        public void SetDamage(int damage)
+        {
+            GameplayAssistant.SetNetworkParameter(_damage, damage);
+        }
+        
         public void AE_TryLocalHitVfx()
         {
             if (!IsOwner)
@@ -39,13 +69,18 @@ namespace Game.Scripts.Player
 
         private async UniTaskVoid LocalVfxWindowAsync(CancellationToken token)
         {
+            if (_bladeTip == null || _bladeRoot == null)
+            {
+                return;
+            }
+            
             float duration = Mathf.Min(_hitWindow, _localVfxWindow);
             float tEnd = Time.time + duration;
 
             HashSet<int> hitOnce = new HashSet<int>();
 
-            Vector3 prevTip = bladeTip ? bladeTip.position : transform.position + transform.forward * 1f;
-            Vector3 prevRoot = bladeRoot ? bladeRoot.position : transform.position;
+            Vector3 prevTip = _bladeTip ? _bladeTip.position : transform.position + transform.forward * 1f;
+            Vector3 prevRoot = _bladeRoot ? _bladeRoot.position : transform.position;
 
             try
             {
@@ -53,8 +88,8 @@ namespace Game.Scripts.Player
                 {
                     await UniTask.Yield(PlayerLoopTiming.Update, token);
 
-                    Vector3 curTip = bladeTip ? bladeTip.position : prevTip;
-                    Vector3 curRoot = bladeRoot ? bladeRoot.position : prevRoot;
+                    Vector3 curTip = _bladeTip ? _bladeTip.position : prevTip;
+                    Vector3 curRoot = _bladeRoot ? _bladeRoot.position : prevRoot;
 
                     int count = Physics.OverlapCapsuleNonAlloc(prevTip, curTip, _sweepRadius, VFXBuf, hitMask, QueryTriggerInteraction.Ignore);
                     for (int i = 0; i < count; i++)
@@ -95,16 +130,6 @@ namespace Game.Scripts.Player
             playerRoot.characterParticles.HitEffectPlay(hitPointWorld);
         }
 
-        private void OnEnable()
-        {
-            _cts = new CancellationTokenSource();
-        }
-
-        private void OnDisable()
-        {
-            CancelTasks();
-        }
-
         public override void OnStopNetwork()
         {
             base.OnStopNetwork();
@@ -136,11 +161,16 @@ namespace Game.Scripts.Player
                 _cts = new CancellationTokenSource();
             }
             
-            _ = ServerMeleeWindowAsync(damage, _hitWindow, _cts.Token);
+            _ = ServerMeleeWindowAsync(_damage.Value, _hitWindow, _cts.Token);
         }
 
         private async UniTaskVoid ServerMeleeWindowAsync(int dmg, float window, CancellationToken token)
         {
+            if (_bladeTip == null || _bladeRoot == null)
+            {
+                return;
+            }
+            
             if (!IsServer)
             {
                 return;
@@ -149,8 +179,8 @@ namespace Game.Scripts.Player
             float tEnd = Time.time + window;
 
             HashSet<int> hitOnce = new HashSet<int>();
-            Vector3 prevRoot = bladeRoot ? bladeRoot.position : transform.position;
-            Vector3 prevTip = bladeTip ? bladeTip.position : transform.position + transform.forward * 1f;
+            Vector3 prevRoot = _bladeRoot ? _bladeRoot.position : transform.position;
+            Vector3 prevTip = _bladeTip ? _bladeTip.position : transform.position + transform.forward * 1f;
 
             try
             {
@@ -158,8 +188,8 @@ namespace Game.Scripts.Player
                 {
                     await UniTask.Yield(PlayerLoopTiming.Update, token);
 
-                    Vector3 curRoot = bladeRoot ? bladeRoot.position : prevRoot;
-                    Vector3 curTip = bladeTip ? bladeTip.position : prevTip;
+                    Vector3 curRoot = _bladeRoot ? _bladeRoot.position : prevRoot;
+                    Vector3 curTip = _bladeTip ? _bladeTip.position : prevTip;
 
                     Collider[] cols = Physics.OverlapCapsule(prevTip, curTip, _sweepRadius, hitMask, QueryTriggerInteraction.Ignore);
 
@@ -189,7 +219,7 @@ namespace Game.Scripts.Player
                             continue;
                         }
 
-                        Vector3 hitPoint = bladeTip ? bladeTip.position : transform.position + transform.forward * 0.8f;
+                        Vector3 hitPoint = _bladeTip ? _bladeTip.position : transform.position + transform.forward * 0.8f;
                         Vector3 impulse = transform.forward * 6f;
                         Vector3 hitPointWorld = c.ClosestPoint(curTip);
                         BroadcastHitVfx(target.networkObject, hitPointWorld);

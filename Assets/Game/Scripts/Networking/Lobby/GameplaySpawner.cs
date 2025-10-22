@@ -10,6 +10,7 @@ using Game.GameResources;
 using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.Core.Helpers;
+using Game.Scripts.Gameplay;
 using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.MenuController;
 using Game.Scripts.Player;
@@ -204,7 +205,7 @@ namespace Game.Scripts.Networking.Lobby
 
             ServerRoom serverRoom = LobbyRooms.GetRoomByConnection(conn);
             Player playerByConnection = serverRoom.GetPlayerBuyConnection(conn);
-            playerByConnection.randomPlayerConnected = true;
+            playerByConnection.connected = true;
 
             List<Player> realPlayers = new();
 
@@ -216,7 +217,7 @@ namespace Game.Scripts.Networking.Lobby
                 }
             }
 
-            bool allLoaded = realPlayers.All(p => p.randomPlayerConnected);
+            bool allLoaded = realPlayers.All(p => p.connected);
 
             if (allLoaded) //виконується тільки тоді коли всі гравці загрузилися
             {
@@ -329,20 +330,18 @@ namespace Game.Scripts.Networking.Lobby
 
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
             PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
-            PlayerRoot unit = ResourceManager.GetPrefab(profile.activeWarriorCode);
-            PlayerRoot playerRoot = Instantiate(unit, spawnPoint.transform.position, Quaternion.identity);
+            PlayerRoot playerRoot = Instantiate(ResourceManager.GetPrefab(), spawnPoint.transform.position, Quaternion.identity);
             ServerManager.Spawn(playerRoot.networkObject, connection, _additiveServerScene);
             
             WarriorDto info = WarriorsServer.GetWarrior(profile.activeWarriorCode);
             
             playerRoot.warriorCode = profile.activeWarriorCode;
             playerRoot.health.SetHpServer(info.hp);
-            playerRoot.meleeWeapon.damage = info.damage;
+            playerRoot.meleeWeapon.SetDamage(info.damage);
             playerRoot.Team.Value = player.team;
-            playerRoot.serverRoom =  serverRoom;
             
             player.playerRoot = playerRoot;
-            player.playerRoot.characterInit.ServerInit(serverRoom.maxPlayers, PlayerType.Player, player.loginName, _additiveServerScene);
+            player.playerRoot.characterInit.ServerInit(PlayerType.Player, _additiveServerScene, profile.activeWarriorCode, connection.ClientId);
         }
         
         [ObserversRpc]

@@ -2,7 +2,8 @@ using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
-using FishNet.Object.Synchronizing; // SyncVar<T>
+using FishNet.Object.Synchronizing;
+using Game.Scripts.Core.Helpers; // SyncVar<T>
 using Game.Scripts.Core.Services;
 using Game.Scripts.UI.HUD;
 using Game.Scripts.World.Spawns; // Team, тощо
@@ -13,9 +14,8 @@ namespace Game.Scripts.Player
 {
     public class Health : NetworkBehaviour
     {
-        [Header("HP")]
-        public int maxHp = 100;
-
+        public int hpTest;
+        private readonly SyncVar<int> _maxHp = new();
         private readonly SyncVar<int> _hp = new();
         public int CurrentHp => _hp.Value;
 
@@ -24,13 +24,10 @@ namespace Game.Scripts.Player
 
         private HealthBar _healthBar; // локальний HUD (тільки власник)
         public PlayerRoot playerRoot;
-
-        // ----------------- LIFECYCLE -----------------
-
-        public override void OnStartNetwork()
+        
+        private void Update()
         {
-            if (IsServer)
-                _hp.Value = Mathf.Clamp(_hp.Value <= 0 ? maxHp : _hp.Value, 0, maxHp);
+            hpTest = CurrentHp;
         }
 
         public override void OnStartClient()
@@ -52,7 +49,9 @@ namespace Game.Scripts.Player
         private void TryBindHealthBar()
         {
             if (_healthBar == null)
+            {
                 _healthBar = Singleton<HealthBar>.Instance;
+            }
         }
 
         // ----------------- SERVER API -----------------
@@ -60,16 +59,15 @@ namespace Game.Scripts.Player
         [Server]
         public void SetHpServer(int newHp)
         {
-            int clamped = Mathf.Clamp(newHp, 0, maxHp);
-            if (_hp.Value == clamped)
-                return;
-
-            _hp.Value = clamped;
-
+            GameplayAssistant.SetNetworkParameter(_maxHp, newHp);
+            GameplayAssistant.SetNetworkParameter(_hp, newHp);
+            
             if (_hp.Value == 0)
+            {
                 DeathServer();
+            }
         }
-
+        
         [Server]
         public void ApplyDamageServer(int dmg, Vector3 hitPoint, Vector3 impulse, NetworkObject attacker)
         {
@@ -81,22 +79,24 @@ namespace Game.Scripts.Player
 
             HitFxObserversRpc(hitPoint, impulse);
 
-            if (attacker != null && playerRoot != null && playerRoot.serverRoom != null)
+            if (attacker != null)
             {
-                var attackerRoot = playerRoot.serverRoom.players
+                var attackerRoot = playerRoot.characterInit.serverRoom.players
                     .Select(p => p.playerRoot)
                     .FirstOrDefault(r => r != null && r.OwnerId == attacker.OwnerId);
 
                 if (attackerRoot != null && dmg > 0)
                 {
-                    int dealt = Mathf.Min(dmg, maxHp); // статистика (безпечна оцінка)
+                    int dealt = Mathf.Min(dmg, _maxHp.Value); // статистика (безпечна оцінка)
                     attackerRoot.statisticCounter.AddDamage(dealt);
                     if (newHp == 0) attackerRoot.statisticCounter.AddKill();
                 }
             }
 
             if (_hp.Value == 0)
+            {
                 DeathServer();
+            }
         }
 
         [Server]
@@ -117,7 +117,7 @@ namespace Game.Scripts.Player
             {
                 if (leftTeam != Team.Draw)
                 {
-                    playerRoot.serverRoom.gameplayTimer.Close();
+                    playerRoot.characterInit.serverRoom.gameplayTimer.Close();
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace Game.Scripts.Player
         {
             int dmg = Mathf.Max(0, previous - current);
 
-            OnDamaged?.Invoke(dmg, current, maxHp);
+            OnDamaged?.Invoke(dmg, current, _maxHp.Value);
 
             if (IsOwner)
             {
@@ -175,7 +175,7 @@ namespace Game.Scripts.Player
         private void UpdateOwnerHud(int currentHp)
         {
             if (_healthBar == null || _healthBar.healthImage == null) return;
-            _healthBar.SetHpView(currentHp, maxHp);
+            _healthBar.SetHpView(currentHp, _maxHp.Value);
         }
 
         // ✅ ПОВЕРНУТО: перевірка «одна команда лишилась»
@@ -183,7 +183,7 @@ namespace Game.Scripts.Player
         {
             winner = default;
 
-            PlayerRoot[] players = playerRoot.serverRoom.players.Select(p => p.playerRoot).ToArray();
+            PlayerRoot[] players = playerRoot.characterInit.serverRoom.players.Select(p => p.playerRoot).ToArray();
 
             bool anyAlive = false;
             bool hasRed = false;

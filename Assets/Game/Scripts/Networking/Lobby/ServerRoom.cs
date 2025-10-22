@@ -111,6 +111,11 @@ namespace Game.Scripts.Networking.Lobby
             return players.Find(p => p.Connection == connection);
         }
         
+        public Player GetPlayerBuyClientId(int clientId)
+        {
+            return players.Find(p => p.Connection.ClientId == clientId);
+        }
+        
         public Player GetPlayerBuyName(string name)
         {
             return players.Find(p => p.loginName == name);

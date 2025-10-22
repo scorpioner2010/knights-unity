@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using FishNet.Object.Synchronizing;
 using Game.Scripts.Core.Services;
 using UnityEditor;
 using UnityEngine;
@@ -36,6 +37,27 @@ namespace Game.Scripts.Core.Helpers
             }
 
             Canvas.ForceUpdateCanvases();
+        }
+        
+        public static void SetNetworkParameter(SyncVar<int> parameter, int value, bool isMinus = false)
+        {
+            int clamped;
+            
+            if (isMinus)
+            {
+                clamped = Mathf.Clamp(value, value, 0);
+            }
+            else
+            {
+                clamped = Mathf.Clamp(value, 0, value);
+            }
+            
+            if (parameter.Value == clamped)
+            {
+                return;
+            }
+
+            parameter.Value = clamped;
         }
         
         private static void ForceRebuildRecursive(Transform t)

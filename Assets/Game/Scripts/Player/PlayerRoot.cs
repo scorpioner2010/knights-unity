@@ -1,8 +1,8 @@
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Game.Script.Player.UI;
+using Game.Scripts.Gameplay;
 using Game.Scripts.Gameplay.Robots;
-using Game.Scripts.Networking.Lobby;
 using Game.Scripts.World.Spawns;
 using UnityEngine;
 
@@ -29,8 +29,14 @@ namespace Game.Scripts.Player
         
         public readonly SyncVar<bool> IsDead = new();
         public readonly SyncVar<Team> Team = new();
-        public ServerRoom serverRoom; //only server
         public string warriorCode;
+        public MeshPack mesh;
+
+        public void PutMesh(MeshPack pack)
+        {
+            mesh = Instantiate(pack, characterMovement.skeleton);
+            mesh.Init(animator, this);
+        }
         
         public override void OnStartClient()
         {

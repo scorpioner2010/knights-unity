@@ -89,9 +89,7 @@ namespace Game.Scripts.UI.MainMenu
                 MakeIcons(robotList.icon, robotList.isSelected, robotList.id);
             }
             
-            PlayerRoot vehicleRoot = ResourceManager.GetPrefab(selected.code);
-            Spawn(vehicleRoot);
-
+            Spawn(selected.code);
             UpdateUI();
         }
         
@@ -157,10 +155,16 @@ namespace Game.Scripts.UI.MainMenu
             GameplayAssistant.RebuildAllLayouts(l).Forget();
         }
         
-        public static async void Spawn(PlayerRoot tankRoot)
+        public static async void Spawn(string code)
         {
             _in.rootSpawnPlace.SetActive(true);
-            _in._tankRoot = Instantiate(tankRoot, _in.spawnPosition.transform, true);
+            
+            PlayerRoot root = ResourceManager.GetPrefab();
+            _in._tankRoot = Instantiate(root, _in.spawnPosition.transform, true);
+            
+            MeshPack mesh = ResourceManager.GetMesh(code);
+            _in._tankRoot.PutMesh(mesh);
+            
             _in._tankRoot.gameObject.SetActive(false);
             
             // Прибираємо FishNet-компоненти (лишаємо твої скрипти).

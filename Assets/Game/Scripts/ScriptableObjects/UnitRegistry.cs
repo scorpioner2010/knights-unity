@@ -13,20 +13,25 @@ namespace Game.Scripts.ScriptableObjects
         public class Item
         {
             public string code;
-            public PlayerRoot prefab;
-            [ShowAssetPreview(64, 64)]
-            public Sprite icon;
+            public MeshPack meshPack;
+            [ShowAssetPreview] public Sprite icon;
         }
 
+        public PlayerRoot prefab;
         public List<Item> items = new ();
-
-        public PlayerRoot GetPrefab(string code)
+        
+        public PlayerRoot GetPrefab()
+        {
+            return prefab;
+        }
+        
+        public MeshPack GetMesh(string code)
         {
             foreach (Item it in items)
             {
                 if (it.code == code)
                 {
-                    return it.prefab;
+                    return it.meshPack;
                 }
             }
         
