@@ -163,7 +163,7 @@ namespace Game.Scripts.UI.MainMenu
             _in._tankRoot = Instantiate(root, _in.spawnPosition.transform, true);
             
             MeshPack mesh = ResourceManager.GetMesh(code);
-            _in._tankRoot.PutMesh(mesh);
+            _in._tankRoot.InitMesh(mesh);
             
             _in._tankRoot.gameObject.SetActive(false);
             

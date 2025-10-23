@@ -37,7 +37,7 @@ namespace Game.Scripts.Gameplay
             MeshCode.Value = meshCode;
             
             MeshPack mesh = ResourceManager.GetMesh(meshCode);
-            playerRoot.PutMesh(mesh);
+            playerRoot.InitMesh(mesh);
         }
 
         public override void OnStartClient()
@@ -66,27 +66,23 @@ namespace Game.Scripts.Gameplay
         [ObserversRpc]
         public void InitClient()
         {
+            Camera cam = CameraSync.In.gameplayCamera;
+            
             if (IsOwner) //only owner
             {
-                playerRoot.Init();
-                
-                PlayerRoot[] players = FindObjectsByType<PlayerRoot>(FindObjectsSortMode.None);
+                playerRoot.InitOwner(cam);
+            }
             
-                Camera cam = CameraSync.In.gameplayCamera;
-
-                foreach (PlayerRoot root in players)
-                {
-                    if (OwnerId != root.OwnerId)
-                    {
-                        root.playerHUD.SetCamera(cam);
-                        root.playerHUD.SetNick(root.characterInit.LoginName.Value);
-                    }
-                }
+            if (IsOwner == false)
+            {
+                playerRoot.playerHUD.SetCamera(cam);
+                playerRoot.playerHUD.SetNick(playerRoot.characterInit.LoginName.Value);
+                playerRoot.InitTeamView();
             }
             
             //for all clients
             MeshPack mesh = ResourceManager.GetMesh(MeshCode.Value);
-            playerRoot.PutMesh(mesh);
+            playerRoot.InitMesh(mesh);
         }
     }
 }

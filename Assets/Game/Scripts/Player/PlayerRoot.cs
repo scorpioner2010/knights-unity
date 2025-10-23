@@ -1,8 +1,8 @@
+using System;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Game.Script.Player.UI;
 using Game.Scripts.Gameplay;
-using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.World.Spawns;
 using UnityEngine;
 
@@ -14,7 +14,6 @@ namespace Game.Scripts.Player
         public CharacterMovement characterMovement;
         public CharacterAnimationController animationController;
         public Animator animator;
-        public UnityEngine.Camera playerCamera;
         public CharacterInput characterInput;
         public CharacterController characterController;
         public CharacterCameraController characterCameraController;
@@ -29,13 +28,29 @@ namespace Game.Scripts.Player
         
         public readonly SyncVar<bool> IsDead = new();
         public readonly SyncVar<Team> Team = new();
-        public string warriorCode;
-        public MeshPack mesh;
+        
+        [HideInInspector] public UnityEngine.Camera playerCamera;
+        [HideInInspector] public string warriorCode;
+        [HideInInspector] public MeshPack mesh;
+        
+        public ParticleSystem teamView;
 
-        public void PutMesh(MeshPack pack)
+        public void InitMesh(MeshPack pack)
         {
             mesh = Instantiate(pack, characterMovement.skeleton);
             mesh.Init(animator, this);
+        }
+
+        [Obsolete("Obsolete")]
+        public void InitTeamView()
+        {
+            teamView.gameObject.SetActive(true);
+            teamView.startColor = Team.Value switch
+            {
+                World.Spawns.Team.Blue => Color.blue,
+                World.Spawns.Team.Red => Color.red,
+                _ => default
+            };
         }
         
         public override void OnStartClient()
@@ -48,9 +63,9 @@ namespace Game.Scripts.Player
             IsDead.OnChange -= OnIsDeadChanged;
         }
 
-        public void Init()
+        public void InitOwner(UnityEngine.Camera playerCam)
         {
-            playerCamera = CameraSync.In.gameplayCamera;
+            playerCamera = playerCam;
             faceCenterFromGround.FaceCenterFromGroundLayer(this);
         }
 
@@ -70,7 +85,7 @@ namespace Game.Scripts.Player
             if (isDead)
             {
                 animator.ResetTrigger("Attack");
-                animator.ResetTrigger("Jump");
+                animator.SetBool("Shield", false);
                 animator.SetFloat("Locomotion", 0f);
                 animator.SetTrigger("Die");
             }

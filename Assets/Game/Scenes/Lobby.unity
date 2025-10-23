@@ -20602,7 +20602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTestMode: 0
   maxPlayersForFindRoom: 30
-  findRoomSeconds: 20
+  findRoomSeconds: 3
 --- !u!4 &2068572094
 Transform:
   m_ObjectHideFlags: 0
@@ -24401,7 +24401,7 @@ PrefabInstance:
     - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}
       propertyPath: ConnectionData.Address
-      value: 3.120.130.195
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}
