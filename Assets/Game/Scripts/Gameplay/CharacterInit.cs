@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
@@ -64,6 +65,7 @@ namespace Game.Scripts.Gameplay
         }
 
         [ObserversRpc]
+        [Obsolete("Obsolete")]
         public void InitClient()
         {
             Camera cam = CameraSync.In.gameplayCamera;

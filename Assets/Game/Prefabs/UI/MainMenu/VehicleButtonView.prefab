@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3616016888375353605}
   - component: {fileID: 6707670531963912634}
   m_Layer: 0
-  m_Name: VehicleButton
+  m_Name: VehicleButtonView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
