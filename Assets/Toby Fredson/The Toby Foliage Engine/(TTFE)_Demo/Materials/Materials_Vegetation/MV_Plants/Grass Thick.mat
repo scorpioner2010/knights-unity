@@ -460,7 +460,7 @@ Material:
     - _SPECPOWER: 1
     - _SSSFalloff: 0
     - _ScaleA: 0.4
-    - _SeasonChangeGlobal: 2
+    - _SeasonChangeGlobal: -2
     - _SeasonVertexColorR: 0
     - _SecondaryFactor: 0.64
     - _SelfShading: 0
@@ -664,3 +664,4 @@ Material:
     - _render_normals_options: {r: 1, g: 1, b: 1, a: 0}
     - _render_normals_options1: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

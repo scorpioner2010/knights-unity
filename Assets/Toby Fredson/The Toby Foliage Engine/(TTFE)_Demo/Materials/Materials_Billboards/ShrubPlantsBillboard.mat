@@ -208,7 +208,7 @@ Material:
     - _RandomContrastOnOff: 0
     - _ReceiveShadows: 1
     - _SEASONSETTINGS: 0
-    - _SeasonChangeGlobal: 2
+    - _SeasonChangeGlobal: -0.1
     - _SeasonChnageA: 0
     - _SeasonChnageB: 0
     - _SeasonVertexColorR: 0
@@ -252,3 +252,4 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _TranslucencyColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
