@@ -35,9 +35,10 @@ namespace Game.Scripts.Networking.Lobby
         {
             foreach (Player player in players)
             {
-                if (player.isBot == false)
+                if (player.IsBot == false)
                 {
-                    _in.UpdateTimerTargetRpc(player.Connection, time, players.Count);
+                    NetworkConnection connection = _in.ServerManager.Clients[player.clientId];
+                    _in.UpdateTimerTargetRpc(connection, time, players.Count);
                 }
             }
         }

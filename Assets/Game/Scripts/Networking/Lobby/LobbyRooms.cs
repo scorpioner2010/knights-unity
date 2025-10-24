@@ -110,7 +110,7 @@ namespace Game.Scripts.Networking.Lobby
         {
             foreach (ServerRoom room in Rooms.Values)
             {
-                bool isHas = room.HasPlayer(conn);
+                bool isHas = room.HasPlayer(conn.ClientId);
                 
                 if (isHas)
                 {

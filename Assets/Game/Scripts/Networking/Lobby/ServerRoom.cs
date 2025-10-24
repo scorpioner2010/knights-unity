@@ -85,40 +85,25 @@ namespace Game.Scripts.Networking.Lobby
         {
             return players.Count;
         }
-
-        public bool HasPlayer(NetworkConnection connection)
-        {
-            if (players.Find(p => p.Connection == connection) != null)
-            {
-                return true;
-            }
-
-            return false;
-        }
         
         public bool HasPlayer(int clientId)
         {
-            if (players.Find(p => p.Connection.ClientId == clientId) != null)
+            if (players.Find(p => p.clientId == clientId) != null)
             {
                 return true;
             }
 
             return false;
-        }
-
-        public Player GetPlayerBuyConnection(NetworkConnection connection)
-        {
-            return players.Find(p => p.Connection == connection);
         }
         
         public Player GetPlayerBuyClientId(int clientId)
         {
-            return players.Find(p => p.Connection.ClientId == clientId);
+            return players.Find(p => p.clientId == clientId);
         }
         
-        public Player GetPlayerBuyName(string name)
+        public Player GetPlayerBuyName(string playerName)
         {
-            return players.Find(p => p.loginName == name);
+            return players.Find(p => p.loginName == playerName);
         }
 
         public List<Player> GetPlayers()
@@ -132,7 +117,7 @@ namespace Game.Scripts.Networking.Lobby
 
             foreach (Player player in players)
             {
-                if (player.isBot == false)
+                if (player.IsBot == false)
                 {
                     realPlayers.Add(player);
                 }

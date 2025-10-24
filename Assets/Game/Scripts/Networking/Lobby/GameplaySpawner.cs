@@ -11,7 +11,6 @@ using Game.Scripts.API.Endpoints;
 using Game.Scripts.API.ServerManagers;
 using Game.Scripts.Core.Helpers;
 using Game.Scripts.Gameplay;
-using Game.Scripts.Gameplay.Robots;
 using Game.Scripts.MenuController;
 using Game.Scripts.Player;
 using Game.Scripts.UI.HUD;
@@ -59,7 +58,7 @@ namespace Game.Scripts.Networking.Lobby
                     return;
                 }
 
-                Player player = serverRoom.GetPlayers().Find(x => x.Connection == conn);
+                Player player = serverRoom.GetPlayers().Find(x => x.clientId == conn.ClientId);
 
                 if (player == null)
                 {
@@ -182,7 +181,7 @@ namespace Game.Scripts.Networking.Lobby
 
             if (serverRoom != null)
             {
-                Player player = serverRoom.GetPlayerBuyConnection(conn);
+                Player player = serverRoom.GetPlayerBuyClientId(conn.ClientId);
 
                 if (player != null)
                 {
@@ -204,14 +203,14 @@ namespace Game.Scripts.Networking.Lobby
             }
 
             ServerRoom serverRoom = LobbyRooms.GetRoomByConnection(conn);
-            Player playerByConnection = serverRoom.GetPlayerBuyConnection(conn);
+            Player playerByConnection = serverRoom.GetPlayerBuyClientId(conn.ClientId);
             playerByConnection.connected = true;
 
             List<Player> realPlayers = new();
 
             foreach (Player player in serverRoom.GetPlayers())
             {
-                if (player.isBot == false)
+                if (player.IsBot == false)
                 {
                     realPlayers.Add(player);
                 }
@@ -223,13 +222,13 @@ namespace Game.Scripts.Networking.Lobby
             {
                 foreach (Player player in serverRoom.GetPlayers())
                 {
-                    if (player.isBot)
+                    if (player.IsBot)
                     {
                         SpawnBot(serverRoom, player);
                     }
                     else
                     {
-                        SpawnPlayer(serverRoom, player.Connection);
+                        SpawnPlayer(serverRoom, player.clientId);
                     }
                 }
 
@@ -274,7 +273,7 @@ namespace Game.Scripts.Networking.Lobby
            }
            else
            {
-               Player owner = serverRoom.players.Where(p => p.Connection.ClientId == info.root.OwnerId).ToList().FirstOrDefault();
+               Player owner = serverRoom.players.Where(p => p.clientId == info.root.OwnerId).ToList().FirstOrDefault();
                
                if (owner != null)
                {
@@ -293,8 +292,6 @@ namespace Game.Scripts.Networking.Lobby
 
         private void SpawnBot(ServerRoom serverRoom, Player player)
         {
-            return;
-
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
 
             if (spawnPoint == null)
@@ -303,14 +300,25 @@ namespace Game.Scripts.Networking.Lobby
                 return;
             }
 
-            //TankRoot tankRoot = Instantiate(PlayerPrefab, spawnPoint.transform.position, Quaternion.identity);
-            //ServerManager.Spawn(tankRoot.networkObject, LocalConnection, _additiveServerScene);
-            //player.playerRoot = tankRoot;
-            //playerRoot.Side.Value = player.side;
-            //player.playerRoot.characterInit.Init(0, InitValue.Bot, player.loginName, serverRoom.roomId, _additiveServerScene);
+            string warriorCode = "vik_l1_starter";
+                
+            PlayerRoot root = Instantiate(ResourceManager.GetPrefab(), spawnPoint.transform.position, Quaternion.identity);
+            ServerManager.Spawn(root.networkObject, LocalConnection, _additiveServerScene);
+            
+            WarriorDto info = WarriorsServer.GetWarrior(warriorCode);
+            
+            root.warriorCode = warriorCode;
+            root.health.SetHpServer(info.hp);
+            root.meleeWeapon.SetDamage(info.damage);
+            root.Team.Value = player.team;
+            
+            player.playerRoot = root;
+            player.playerRoot.characterInit.ServerInit(PlayerType.Bot, _additiveServerScene, warriorCode, player.clientId);
         }
 
-        private async void SpawnPlayer(ServerRoom serverRoom, NetworkConnection connection)
+        
+
+        private async void SpawnPlayer(ServerRoom serverRoom, int clientId)
         {
             float elapsedTime = 0f;
 
@@ -326,11 +334,13 @@ namespace Game.Scripts.Networking.Lobby
                 return;
             }
 
-            Player player = serverRoom.GetPlayerBuyConnection(connection);
+            Player player = serverRoom.GetPlayerBuyClientId(clientId);
 
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
-            PlayerProfileDto profile = ProfileServer.GetProfileByClientId(connection.ClientId);
+            PlayerProfileDto profile = ProfileServer.GetProfileByClientId(clientId);
             PlayerRoot playerRoot = Instantiate(ResourceManager.GetPrefab(), spawnPoint.transform.position, Quaternion.identity);
+            
+            NetworkConnection connection = ServerManager.Clients[clientId];
             ServerManager.Spawn(playerRoot.networkObject, connection, _additiveServerScene);
             
             WarriorDto info = WarriorsServer.GetWarrior(profile.activeWarriorCode);

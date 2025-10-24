@@ -27,11 +27,14 @@ namespace Game.Scripts.Networking.Lobby
         
         [SerializeField] private MainMenu mainMenu;
         
+        public int botNumber; //server field
+        
         private void Awake()
         {
             createRoomButton.onClick.AddListener(OnCreateRoomClicked);
             backCreateButton.onClick.AddListener(OnBackCreateClicked);
             backLobbyButton.onClick.AddListener(OnBackLobbyClicked);
+            botNumber = Player.BotStartNumber; //bot index init
         }
 
         private void OnBackLobbyClicked()
@@ -81,7 +84,7 @@ namespace Game.Scripts.Networking.Lobby
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void CreateRoomServerRpc(string roomName, int maxPlayers, string selectedLocation, string loginName, int senderId) //створення кімнати гравцем
+        public void CreateRoomServerRpc(string roomName, int maxPlayers, string selectedLocation, string loginName, int clientId) //створення кімнати гравцем
         {
             string roomId = Guid.NewGuid().ToString();
 
@@ -95,23 +98,29 @@ namespace Game.Scripts.Networking.Lobby
             Player creator = new Player
             {
                 loginName = loginName,
-                Connection = ServerManager.Clients[senderId]
+                clientId = clientId,
             };
             
             room.AddPlayer(creator);
             
             LobbyRooms.AddRoom(room);
             
-            NetworkConnection senderConn = ServerManager.Clients[senderId];
+            NetworkConnection senderConn = ServerManager.Clients[clientId];
             TargetRoomJoinedRpc(senderConn, room.GetInfo());
             UpdateLobbyRooms();
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void CreateRoomOrJoinServerRpc(int maxPlayers, string selectedLocation, string loginName, int senderId)
+        public void CreateRoomOrJoinServerRpc(int maxPlayers, string selectedLocation, string loginName, int clientId)
         {
             ServerRoom serverRoom = LobbyRooms.GetNotFullAutoRoom();
 
+            Player player = new Player
+            {
+                loginName = loginName,
+                clientId = clientId,
+            };
+            
             if (serverRoom == null)
             {
                 ServerRoom room = Instantiate(serverRoomPrefab, transform);
@@ -120,13 +129,6 @@ namespace Game.Scripts.Networking.Lobby
                 room.maxPlayers = maxPlayers;
                 room.selectedLocation = selectedLocation;
                 room.isAutoRoom = true;
-
-                Player player = new Player
-                {
-                    loginName = loginName,
-                    Connection = ServerManager.Clients[senderId]
-                };
-                
                 room.AddPlayer(player);
                 
                 LobbyRooms.AddRoom(room);
@@ -136,12 +138,6 @@ namespace Game.Scripts.Networking.Lobby
             }
             else
             {
-                Player player = new Player
-                {
-                    loginName = loginName,
-                    Connection = ServerManager.Clients[senderId]
-                };
-                
                 serverRoom.AddPlayer(player);
             }
             
@@ -157,22 +153,24 @@ namespace Game.Scripts.Networking.Lobby
 
             for (int i = 0; i < bots; i++)
             {
-                continue;
                 Player bot = new Player();
                 int lengthName = GameplayAssistant.GetRandomInt(3, 5);
                 bot.loginName = GameplayAssistant.GenerateName(lengthName);
-                bot.isBot = true;
+                bot.matchId = -1;
+                botNumber--;
+                bot.clientId = botNumber;
                 room.AddPlayer(bot);
             }
-            
-            foreach (Player player in room.GetPlayers())
-            {
-                if (player.isBot == false)
-                {
-                    HideLoadingFindPlayers(player.Connection, false);
-                }
-            }
 
+            HideFindLoading(room);
+            SetServerTeam(room);
+            
+            room.isInGame = true;
+            LoadScene(room);
+        }
+
+        private void SetServerTeam(ServerRoom room)
+        {
             int amount = Mathf.Max(1, (room.players.Count + 1) / 2);
 
             foreach (Player player in room.GetPlayers())
@@ -187,9 +185,18 @@ namespace Game.Scripts.Networking.Lobby
                     player.team = Team.Red;
                 }
             }
-            
-            room.isInGame = true;
-            LoadScene(room);
+        }
+        
+        private void HideFindLoading(ServerRoom room)
+        {
+            foreach (Player player in room.GetPlayers())
+            {
+                if (player.IsBot == false)
+                {
+                    NetworkConnection connection = ServerManager.Clients[player.clientId];
+                    HideLoadingFindPlayers(connection, false);
+                }
+            }
         }
         
         [ServerRpc(RequireOwnership = false)]
@@ -200,9 +207,10 @@ namespace Game.Scripts.Networking.Lobby
             
             // 3) Якщо гравець вже в кімнаті (авто або створеній вручну) — видаляємо звідти
             ServerRoom serverRoom = LobbyRooms.GetRoomByConnection(connection);
+            
             if (serverRoom != null)
             {
-                Player player = serverRoom.GetPlayerBuyConnection(connection);
+                Player player = serverRoom.GetPlayerBuyClientId(clientId);
                 if (!serverRoom.isInGame)
                 {
                     LobbyRooms.RemovePlayerFromRoom(serverRoom.roomId, player.loginName);
@@ -255,7 +263,7 @@ namespace Game.Scripts.Networking.Lobby
             Player newPlayer = new Player
             {
                 loginName = loginName,
-                Connection = ServerManager.Clients[senderId]
+                clientId = senderId,
             };
 
             LobbyRooms.AddPlayerToRoom(roomId, newPlayer);
@@ -315,9 +323,10 @@ namespace Game.Scripts.Networking.Lobby
             
             foreach (Player player in serverRoom.GetPlayers())
             {
-                if (player.isBot == false)
+                if (player.IsBot == false)
                 {
-                    connections.Add(player.Connection);
+                    NetworkConnection connection = ServerManager.Clients[player.clientId];
+                    connections.Add(connection);
                 }
             }
             

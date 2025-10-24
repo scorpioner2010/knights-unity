@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
@@ -60,21 +59,26 @@ namespace Game.Scripts
         {
             PlayerRoot[] players = serverRoom.players.Select(p => p.playerRoot).ToArray();
             
-            foreach (PlayerRoot player in players)
+            foreach (PlayerRoot root in players)
             {
-                if (player != null)
+                if (root != null)
                 {
                     EndMatchMeRequest body = new();
-                    body.damage = player.statisticCounter.UnitStats.Value.damage;
-                    body.kills = player.statisticCounter.UnitStats.Value.kills;
-                    body.result = player.IsDead.Value ? "lose" : "win";
-                    body.team = (int)player.Team.Value;
-                    body.warriorCode = player.warriorCode;
+                    body.damage = root.statisticCounter.UnitStats.Value.damage;
+                    body.kills = root.statisticCounter.UnitStats.Value.kills;
+                    body.result = root.IsDead.Value ? "lose" : "win";
+                    body.team = (int)root.Team.Value;
+                    body.warriorCode = root.warriorCode;
+                    
+                    Networking.Lobby.Player player = serverRoom.GetPlayerBuyClientId(root.OwnerId);
 
-                    int matchId = serverRoom.players.Where(p => p.Connection.ClientId == player.OwnerId).ToList().FirstOrDefault()!.matchId;
-                    string token = RegisterServer.GetToken(player.OwnerId);
-
-                    EndMatch(matchId, body, token);
+                    if (player == null || player.IsBot)
+                    {
+                        continue;
+                    }
+                    
+                    string token = RegisterServer.GetToken(root.OwnerId);
+                    EndMatch(player.matchId, body, token);
                 }
             }
             

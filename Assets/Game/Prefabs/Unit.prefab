@@ -29,6 +29,8 @@ GameObject:
   - component: {fileID: 6551520111187205520}
   - component: {fileID: 5044299463202849338}
   - component: {fileID: -6113481503883571012}
+  - component: {fileID: -3805200838068903481}
+  - component: {fileID: 1438081489471225130}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -439,6 +441,7 @@ MonoBehaviour:
   playerCollider: {fileID: 3286393339316045850}
   faceCenterFromGround: {fileID: 5044299463202849338}
   statisticCounter: {fileID: -6113481503883571012}
+  bot: {fileID: -3805200838068903481}
   playerCamera: {fileID: 0}
   warriorCode: 
   mesh: {fileID: 0}
@@ -549,6 +552,41 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 4678259557315704785}
   _networkObjectCache: {fileID: 4678259557315704785}
   playerRoot: {fileID: 1295222213664343209}
+--- !u!114 &-3805200838068903481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421123571065159367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53415c16dfe3ef742a7c2d109c17e80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRoot: {fileID: 1295222213664343209}
+  navMeshAgent: {fileID: 2471983283610974262}
+  botController: {fileID: 1438081489471225130}
+  initialDelayMin: 1500
+  initialDelayMax: 2000
+  attackDelayMin: 200
+  attackDelayMax: 400
+  pathTimeoutSeconds: 4
+  fightTimeoutSeconds: 5
+  moveStartTime: 0
+--- !u!114 &1438081489471225130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421123571065159367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e930f0d29a22ca94089e27a944b87ffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActiveBot: 0
 --- !u!1 &1682234552441226143
 GameObject:
   m_ObjectHideFlags: 0

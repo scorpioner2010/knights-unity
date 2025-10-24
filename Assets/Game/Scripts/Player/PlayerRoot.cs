@@ -25,6 +25,7 @@ namespace Game.Scripts.Player
         public Collider playerCollider;
         public FaceCenterFromGround  faceCenterFromGround;
         public StatisticCounter  statisticCounter;
+        public Bot bot;
         
         public readonly SyncVar<bool> IsDead = new();
         public readonly SyncVar<Team> Team = new();
