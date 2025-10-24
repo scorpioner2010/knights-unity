@@ -22,8 +22,9 @@ namespace Game.Scripts.Player
         public float pathTimeoutSeconds = 4f;
         public float fightTimeoutSeconds = 5f;
 
-        private TimerBlocker _attackSpeed = new (1f);
+        private TimerBlocker _attackSpeed = new(1f);
         public float moveStartTime;
+        public int attackCount;
 
         public void Init()
         {
@@ -60,6 +61,7 @@ namespace Game.Scripts.Player
             {
                 playerRoot.animationController.ServerAttack();
                 _attackSpeed.Block();
+                attackCount++;
             }
         }
 
@@ -73,6 +75,25 @@ namespace Game.Scripts.Player
             navMeshAgent.isStopped = false;
             navMeshAgent.stoppingDistance = stoppingDistance;
             navMeshAgent.SetDestination(target.transform.position);
+            while (navMeshAgent.pathPending || navMeshAgent.remainingDistance > (stoppingDistance + arrivalSlack))
+            {
+                if (shouldCancel != null && shouldCancel())
+                {
+                    navMeshAgent.ResetPath();
+                    return false;
+                }
+                await UniTask.Yield();
+            }
+            navMeshAgent.isStopped = true;
+            return true;
+        }
+
+        public async UniTask<bool> MoveToAsync(Vector3 destination, float stoppingDistance, Func<bool> shouldCancel, float arrivalSlack = 0.3f)
+        {
+            moveStartTime = Time.time;
+            navMeshAgent.isStopped = false;
+            navMeshAgent.stoppingDistance = stoppingDistance;
+            navMeshAgent.SetDestination(destination);
             while (navMeshAgent.pathPending || navMeshAgent.remainingDistance > (stoppingDistance + arrivalSlack))
             {
                 if (shouldCancel != null && shouldCancel())

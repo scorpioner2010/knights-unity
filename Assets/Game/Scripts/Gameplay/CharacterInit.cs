@@ -104,8 +104,7 @@ namespace Game.Scripts.Gameplay
                         foreach (PlayerRoot player in players)
                         {
                             CharacterInit carInit = player.characterInit;
-                            player.playerHUD.SetCamera(cam);
-                            player.playerHUD.SetNick(carInit.LoginName.Value);
+                            player.playerHUD.Init(cam, carInit.LoginName.Value);
                             player.InitTeamView();
                             player.InitMesh(ResourceManager.GetMesh(carInit.MeshCode.Value));
                         }

@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Game.Script.Player.UI;
@@ -81,7 +82,7 @@ namespace Game.Scripts.Player
             ApplyDeadState(next);
         }
 
-        private void ApplyDeadState(bool isDead)
+        private async void ApplyDeadState(bool isDead)
         {
             if (isDead)
             {
@@ -89,6 +90,10 @@ namespace Game.Scripts.Player
                 animator.SetBool("Shield", false);
                 animator.SetFloat("Locomotion", 0f);
                 animator.SetTrigger("Die");
+
+                await UniTask.Delay(2000);
+                
+                playerHUD.Deactivate();
             }
         }
     }

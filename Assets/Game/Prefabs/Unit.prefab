@@ -31,6 +31,7 @@ GameObject:
   - component: {fileID: -6113481503883571012}
   - component: {fileID: -3805200838068903481}
   - component: {fileID: 1438081489471225130}
+  - component: {fileID: -1187252011387159308}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -587,6 +588,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActiveBot: 0
+  botDisperser: {fileID: -1187252011387159308}
+--- !u!114 &-1187252011387159308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421123571065159367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c89ce79bec9d64c98d571dfa27451b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRoot: {fileID: 1295222213664343209}
+  navMeshAgent: {fileID: 2471983283610974262}
+  desiredDistance: 10
+  sampleRadius: 12
+  minClearDistance: 2.5
+  reservationRadius: 1.5
+  settleDelaySeconds: 2
 --- !u!1 &1682234552441226143
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,18 @@ namespace Game.Script.Player.UI
         public Image hpView;
         public FloatingText floatingTextPrefab;
 
+        public void Init(Camera cam, string nick)
+        {
+            _mainCamera = cam;
+            nickName.text = nick;
+            gameObject.SetActive(true);
+        }
+
+        public void Deactivate()
+        {
+            gameObject.SetActive(false);
+        }
+
         private void Start()
         {
             tankRoot.health.OnDamaged += (dmg, current, max) =>
@@ -27,17 +39,6 @@ namespace Game.Script.Player.UI
             FloatingText t = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
             string damage = Mathf.RoundToInt(dmg).ToString();
             t.SetText(damage);
-        }
-
-        public void SetNick(string nick)
-        {
-            nickName.text = nick;
-            gameObject.SetActive(true);
-        }
-        
-        public void SetCamera(Camera cam)
-        {
-            _mainCamera = cam;
         }
         
         private void LateUpdate()
