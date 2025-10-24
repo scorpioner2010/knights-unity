@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3590085890762013607}
   - component: {fileID: 6741285400773246127}
   - component: {fileID: 7906509426840605445}
+  - component: {fileID: 2713528846622585463}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -87,6 +88,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProtocolType: 0
+  m_UseWebSockets: 0
+  m_UseEncryption: 0
   m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 8192
   m_HeartbeatTimeoutMS: 300
@@ -94,7 +97,7 @@ MonoBehaviour:
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 127.0.0.1
+    Address: 63.179.97.144
     Port: 7770
     ServerListenAddress: 0.0.0.0
   DebugSimulator:
@@ -124,7 +127,23 @@ MonoBehaviour:
     Position: 0
     Rotation: 2
     Scale: 2
-  _changeFrameRate: 1
+  _changeFrameRate: 0
   _frameRate: 500
   _shareIds: 1
   _startOnHeadless: 1
+--- !u!114 &2713528846622585463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253888701579178645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca43cf6f20e77c4f8fcc078fd85081f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _remoteServerTimeout: 2
+  _remoteServerTimeoutDuration: 60
+  _changeFrameRate: 0
+  _frameRate: 500

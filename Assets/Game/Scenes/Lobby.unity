@@ -3111,7 +3111,7 @@ MonoBehaviour:
   cancel: {fileID: 1709096796}
   lobbyManager: {fileID: 970225864}
   scenes: 0100000000000000
-  currentMap: 0
+  currentMap: 1
 --- !u!114 &337547483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24393,30 +24393,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
+    - target: {fileID: 2713528846622585463, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}
-      propertyPath: m_ProtocolType
-      value: 0
+      propertyPath: _changeFrameRate
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
+    - target: {fileID: 7906509426840605445, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}
-      propertyPath: ConnectionData.Address
-      value: 127.0.0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
-        type: 3}
-      propertyPath: DebugSimulator.PacketDelayMS
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
-        type: 3}
-      propertyPath: DebugSimulator.PacketDropRate
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
-        type: 3}
-      propertyPath: DebugSimulator.PacketJitterMS
-      value: 0
+      propertyPath: _changeFrameRate
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
