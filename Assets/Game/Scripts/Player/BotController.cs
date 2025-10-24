@@ -14,7 +14,7 @@ namespace Game.Scripts.Player
         private PlayerRoot _playerRoot;
         public bool isActiveBot;
         public BotDisperser botDisperser;
-        
+
         public void Init(PlayerRoot root)
         {
             _playerRoot = root;
@@ -75,6 +75,9 @@ namespace Game.Scripts.Player
             }
             _navMeshAgent.isStopped = true;
             float fightStartTime = Time.time;
+            int baselineHp = target.health.CurrentHp;
+            int lastCheckedCount = 0;
+            _bot.attackCount = 0;
             while (isActiveBot && target.IsDead.Value == false)
             {
                 await UniTask.Yield();
@@ -91,12 +94,45 @@ namespace Game.Scripts.Player
                 {
                     break;
                 }
-
-                int hp = target.health.CurrentHp;
-                
                 _bot.FaceTarget(target.transform);
                 _bot.Attack();
                 await UniTask.Delay(GameplayAssistant.GetRandomInt(_bot.attackDelayMin, _bot.attackDelayMax));
+                if (_bot.attackCount - lastCheckedCount >= 2)
+                {
+                    int hpNow = target.health.CurrentHp;
+                    if (hpNow >= baselineHp)
+                    {
+                        float closerStop = Mathf.Max(0.1f, stopDist - 0.6f);
+                        bool closed = await _bot.MoveToAsync(target, closerStop,
+                            () =>
+                            {
+                                if (!isActiveBot)
+                                {
+                                    return true;
+                                }
+                                if (_playerRoot.IsDead.Value)
+                                {
+                                    return true;
+                                }
+                                if (target.IsDead.Value)
+                                {
+                                    return true;
+                                }
+                                return false;
+                            },
+                            0f
+                        );
+                        if (!closed)
+                        {
+                            break;
+                        }
+                        baselineHp = target.health.CurrentHp;
+                        lastCheckedCount = _bot.attackCount;
+                        continue;
+                    }
+                    baselineHp = hpNow;
+                    lastCheckedCount = _bot.attackCount;
+                }
             }
             return true;
         }
