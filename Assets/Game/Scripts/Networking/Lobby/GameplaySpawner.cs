@@ -224,7 +224,7 @@ namespace Game.Scripts.Networking.Lobby
                 {
                     if (player.IsBot)
                     {
-                        SpawnBot(serverRoom, player);
+                        SpawnBot(player);
                     }
                     else
                     {
@@ -290,7 +290,7 @@ namespace Game.Scripts.Networking.Lobby
             timer.serverRoom = serverRoom;
         }
 
-        private void SpawnBot(ServerRoom serverRoom, Player player)
+        private void SpawnBot(Player player)
         {
             SpawnPoint spawnPoint = SpawnPoint.GetFreePoint(_additiveServerScene, player.team);
 
@@ -300,7 +300,16 @@ namespace Game.Scripts.Networking.Lobby
                 return;
             }
 
-            string warriorCode = "vik_l1_starter";
+            List<string> warriors = new List<string>
+            {
+                "vik_l1_starter",
+                "sam_l1_starter",
+                "sam_l2_ronin",
+                "sam_l2_spearman",
+                "vik_l2_berserker",
+            };
+            
+            string warriorCode = warriors.RandomElement();
                 
             PlayerRoot root = Instantiate(ResourceManager.GetPrefab(), spawnPoint.transform.position, Quaternion.identity);
             ServerManager.Spawn(root.networkObject, LocalConnection, _additiveServerScene);
@@ -315,9 +324,7 @@ namespace Game.Scripts.Networking.Lobby
             player.playerRoot = root;
             player.playerRoot.characterInit.ServerInit(PlayerType.Bot, _additiveServerScene, warriorCode, player.clientId);
         }
-
         
-
         private async void SpawnPlayer(ServerRoom serverRoom, int clientId)
         {
             float elapsedTime = 0f;

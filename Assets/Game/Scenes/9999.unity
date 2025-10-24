@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0f62be39b3eeaa840bb0169b77b88469, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -95,7 +95,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 55920cb24a5129d41a89c0c59d15632c,
     type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 05bab6d27fa78014b8a9bd6d19146ad5,
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 207bc6cb0d91c9248813ff31438b1edb,
     type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -5112,7 +5112,7 @@ MonoBehaviour:
   cancel: {fileID: 1709096796}
   lobbyManager: {fileID: 970225864}
   scenes: 0100000000000000
-  currentMap: 0
+  currentMap: 1
 --- !u!114 &337547483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33791,7 +33791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTestMode: 0
-  maxPlayersForFindRoom: 10
+  maxPlayersForFindRoom: 30
   findRoomSeconds: 3
 --- !u!4 &2068572094
 Transform:
@@ -37802,7 +37802,7 @@ PrefabInstance:
     - target: {fileID: 6741285400773246127, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}
       propertyPath: ConnectionData.Address
-      value: 127.0.0.1
+      value: 63.179.97.144
       objectReference: {fileID: 0}
     - target: {fileID: 7906509426840605445, guid: 50f2395fc5c7e8e4bb576c913ea66c58,
         type: 3}

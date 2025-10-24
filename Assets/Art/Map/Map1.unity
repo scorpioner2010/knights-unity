@@ -338,6 +338,102 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 1878466894}
   _networkObjectCache: {fileID: 0}
   team: 1
+--- !u!1 &163469819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 163469822}
+  - component: {fileID: 163469821}
+  - component: {fileID: 163469820}
+  - component: {fileID: 163469823}
+  m_Layer: 0
+  m_Name: NavMeshBaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &163469820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163469819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ea9a5b2bd4cf5499cb1221236ee129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshSurface: {fileID: 163469821}
+  navMeshData: {fileID: 23800000, guid: 499050b5d7f1be24e8f22a6e737bb5d7, type: 2}
+--- !u!114 &163469821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163469819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 1
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 1
+  m_TileSize: 256
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.1
+  m_MinRegionArea: 1
+  m_NavMeshData: {fileID: 23800000, guid: 499050b5d7f1be24e8f22a6e737bb5d7, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &163469822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163469819}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2067906810}
+  - {fileID: 654938907}
+  - {fileID: 1817461193}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &163469823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163469819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05725f147002851409c50235e935cd2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  center: {fileID: 2067906810}
 --- !u!1 &204694933
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,6 +957,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 654938907}
     m_Modifications:
+    - target: {fileID: 6401909331302830052, guid: d80d66283d5ec724d86504f8e8de85f0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8456439649671694964, guid: d80d66283d5ec724d86504f8e8de85f0,
         type: 3}
       propertyPath: m_Name
@@ -869,17 +970,17 @@ PrefabInstance:
     - target: {fileID: 9083935967571972302, guid: d80d66283d5ec724d86504f8e8de85f0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 188.38225
+      value: 188.61
       objectReference: {fileID: 0}
     - target: {fileID: 9083935967571972302, guid: d80d66283d5ec724d86504f8e8de85f0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8405821
+      value: 3.78
       objectReference: {fileID: 0}
     - target: {fileID: 9083935967571972302, guid: d80d66283d5ec724d86504f8e8de85f0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 101.76118
+      value: 95.64
       objectReference: {fileID: 0}
     - target: {fileID: 9083935967571972302, guid: d80d66283d5ec724d86504f8e8de85f0,
         type: 3}
@@ -1050,17 +1151,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.89
+      value: 31.15
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1359
+      value: 3.29
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 104.18
+      value: 103.22
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -1102,6 +1203,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1123,17 +1229,17 @@ PrefabInstance:
     - target: {fileID: 3162087503065634966, guid: 2314966121d0f794d8c6b95b205b6f02,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 165.27177
+      value: 164.07
       objectReference: {fileID: 0}
     - target: {fileID: 3162087503065634966, guid: 2314966121d0f794d8c6b95b205b6f02,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.23
+      value: 0.64
       objectReference: {fileID: 0}
     - target: {fileID: 3162087503065634966, guid: 2314966121d0f794d8c6b95b205b6f02,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 146.2
+      value: 146.85
       objectReference: {fileID: 0}
     - target: {fileID: 3162087503065634966, guid: 2314966121d0f794d8c6b95b205b6f02,
         type: 3}
@@ -1169,6 +1275,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -32.563
+      objectReference: {fileID: 0}
+    - target: {fileID: 6457726111400129269, guid: 2314966121d0f794d8c6b95b205b6f02,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1464,8 +1575,18 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4c060fbb3796f494e98f31626c73d6dd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1299720193}
   m_SourcePrefab: {fileID: 100100000, guid: 4c060fbb3796f494e98f31626c73d6dd, type: 3}
+--- !u!1 &413691877 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4c060fbb3796f494e98f31626c73d6dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 413691876}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &417457054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1532,8 +1653,18 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4c060fbb3796f494e98f31626c73d6dd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1694195561}
   m_SourcePrefab: {fileID: 100100000, guid: 4c060fbb3796f494e98f31626c73d6dd, type: 3}
+--- !u!1 &417457055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4c060fbb3796f494e98f31626c73d6dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 417457054}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &433846927 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
@@ -1659,7 +1790,7 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.68
+      value: 2.6
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -1706,6 +1837,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass
       objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1732,7 +1868,7 @@ PrefabInstance:
     - target: {fileID: 1954717851188047821, guid: 28ac5debd9ebb6b4db5b3cd07a09068f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.16
+      value: 1.689
       objectReference: {fileID: 0}
     - target: {fileID: 1954717851188047821, guid: 28ac5debd9ebb6b4db5b3cd07a09068f,
         type: 3}
@@ -1774,6 +1910,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9183012655122819427, guid: 28ac5debd9ebb6b4db5b3cd07a09068f,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1795,17 +1936,17 @@ PrefabInstance:
     - target: {fileID: 3264951722939801831, guid: 70fa0768735a6054fa06ea890e9f3df5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 172.48322
+      value: 172.549
       objectReference: {fileID: 0}
     - target: {fileID: 3264951722939801831, guid: 70fa0768735a6054fa06ea890e9f3df5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.69589543
+      value: 1.048
       objectReference: {fileID: 0}
     - target: {fileID: 3264951722939801831, guid: 70fa0768735a6054fa06ea890e9f3df5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 152.62
+      value: 152.572
       objectReference: {fileID: 0}
     - target: {fileID: 3264951722939801831, guid: 70fa0768735a6054fa06ea890e9f3df5,
         type: 3}
@@ -1842,6 +1983,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -12.974
       objectReference: {fileID: 0}
+    - target: {fileID: 7582345434443347536, guid: 70fa0768735a6054fa06ea890e9f3df5,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1871,7 +2017,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654938906}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1884,12 +2030,12 @@ Transform:
   - {fileID: 1707245303}
   - {fileID: 2060699742}
   - {fileID: 1299720192}
-  - {fileID: 709582277}
-  - {fileID: 723316284}
   - {fileID: 108396247}
   - {fileID: 1259034154}
   - {fileID: 1317817106}
   - {fileID: 857988327}
+  - {fileID: 709582277}
+  - {fileID: 723316284}
   - {fileID: 1958564479}
   - {fileID: 1689249749}
   - {fileID: 433846927}
@@ -1898,7 +2044,7 @@ Transform:
   - {fileID: 1137921408}
   - {fileID: 1248404303}
   - {fileID: 755741962}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 163469822}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &709582277 stripped
 Transform:
@@ -2196,8 +2342,18 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 797c0fca21fb11f46bf2e3eff1c9510b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1707245304}
   m_SourcePrefab: {fileID: 100100000, guid: 797c0fca21fb11f46bf2e3eff1c9510b, type: 3}
+--- !u!1 &907353380 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 797c0fca21fb11f46bf2e3eff1c9510b,
+    type: 3}
+  m_PrefabInstance: {fileID: 907353379}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &958493716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2327,17 +2483,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 44.71
+      value: 47.67
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.46
+      value: -0.4
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 137.75
+      value: 138.09
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -2378,6 +2534,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2553,8 +2714,18 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ec2ed4b455e16aa418827e63db970dc5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1756416581}
   m_SourcePrefab: {fileID: 100100000, guid: ec2ed4b455e16aa418827e63db970dc5, type: 3}
+--- !u!1 &1131242329 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ec2ed4b455e16aa418827e63db970dc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1131242328}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1137921408 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
@@ -2793,17 +2964,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 44.14
+      value: 49.7
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.7
+      value: 2.1
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 66.26
+      value: 70.7
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -2845,6 +3016,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2870,6 +3046,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 654938907}
     m_Modifications:
+    - target: {fileID: 3034835831133262426, guid: 32f23c80203feae4281c82bfb793bca6,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5164577042100018480, guid: 32f23c80203feae4281c82bfb793bca6,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2888,17 +3069,17 @@ PrefabInstance:
     - target: {fileID: 5164577042100018480, guid: 32f23c80203feae4281c82bfb793bca6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 183.4855
+      value: 183.76
       objectReference: {fileID: 0}
     - target: {fileID: 5164577042100018480, guid: 32f23c80203feae4281c82bfb793bca6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.76
+      value: 1.64
       objectReference: {fileID: 0}
     - target: {fileID: 5164577042100018480, guid: 32f23c80203feae4281c82bfb793bca6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 155.06271
+      value: 154.71
       objectReference: {fileID: 0}
     - target: {fileID: 5164577042100018480, guid: 32f23c80203feae4281c82bfb793bca6,
         type: 3}
@@ -3080,17 +3261,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 205.53
+      value: 205.02
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.13
+      value: 0.79
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 134.26
+      value: 133.94
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -3132,6 +3313,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3163,17 +3349,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 203.75021
+      value: 202.69
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.13
+      value: -0.33
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 141.53935
+      value: 141.43
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -3214,6 +3400,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3335,6 +3526,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 413691876}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1299720193
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413691877}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: 4c060fbb3796f494e98f31626c73d6dd, type: 3}
 --- !u!4 &1317817106 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3264951722939801831, guid: 70fa0768735a6054fa06ea890e9f3df5,
@@ -3427,8 +3640,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35dbdcbd6a0b1f84a9b7d6392ad9b652,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1379488438}
   m_SourcePrefab: {fileID: 100100000, guid: 35dbdcbd6a0b1f84a9b7d6392ad9b652, type: 3}
+--- !u!1 &1379488437 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 35dbdcbd6a0b1f84a9b7d6392ad9b652,
+    type: 3}
+  m_PrefabInstance: {fileID: 1379488436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1379488438
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379488437}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: 35dbdcbd6a0b1f84a9b7d6392ad9b652, type: 3}
 --- !u!1001 &1385541291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3455,17 +3700,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 47.48
+      value: 50.3
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.81
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 182.74
+      value: 178.2
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -3506,6 +3751,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4261,8 +4511,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 797c0fca21fb11f46bf2e3eff1c9510b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1686400167}
   m_SourcePrefab: {fileID: 100100000, guid: 797c0fca21fb11f46bf2e3eff1c9510b, type: 3}
+--- !u!1 &1686400166 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 797c0fca21fb11f46bf2e3eff1c9510b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1686400165}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1686400167
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686400166}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: 797c0fca21fb11f46bf2e3eff1c9510b, type: 3}
 --- !u!1 &1687088200
 GameObject:
   m_ObjectHideFlags: 0
@@ -4330,7 +4612,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.990566, g: 0.74808687, b: 0.52799034, a: 1}
-  m_Intensity: 3
+  m_Intensity: 5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4445,12 +4727,56 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 417457054}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1694195561
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417457055}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: 4c060fbb3796f494e98f31626c73d6dd, type: 3}
 --- !u!4 &1707245303 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 797c0fca21fb11f46bf2e3eff1c9510b,
     type: 3}
   m_PrefabInstance: {fileID: 907353379}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1707245304
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907353380}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: 797c0fca21fb11f46bf2e3eff1c9510b, type: 3}
 --- !u!1 &1747510806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4560,6 +4886,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1131242328}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1756416581
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131242329}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: ec2ed4b455e16aa418827e63db970dc5, type: 3}
 --- !u!1001 &1791843748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4586,17 +4934,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 32.01
+      value: 38.6
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.223167
+      value: 4.1
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 85.27
+      value: 90.3
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -4638,6 +4986,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4649,7 +5002,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 163469822}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fc8a233ead87a2646a0e9e2b13225d52,
         type: 3}
@@ -4768,6 +5121,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 753727634777444804, guid: fc8a233ead87a2646a0e9e2b13225d52, type: 3}
+--- !u!4 &1817461193 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fc8a233ead87a2646a0e9e2b13225d52,
+    type: 3}
+  m_PrefabInstance: {fileID: 1817461190}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1860022733
 GameObject:
   m_ObjectHideFlags: 0
@@ -4784,7 +5143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1860022734
 Transform:
   m_ObjectHideFlags: 0
@@ -5322,17 +5681,17 @@ PrefabInstance:
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 209.09
+      value: 207.78
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9
+      value: 0.29
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 122.39
+      value: 121.56
       objectReference: {fileID: 0}
     - target: {fileID: 1352398628558988671, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
         type: 3}
@@ -5373,6 +5732,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CliffRockTTFEL_B Grass (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7183651734878543584, guid: d8da1b6935a8e9547a0d2ac8d27d8ec0,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5554,9 +5918,41 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ec2ed4b455e16aa418827e63db970dc5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2061932821}
   m_SourcePrefab: {fileID: 100100000, guid: ec2ed4b455e16aa418827e63db970dc5, type: 3}
---- !u!1 &2079547447
+--- !u!1 &2061932820 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ec2ed4b455e16aa418827e63db970dc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2061932819}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2061932821
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061932820}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: ec2ed4b455e16aa418827e63db970dc5, type: 3}
+--- !u!1 &2067906809
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5564,76 +5960,28 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2079547450}
-  - component: {fileID: 2079547449}
-  - component: {fileID: 2079547448}
+  - component: {fileID: 2067906810}
   m_Layer: 0
-  m_Name: NavMeshBaker
+  m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &2079547448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079547447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41ea9a5b2bd4cf5499cb1221236ee129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  navMeshSurface: {fileID: 2079547449}
-  navMeshData: {fileID: 23800000, guid: 9088831e45d998344992e04893790801, type: 2}
---- !u!114 &2079547449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079547447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SerializedVersion: 0
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 1
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 1
-  m_TileSize: 256
-  m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 9088831e45d998344992e04893790801, type: 2}
-  m_BuildHeightMesh: 1
---- !u!4 &2079547450
+  m_IsActive: 1
+--- !u!4 &2067906810
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079547447}
+  m_GameObject: {fileID: 2067906809}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 122.9, y: 1.81, z: 129.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 163469822}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2083525922
 PrefabInstance:
@@ -5701,8 +6049,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ec2ed4b455e16aa418827e63db970dc5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2083525924}
   m_SourcePrefab: {fileID: 100100000, guid: ec2ed4b455e16aa418827e63db970dc5, type: 3}
+--- !u!1 &2083525923 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ec2ed4b455e16aa418827e63db970dc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2083525922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2083525924
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083525923}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2943078631724464917, guid: ec2ed4b455e16aa418827e63db970dc5, type: 3}
 --- !u!1 &2096561288
 GameObject:
   m_ObjectHideFlags: 0
@@ -6056,14 +6436,12 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2079547450}
   - {fileID: 1691396561}
   - {fileID: 1545912543}
   - {fileID: 402575599}
   - {fileID: 1687088201}
-  - {fileID: 654938907}
   - {fileID: 1878466896}
   - {fileID: 2096561292}
   - {fileID: 1916546385}
-  - {fileID: 1817461190}
   - {fileID: 1860022734}
+  - {fileID: 163469822}
