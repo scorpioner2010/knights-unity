@@ -15,34 +15,34 @@ MonoBehaviour:
   prefab: {fileID: 1295222213664343209, guid: bd04a9953fcfd634bafec054774d5208, type: 3}
   items:
   - code: sam_l1_starter
-    meshPack: {fileID: 7733389373318464211, guid: e43138e31b511a34eb15d47e1387b28f,
+    meshPack: {fileID: 4705489485419883317, guid: 36984d39686944e43a99a21ec748d37d,
       type: 3}
     icon: {fileID: 21300000, guid: a7ca02c81061d284e890a594b4d6b2f6, type: 3}
   - code: sam_l2_ronin
-    meshPack: {fileID: 5914826943975282765, guid: 9cccd315b1db3804e8c16184efc0079f,
+    meshPack: {fileID: 1391176890488897778, guid: 8ae9ba7df8b17094da2d1465246237a6,
       type: 3}
     icon: {fileID: 21300000, guid: 39cef4d2959010441aa1788faa25889d, type: 3}
   - code: sam_l2_spearman
-    meshPack: {fileID: 4833452194228130316, guid: 31780912f88150248aaa21ecaf0e1e36,
+    meshPack: {fileID: 3810852663616411212, guid: ea73f0d98a640074eb1c4018348977f9,
       type: 3}
     icon: {fileID: 21300000, guid: 4c064b71c54ca8440846aa099b79595f, type: 3}
   - code: sam_l2_kensei
-    meshPack: {fileID: -675335786746793565, guid: 779f430ca5fe3e648a5895b4d6b74596,
+    meshPack: {fileID: 2007633539822261144, guid: 98b3f3aa49aedcd438cb05d2ef7aefc9,
       type: 3}
-    icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+    icon: {fileID: 21300000, guid: b1ffe18ee081a904fb91305c4c3d8b67, type: 3}
   - code: vik_l1_starter
-    meshPack: {fileID: 8087062356919010200, guid: be13c294be2b23747bb209d1c04bd1de,
+    meshPack: {fileID: 1391176890488897778, guid: 53d739dc7d6b5ce4c94c774ff7e8800b,
       type: 3}
     icon: {fileID: 21300000, guid: 93a13a17ffcb5b24faa344b444b10fb1, type: 3}
   - code: vik_l2_raider
-    meshPack: {fileID: -675335786746793565, guid: 779f430ca5fe3e648a5895b4d6b74596,
+    meshPack: {fileID: 5484757832437980479, guid: 3256b3422a7554a4f83d2bd5c1a6e966,
       type: 3}
-    icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+    icon: {fileID: 21300000, guid: 808ce26fe2a427e409734d186a0ab846, type: 3}
   - code: vik_l2_shieldbearer
-    meshPack: {fileID: -675335786746793565, guid: 779f430ca5fe3e648a5895b4d6b74596,
+    meshPack: {fileID: 3112355811821676787, guid: e9d18265899e1c54fa656dcc2eddd601,
       type: 3}
-    icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+    icon: {fileID: 21300000, guid: a086fc165fb77834dba78a3b64832a15, type: 3}
   - code: vik_l2_berserker
-    meshPack: {fileID: -675335786746793565, guid: 779f430ca5fe3e648a5895b4d6b74596,
+    meshPack: {fileID: 3247749874186168939, guid: 2cef1ba9b36fdda49be6bfcd7a35ffb4,
       type: 3}
-    icon: {fileID: 21300000, guid: 18cfe3d2f14381a44a87714209c52685, type: 3}
+    icon: {fileID: 21300000, guid: c5e28ecb4e698f644babef60528b4bfe, type: 3}
