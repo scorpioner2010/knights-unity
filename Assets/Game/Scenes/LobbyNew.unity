@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.005
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
+  m_AmbientSkyColor: {r: 1.0992239, g: 1.1335851, b: 1.2016646, a: 1}
   m_AmbientEquatorColor: {r: 0.54901963, g: 0.40392157, b: 0.32156864, a: 1}
   m_AmbientGroundColor: {r: 0.59607846, g: 0.54509807, b: 0.2901961, a: 1}
   m_AmbientIntensity: 1.8
-  m_AmbientMode: 0
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -93,7 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: ac228d60dc9d774439671c7dcabc4bde,
+    type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 207bc6cb0d91c9248813ff31438b1edb,
     type: 2}
 --- !u!196 &4
