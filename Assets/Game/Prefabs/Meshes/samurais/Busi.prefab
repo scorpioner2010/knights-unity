@@ -205,7 +205,6 @@ GameObject:
   - component: {fileID: 3606152141835780082}
   - component: {fileID: 5412644572480921024}
   - component: {fileID: 4705489485419883317}
-  - component: {fileID: 4571103354815176120}
   m_Layer: 0
   m_Name: Busi
   m_TagString: Untagged
@@ -237,7 +236,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897068109398950952}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82f081af9f0a1364394065c133ec0a43, type: 3}
   m_Name: 
@@ -354,28 +353,6 @@ MonoBehaviour:
   humanAvatar: {fileID: 9000000, guid: 44591b0df3289354f9d2951541c5d9b1, type: 3}
   bladeRoot: {fileID: 180113992850833910}
   bladeTip: {fileID: 5475627285481242510}
---- !u!95 &4571103354815176120
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897068109398950952}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 44591b0df3289354f9d2951541c5d9b1, type: 3}
-  m_Controller: {fileID: 9100000, guid: 595a9dbf17010654d98449b634214a65, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2005161499519366474
 GameObject:
   m_ObjectHideFlags: 0

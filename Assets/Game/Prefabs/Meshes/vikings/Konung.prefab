@@ -339,7 +339,6 @@ GameObject:
   - component: {fileID: 2150532136348976055}
   - component: {fileID: 32827938564292910}
   - component: {fileID: 5484757832437980479}
-  - component: {fileID: 5500780573220685404}
   m_Layer: 0
   m_Name: Konung
   m_TagString: Untagged
@@ -476,28 +475,6 @@ MonoBehaviour:
   humanAvatar: {fileID: 9000000, guid: 44591b0df3289354f9d2951541c5d9b1, type: 3}
   bladeRoot: {fileID: 1488438275496599193}
   bladeTip: {fileID: 8553042032383203141}
---- !u!95 &5500780573220685404
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2811612481195368614}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: e7c745cc79db15044a9bc964cac528a2, type: 3}
-  m_Controller: {fileID: 9100000, guid: 595a9dbf17010654d98449b634214a65, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3128411981752409903
 GameObject:
   m_ObjectHideFlags: 0
