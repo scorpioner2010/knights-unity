@@ -15,7 +15,7 @@ Material:
   - _LEAFFLUTTER_ON
   - _SELFSHADINGVERTEXCOLOR_ON
   - _SPECULARBACKFACEOCCLUSION1_ON
-  - _WINDTYPE_GENTLEBREEZE
+  - _WINDTYPE_WINDOFF
   m_InvalidKeywords:
   - _BACKFACELIGHTS_ON
   - _BRANCHMASKR_ON
@@ -238,7 +238,7 @@ Material:
     - _GG: 1
     - _GlobalFlutterIntensity: 0.8
     - _GlobalWindPower: 1
-    - _GlobalWindStrength: 1
+    - _GlobalWindStrength: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -283,7 +283,7 @@ Material:
     - _SSSMapOffset: 0.1
     - _SSSMapScale: 1
     - _Scale: 0
-    - _SeasonChangeGlobal: -0.1
+    - _SeasonChangeGlobal: 2
     - _SeasonVertexColorR: 1
     - _SelfShadingVertexColor: 1
     - _Shininess: 0.01

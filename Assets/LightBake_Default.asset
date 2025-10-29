@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f59a8a4657df84dab33c6164128e71, type: 3}
+  m_Name: LightBake_Default
+  m_EditorClassIdentifier: 
+  useGPUProgressive: 1
+  prioritiseView: 1
+  lightmapResolution: 40
+  lightmapPadding: 2
+  maxLightmapSize: 1024
+  directSamples: 64
+  indirectSamples: 512
+  envSamples: 128
+  bounces: 2
+  denoiseDirect: 1
+  denoiseIndirect: 1
+  denoiseAO: 1
+  compressLightmaps: 1
+  enableAO: 1
+  aoIntensity: 0.5
+  aoDistance: 1
+  ambientMode: 0
+  ambientColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  environmentReflectionsIntensity: 1
+  reflectionMode: 0
+  reflectionResolution: 128
+  realtimeGI: 0
+  bakedGI: 1

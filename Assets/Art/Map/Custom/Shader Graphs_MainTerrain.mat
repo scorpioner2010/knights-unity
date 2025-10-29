@@ -212,16 +212,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Float: 0.526
-    - _Float_1: 0.182
-    - _Float_2: 0.111
-    - _Float_3: 0
-    - _Float_4: 0.149
-    - _Float_5: 1
-    - _Float_6: 2
+    - _Float: 0.278
+    - _Float_1: 0.179
+    - _Float_2: 0.131
+    - _Float_3: 0.108
+    - _Float_4: 0.114
+    - _Float_5: 0.585
+    - _Float_6: 5
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Vector4: {r: 0.05, g: 0.1, b: 0.1, a: 0.1}
+    - _Vector4: {r: 0.05, g: 0.1, b: 0.2, a: 0.3}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

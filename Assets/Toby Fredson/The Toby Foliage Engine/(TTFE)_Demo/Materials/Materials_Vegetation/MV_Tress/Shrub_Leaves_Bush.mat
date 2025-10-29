@@ -89,7 +89,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorMapRGB:
-        m_Texture: {fileID: 4929792473868046222, guid: a7082a3ea9f63fa41a26d8e017c9477b, type: 2}
+        m_Texture: {fileID: 4929792473868046222, guid: a7082a3ea9f63fa41a26d8e017c9477b,
+          type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -305,7 +306,7 @@ Material:
     - _GlobalSeasonControl: 1
     - _GlobalWind1: 1
     - _GlobalWindSpeed: 1
-    - _GlobalWindStrength: 1
+    - _GlobalWindStrength: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -388,7 +389,7 @@ Material:
     - _SSSMapScale: 1
     - _Scale: 5
     - _Sclevg: 1
-    - _SeasonChangeGlobal: -0.1
+    - _SeasonChangeGlobal: 2
     - _SeasonChnageA: 5
     - _SeasonChnageA1: 5
     - _SeasonChnageA2: 5
