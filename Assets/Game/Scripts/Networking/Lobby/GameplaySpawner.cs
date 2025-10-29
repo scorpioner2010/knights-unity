@@ -302,10 +302,13 @@ namespace Game.Scripts.Networking.Lobby
 
             List<string> warriors = new List<string>
             {
-                "vik_l1_starter",
                 "sam_l1_starter",
                 "sam_l2_ronin",
                 "sam_l2_spearman",
+                "sam_l2_kensei",
+                "vik_l1_starter",
+                "vik_l2_raider",
+                "vik_l2_shieldbearer",
                 "vik_l2_berserker",
             };
             
@@ -315,6 +318,12 @@ namespace Game.Scripts.Networking.Lobby
             ServerManager.Spawn(root.networkObject, LocalConnection, _additiveServerScene);
             
             WarriorDto info = WarriorsServer.GetWarrior(warriorCode);
+
+            if (info == null)
+            {
+                Debug.LogError(warriorCode);
+            }
+            
             
             root.warriorCode = warriorCode;
             root.health.SetHpServer(info.hp);

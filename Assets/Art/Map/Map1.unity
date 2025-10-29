@@ -33232,6 +33232,8 @@ Transform:
   - {fileID: 1137921408}
   - {fileID: 1248404303}
   - {fileID: 755741962}
+  - {fileID: 8426896273580967267}
+  - {fileID: 1483954870}
   m_Father: {fileID: 163469822}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &709582277 stripped
@@ -35357,7 +35359,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 654938907}
     m_Modifications:
     - target: {fileID: 1551393034638103212, guid: 100790e2ed0b2bb4d8ba03d1126aff32,
         type: 3}
@@ -35392,7 +35394,7 @@ PrefabInstance:
     - target: {fileID: 1551393034638103212, guid: 100790e2ed0b2bb4d8ba03d1126aff32,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1551393034638103212, guid: 100790e2ed0b2bb4d8ba03d1126aff32,
         type: 3}
@@ -35444,6 +35446,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 100790e2ed0b2bb4d8ba03d1126aff32, type: 3}
+--- !u!4 &1483954870 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1551393034638103212, guid: 100790e2ed0b2bb4d8ba03d1126aff32,
+    type: 3}
+  m_PrefabInstance: {fileID: 1483954869}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1500676338
 GameObject:
   m_ObjectHideFlags: 0
@@ -83359,7 +83367,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 96823944742543091}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -83378,7 +83386,7 @@ Transform:
   - {fileID: 7299596249157194023}
   - {fileID: 7787399217450431939}
   - {fileID: 1722221605}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 654938907}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8946001241881551172
 PrefabInstance:
@@ -85031,5 +85039,3 @@ SceneRoots:
   - {fileID: 2096561292}
   - {fileID: 1860022734}
   - {fileID: 163469822}
-  - {fileID: 8426896273580967267}
-  - {fileID: 1483954869}
