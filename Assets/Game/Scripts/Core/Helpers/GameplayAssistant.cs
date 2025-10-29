@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using FishNet.Object.Synchronizing;
 using Game.Scripts.Core.Services;
@@ -9,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using Random = System.Random;
 
 namespace Game.Scripts.Core.Helpers
 {
@@ -302,34 +304,67 @@ namespace Game.Scripts.Core.Helpers
         }
 #endif
         
-
         public static string GenerateName(int len)
         {
-            System.Random r = new System.Random();
-            
-            string[] consonants =
+            if (len < 2)
             {
-                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v",
-                "w", "x"
-            };
-            
-            string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
-            string name = "";
-            name += consonants[r.Next(consonants.Length)].ToUpper();
-            name += vowels[r.Next(vowels.Length)];
-            int b = 2;
-            
-            while (b < len)
-            {
-                name += consonants[r.Next(consonants.Length)];
-                b++;
-                name += vowels[r.Next(vowels.Length)];
-                b++;
+                len = 2;
             }
 
-            return name;
+            Random r = new Random();
+
+            string[] onsets =
+            {
+                "", "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "y",
+                "br", "cr", "dr", "fr", "gr", "kr", "pr", "tr", "bl", "cl", "fl", "gl", "pl", "sl", "sm", "sn", "sp",
+                "st", "sk", "sw",
+                "ch", "sh", "th", "ph", "wh", "qu"
+            };
+
+            string[] nuclei =
+            {
+                "a", "e", "i", "o", "u", "y", "ai", "ei", "ia", "ie", "oa", "oi", "oo", "ou", "au", "ea", "ee"
+            };
+
+            string[] codas =
+            {
+                "", "", "", "", "n", "r", "s", "l", "m", "t", "nd", "nt", "st", "rd", "rt", "ld", "lt", "sk", "sp"
+            };
+
+            StringBuilder sb = new System.Text.StringBuilder(len + 4);
+
+            while (sb.Length < len)
+            {
+                string onset = onsets[r.Next(onsets.Length)];
+                string vowel = nuclei[r.Next(nuclei.Length)];
+                string coda = codas[r.Next(codas.Length)];
+
+                sb.Append(onset);
+                sb.Append(vowel);
+
+                if (sb.Length + coda.Length <= len || r.NextDouble() < 0.4)
+                {
+                    sb.Append(coda);
+                }
+            }
+
+            string name = sb.ToString().ToLowerInvariant();
+
+            if (name.Length > len)
+            {
+                name = name.Substring(0, len);
+            }
+
+            if (name.EndsWith("q"))
+            {
+                name = name.Substring(0, name.Length - 1) + "k";
+            }
+
+            string result = char.ToUpperInvariant(name[0]) + name.Substring(1);
+            return result;
         }
-        
+
+
         public static string GetRandomCode(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
