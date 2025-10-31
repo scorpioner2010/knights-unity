@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 1469188673987968937}
   - component: {fileID: 2054007396674796447}
   - component: {fileID: 3810852663616411212}
+  - component: {fileID: -3102013395489642451}
   m_Layer: 0
   m_Name: Sabupey
   m_TagString: Untagged
@@ -491,6 +492,28 @@ MonoBehaviour:
   humanAvatar: {fileID: 9000000, guid: 50c94ec096b4c13469af03ac278b3f26, type: 3}
   bladeRoot: {fileID: 6739008185658284111}
   bladeTip: {fileID: 1676252594143972050}
+--- !u!95 &-3102013395489642451
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833823659916447377}
+  m_Enabled: 0
+  m_Avatar: {fileID: 9000000, guid: 50c94ec096b4c13469af03ac278b3f26, type: 3}
+  m_Controller: {fileID: 9100000, guid: 595a9dbf17010654d98449b634214a65, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2072900880476992474
 GameObject:
   m_ObjectHideFlags: 0
