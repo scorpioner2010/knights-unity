@@ -6316,7 +6316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTestMode: 0
   maxPlayersForFindRoom: 20
-  findRoomSeconds: 3
+  findRoomSeconds: 20
 --- !u!4 &472175990
 Transform:
   m_ObjectHideFlags: 0
