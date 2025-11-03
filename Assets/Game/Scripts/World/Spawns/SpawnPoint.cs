@@ -54,6 +54,24 @@ namespace Game.Scripts.World.Spawns
             
             return pick;
         }
+
+        private void OnDrawGizmos()
+        {
+            switch (team)
+            {
+                case Team.Blue:
+                    Gizmos.color = Color.blue;
+                    break;
+                case Team.Red:
+                    Gizmos.color = Color.red;
+                    break;
+                default:
+                    Gizmos.color = Color.cyan;
+                    break;
+            }
+
+            Gizmos.DrawSphere(transform.position,1);
+        }
     }
 
     public enum Team
